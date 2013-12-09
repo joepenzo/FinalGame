@@ -22,9 +22,19 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>[source path] src</name>
+			<name>[source path] Citrus-Engine-master-src</name>
+			<type>2</type>
+			<location>/Developer/Resources/actionscript/CitrusEngine/Citrus-Engine-master/src</location>
+		</link>
+		<link>
+			<name>[source path] as3sfxr-src</name>
 			<type>2</type>
 			<location>/Developer/Resources/actionscript/as3sfxr/src</location>
+		</link>
+		<link>
+			<name>[source path] srclib</name>
+			<type>2</type>
+			<location>/Developer/Resources/actionscript/CitrusEngine/Citrus-Engine-master/srclib</location>
 		</link>
 	</linkedResources>
 </projectDescription>
