@@ -1,0 +1,1 @@
+adl -profile extendedDesktop -extdir /Users/joepenzo/School/Afstuderen/Project/FinalGame/development/ane/uncompressedANE /Users/joepenzo/School/Afstuderen/Project/FinalGame/development/bin-debug/AfstudeerGame-app.xml
