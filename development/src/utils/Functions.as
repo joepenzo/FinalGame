@@ -1,0 +1,188 @@
+package utils
+{
+	import Box2D.Collision.Shapes.b2PolygonShape;
+	import Box2D.Common.Math.b2Vec2;
+	import Box2D.Dynamics.b2Body;
+	
+	import citrus.core.starling.StarlingState;
+	import citrus.objects.Box2DPhysicsObject;
+	import citrus.physics.box2d.Box2DShapeMaker;
+	
+	import flash.display.DisplayObject;
+	import flash.events.MouseEvent;
+	import flash.geom.Point;
+
+	public class Functions
+	{
+		
+		/*
+		var swcObject : flash.display.MovieClip  = new fla.game.TestSprite();
+		Functions.resizeDisplayObject(swcObject, 70, 70);
+		var mat:Matrix=new Matrix();
+		mat.scale(swcObject.scaleX,swcObject.scaleY);
+		var bd:BitmapData = new BitmapData(swcObject.width, swcObject.height, false, 0xff0000);
+		bd.draw(swcObject, mat);
+		_hero.view = new Image(Texture.fromBitmapData(bd));
+		
+		*/
+		
+		
+		public static function ResizeObject(state : StarlingState, scaleUp : Boolean, objectName : String, reDrawView : Boolean = true) : void { // Works for rectangle shape now
+			// TODO :: if  hero is standing on top of the object, shit get's fucked up!
+			var mult : Number;
+			if (scaleUp) {
+				mult = 1.05;
+			} else {
+				mult = .95;
+			}
+			var object : Box2DPhysicsObject = state.getObjectByName(objectName) as Box2DPhysicsObject;
+			var body : b2Body = object.getBody() as b2Body;
+			
+			var oldPolygon : b2PolygonShape = body.GetFixtureList().GetShape() as b2PolygonShape;
+			var vertexArray : Vector.<b2Vec2> = oldPolygon.GetVertices() as Vector.<b2Vec2>;
+			for each (var vert:b2Vec2 in vertexArray) {
+				vert.Multiply(mult);
+			}
+			
+			var newShape : b2PolygonShape = new b2PolygonShape();
+			newShape.SetAsVector(vertexArray);
+			
+			body.DestroyFixture(body.GetFixtureList());
+			body.CreateFixture2(newShape); // TODO: Add density?
+			
+			if (reDrawView) {
+				var height : Number = (body.GetFixtureList().GetAABB().upperBound.y - body.GetFixtureList().GetAABB().lowerBound.y) * 30; // standard box2d scale 30
+				var width : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
+//				object.view = StarlingDraw.RectangleShape(width,height, 0x2E2E2E);
+				object.view = StarlingDraw.RectangleImage(width,height, 0x2E2E2E);
+			}
+			
+		}
+		
+		
+		public static function ResizeObjectValue(state : StarlingState, newW:Number, newH: Number, objectName : String, reDrawView : Boolean = true) : void { // Works for rectangle shape now
+			var object : Box2DPhysicsObject = state.getObjectByName(objectName) as Box2DPhysicsObject;
+			var body : b2Body = object.getBody() as b2Body;
+// save color in userdata of box2d and shit			
+			var newShape:b2PolygonShape = Box2DShapeMaker.BeveledRect(newW, newH, 0.1);
+			
+			body.DestroyFixture(body.GetFixtureList());
+			body.CreateFixture2(newShape); // TODO: Add density?
+			
+			if (reDrawView) {
+				var height : Number = (body.GetFixtureList().GetAABB().upperBound.y - body.GetFixtureList().GetAABB().lowerBound.y) * 30; // standard box2d scale 30
+				var width : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
+//				object.view = StarlingDraw.RectangleShape(width,height, 0x2E2E2E);
+				object.view = StarlingDraw.RectangleImage(width,height, 0x2E2E2E);
+			}
+			
+		}
+		
+		
+		
+		public static function findClosetObjectToPoint(position : Point, objectsArray : *):* {
+			var elementPoint:Point = new Point();
+			var element:*;
+			var closestIndex:uint = 0;
+			var closestDist:Number;
+			
+			// Loop through elements
+			for (var i:int = 0; i < objectsArray.length; i++) 
+			{
+				element = objectsArray[i];
+				
+				// Set the elementPoint's x and y rather than creating a new Point object.
+				elementPoint.x = element.x;
+				elementPoint.y = element.y;
+				
+				// Find distance from mouse to element.
+				var dist:Number = Point.distance(position, elementPoint);
+				
+				// Update closestIndex and closestDist if it's the closest.
+				if (i == 0 || dist < closestDist) 
+				{
+					closestDist = dist;
+					closestIndex = i;
+				}
+			}
+			//trace('The closest element is at index', closestIndex, ', with a distance of', closestDist);			
+			return objectsArray[closestIndex]; 
+		}
+		
+		public static  function resizeDisplayObject(mc:DisplayObject, maxW:Number, maxH:Number=0, constrainProportions:Boolean=true):void{
+			maxH = maxH == 0 ? maxW : maxH;
+			mc.width = maxW;
+			mc.height = maxH;
+			if (constrainProportions) {
+				mc.scaleX < mc.scaleY ? mc.scaleY = mc.scaleX : mc.scaleX = mc.scaleY;
+			}
+		}
+		
+		
+		
+		public static function randomIntRange(start:Number, end:Number):int {
+			return int(randomNumberRange(start, end));
+		}
+		
+		public static function randomNumberRange(start:Number, end:Number):Number {
+			end++;
+			return start + (Math.random() * (end - start));
+		}
+		
+		
+		public static function map(num:Number, min1:Number, max1:Number, min2:Number, max2:Number, round:Boolean = false, constrainMin:Boolean = true, constrainMax:Boolean = true):Number {
+			if (constrainMin && num < min1) return min2;
+			if (constrainMax && num > max1) return max2;
+			
+			var num1:Number = (num - min1) / (max1 - min1);
+			var num2:Number = (num1 * (max2 - min2)) + min2;
+			if (round) return Math.round(num2);
+			return num2;
+		}
+		
+		public static function trace2DArray(array : Array) : void {
+			trace("\nArray:");
+			//for (var i:int = 0; i < array[0].length; i++) {
+			for (var i:int = 0; i < array.length; i++) {
+				trace(array[i]);
+			}
+		}
+		
+		
+		
+		
+		
+		
+		public static function isLinkedRight(mapArr: Array, x:int,y:int,match:int):Boolean {
+			if (mapArr[y][x+1] == match) { // right
+				return true;
+			}
+			return false;
+		}
+		
+		public static function isLinkedLeft(mapArr: Array, x:int,y:int,match:int):Boolean {
+			if (mapArr[y][x-1] == match) { // left
+				return true;
+			}
+			return false;
+		}	
+		
+		public static function isLinkedBottom(mapArr: Array, x:int,y:int,match:int):Boolean {
+			if ( y >= mapArr.length-1) return false;
+			if (mapArr[y+1][x] == match) { // bottom
+				return true;
+			}
+			return false;
+		}
+		
+		public static function isLinkedTop(mapArr: Array, x:int,y:int,match:int):Boolean {
+			if (y <= 0) return false;
+			if (mapArr[y-1][x] == match) { // top
+				return true;
+			}
+			return false;
+		}
+		
+		
+	}
+}
