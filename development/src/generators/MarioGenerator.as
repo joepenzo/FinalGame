@@ -14,7 +14,7 @@ public class MarioGenerator
     private static var levelSeedRandom:Random = new Random();
     public static var lastSeed:Number;
 
-    public static function createlevel(width:int, height:int, seed:Number, difficulty:int, type:int, heroPos : Point = null):Level
+    public static function createlevel(width:int, height:int, seed:Number, difficulty:int, type:int = 1, heroPos : Point = null):Level
     {
         var levelGenerator:MarioGenerator = new MarioGenerator(width, height);
         return levelGenerator.createlevel(seed, difficulty, type, heroPos);
@@ -109,11 +109,23 @@ public class MarioGenerator
             }
         }
 
-        fixWalls();
-		
+   
+		addBorderBlocks();
 		//fixHeroPosIfStuck();
-        return lvl;
+        
+		return lvl;
     }
+	
+	private function addBorderBlocks():void {
+		for (var y:int = 0; y < lvl.height; y++) {
+			for (var x:int = 0; x < lvl.width; x++) {
+				if (y == 0) lvl.setBlock(x, y, uint(1) ); // TOP
+				if (y == lvl.height-1) lvl.setBlock(x, y, uint(1) ); // BOTOM
+				if (x == 0) lvl.setBlock(x, y, uint(1) ); // LEFT
+				if (x == lvl.width-1) lvl.setBlock(x, y, uint(1) ); // RIGHT
+			}
+		}
+	}
 	
 //	private function fixHeroPosIfStuck():void {
 //		if (heroPos == null && lvl.getBlock(heroPos.x, heroPos.y) == 0) return;
@@ -418,7 +430,7 @@ public class MarioGenerator
          }*/
     }
 
-    private function fixWalls():void {
+    private function fixWalls():void { // Add extra vertical platforms to the walls!
         var blockMap:Array = new Array(width + 1); // Boolean[width + 1][height + 1];
         for (var x:int = 0; x < width + 1; x++) {
             blockMap[x] = new Array(height + 1);
