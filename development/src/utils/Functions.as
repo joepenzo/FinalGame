@@ -11,20 +11,31 @@ package utils
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import starling.display.Image;
+	import flash.display.BitmapData;
+	import starling.textures.Texture;
+	import flash.display.Shape;
 
 	public class Functions
 	{
 		
-		/*
-		var swcObject : flash.display.MovieClip  = new fla.game.TestSprite();
-		Functions.resizeDisplayObject(swcObject, 70, 70);
-		var mat:Matrix=new Matrix();
-		mat.scale(swcObject.scaleX,swcObject.scaleY);
-		var bd:BitmapData = new BitmapData(swcObject.width, swcObject.height, false, 0xff0000);
-		bd.draw(swcObject, mat);
-		_hero.view = new Image(Texture.fromBitmapData(bd));
 		
-		*/
+		public static function shapeToImage(shape : Shape) : Image {
+			var bmd:BitmapData = new BitmapData(shape.width, shape.height, true, 0x000000);
+			bmd.draw(shape);
+			var img:Image = new Image(Texture.fromBitmapData(bmd));
+			img.smoothing = "none"; 
+			return img;
+			
+			/*
+			//No smoothing, also called "Nearest Neighbor". Pixels will scale up as big rectangles.
+			public static const NONE:String      = "none";
+			//Bilinear filtering. Creates smooth transitions between pixels.
+			public static const BILINEAR:String  = "bilinear";
+			// Trilinear filtering. Highest quality by taking the next mip map level into account.
+			public static const TRILINEAR:String = "trilinear";
+			*/
+		}
 		
 		
 		public static function ResizeObject(state : StarlingState, scaleUp : Boolean, objectName : String, reDrawView : Boolean = true) : void { // Works for rectangle shape now

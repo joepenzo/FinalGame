@@ -23,7 +23,8 @@ package
 		public var green : int = 0;
 		public var blue : int = 0;
 		
-		public var styledItem : String = "platform";
+		public var styledItem : String = "Platform";
+		public var shape : String = "Rectangle";
 		
 			
 			
@@ -45,8 +46,8 @@ package
 			
 			_gui.addGroup("Style");
 			_gui.addComboBox("styledItem", [
-				{label:"Avatar", data: Actions.SELECTED_COLOROBJ_HERO},
 				{label:"Platform", data: Actions.SELECTED_COLOROBJ_PLAT},
+				{label:"Avatar", data: Actions.SELECTED_COLOROBJ_HERO},
 				{label:"Background", data: Actions.SELECTED_COLOROBJ_BG}
 			], { callback: function ():void{  _guiInput.triggerOnce(styledItem); }});
 			
@@ -54,6 +55,12 @@ package
 			_gui.addSlider("green", ValueRange.GREEN.x, ValueRange.GREEN.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.VALUE_GREEN, green);  }});
 			_gui.addSlider("blue", ValueRange.BLUE.x, ValueRange.BLUE.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.VALUE_BLUE, blue);  }});
 			
+			_gui.addComboBox("shape", [
+				{label:"Rectangle", data: Actions.CHANGE_SHAPE_RECT},
+				{label:"Triangle", data: Actions.CHANGE_SHAPE_TRIANGLE},
+				{label:"Hexagon", data: Actions.CHANGE_SHAPE_HEXAGON},
+				{label:"Circle", data: Actions.CHANGE_SHAPE_CIRCLE}
+			], { callback: function ():void{  _guiInput.triggerOnce(shape); }});
 			
 			_gui.show();
 		}

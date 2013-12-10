@@ -12,6 +12,7 @@ package
 	
 	import data.GameData;
 	import data.consts.Actions;
+	import data.consts.Shapes;
 	
 	import flash.display.Sprite;
 	import flash.geom.Point;
@@ -20,11 +21,15 @@ package
 	import generators.CaveGenerator;
 	import generators.MarioGenerator;
 	
+	import objects.ExBox2DPhysicsObject;
 	import objects.ExHero;
 	import objects.Level;
 	
+	import starling.display.Image;
 	import starling.display.QuadBatch;
+	import starling.display.Shape;
 	
+	import utils.FlashShape;
 	import utils.Functions;
 	import utils.StarlingDraw;
 	import utils.StarlingShape;
@@ -54,7 +59,7 @@ package
 
 			
 			_box2D = new Box2D("box2D");
-			_box2D.visible = true;
+			_box2D.visible = false;
 			add(_box2D);
 			
 			_mapW = 150;
@@ -70,8 +75,9 @@ package
 			
 			var heroPos : Point = _lvl.randomPosition();
 			_hero = new ExHero("hero", {x:heroPos.x * tileSize, y:heroPos.y* tileSize, width:tileSize/2, height: tileSize/2, doubleJumpEnabled: true});
-			//_hero.view = StarlingDraw.RectangleImage(_hero.width,_hero.height, 0x000050);			
-			_hero.view = StarlingShape.CircleShape(_hero.width, 0x000050);
+			_hero.currentColor = 0x000050;
+			_hero.currentShape = Shapes.HEXAGON
+			_hero.view = StarlingShape.polygon(_hero.width, 6, _hero.currentColor);
 			add(_hero);
 			
 			_bounds = new Rectangle(0, 0, _mapW*tileSize, _mapH*tileSize);
@@ -80,10 +86,9 @@ package
 			_camera.allowRotation = true;
 			_camera.allowZoom = true;
 			_camera.boundsMode = ACitrusCamera.BOUNDS_MODE_AABB;
-			_camera.setZoom(1.8);
 			_camera.rotationEasing = .3;
 			_camera.zoomEasing = .1;
-			
+			_camera.setZoom(3);
 			
 			// CREATE MINIMAP DEBUG SPRITE
 			_debugSprite = new flash.display.Sprite();
@@ -126,6 +131,7 @@ package
 			// ZOOM - CHANGE
 			if(_ce.input.isDoing(Actions.VALUE_ZOOM)) {
 				action = _ce.input.getAction(Actions.VALUE_ZOOM) as InputAction;
+				debug(action.value);
 				_camera.setZoom(action.value);
 			}
 			
@@ -134,32 +140,61 @@ package
 			if(_ce.input.isDoing(Actions.VALUE_RED)) {
 				action = _ce.input.getAction(Actions.VALUE_RED) as InputAction;
 				_gameData.red = action.value;
-				changeObjectColor(_gameData.currentColoring, _gameData.red, _gameData.green, _gameData.blue);
+				changeObjectColor(_gameData.currentStyling, _gameData.red, _gameData.green, _gameData.blue);
 			}if(_ce.input.isDoing(Actions.VALUE_GREEN)) {
 				action = _ce.input.getAction(Actions.VALUE_GREEN) as InputAction;
 				_gameData.green = action.value;
-				changeObjectColor(_gameData.currentColoring, _gameData.red, _gameData.green, _gameData.blue);
+				changeObjectColor(_gameData.currentStyling, _gameData.red, _gameData.green, _gameData.blue);
 			}if(_ce.input.isDoing(Actions.VALUE_BLUE)) {
 				action = _ce.input.getAction(Actions.VALUE_BLUE) as InputAction;
 				_gameData.blue = action.value;
-				changeObjectColor(_gameData.currentColoring, _gameData.red, _gameData.green, _gameData.blue);
+				changeObjectColor(_gameData.currentStyling, _gameData.red, _gameData.green, _gameData.blue);
 			}
 			
 			if (_ce.input.justDid(Actions.SELECTED_COLOROBJ_HERO)) {
-				fatal("DID HERO");
-				_gameData.currentColoring = "hero";
+				_gameData.currentStyling = "hero";
 			} if (_ce.input.justDid(Actions.SELECTED_COLOROBJ_BG)) {
-				fatal("DID BG");
-				_gameData.currentColoring = "bg";
+				_gameData.currentStyling = "bg";
 			} if (_ce.input.justDid(Actions.SELECTED_COLOROBJ_PLAT)) {
-				fatal("DID PLATFRM");
-				_gameData.currentColoring = "platform";
+				_gameData.currentStyling = "platform";
 			} 
+			
+			if (_ce.input.justDid(Actions.CHANGE_SHAPE_RECT)) {
+				_gameData.currentShape = Shapes.RECTANGLE;
+				changeObjectShape();
+			}if (_ce.input.justDid(Actions.CHANGE_SHAPE_TRIANGLE)) {
+				_gameData.currentShape = Shapes.TRIANGLE;
+				changeObjectShape();
+			}if (_ce.input.justDid(Actions.CHANGE_SHAPE_CIRCLE)) {
+				_gameData.currentShape = Shapes.CIRCLE;
+				changeObjectShape();
+			}if (_ce.input.justDid(Actions.CHANGE_SHAPE_HEXAGON)) {
+				_gameData.currentShape = Shapes.HEXAGON;
+				changeObjectShape();
+			}
 			
 			
 				
 		}
-
+		
+		private function changeObjectShape():void {
+			var object : ExBox2DPhysicsObject = getObjectByName("hero") as ExBox2DPhysicsObject;
+			object.currentShape = _gameData.currentShape;
+			switch (object.currentShape){
+				case Shapes.CIRCLE:
+					object.view = StarlingShape.Circle(object.width, object.currentColor);
+					break;
+				case Shapes.HEXAGON:
+					object.view = StarlingShape.polygon(object.width, 6, object.currentColor);
+					break;
+				case Shapes.RECTANGLE:
+					object.view = StarlingShape.Rectangle(object.width, object.height, object.currentColor);
+					break;
+				case Shapes.TRIANGLE:
+					object.view = StarlingShape.Triangle(object.width, object.height, object.currentColor);
+					break;
+			}
+		}
 		
 		
 		private function changeObjectColor(name : String , red : int, green : int, blue : int):void{
@@ -175,10 +210,26 @@ package
 			}
 			
 			if (getObjectByName(name)) { 
-				var object :Box2DPhysicsObject = getObjectByName(name) as Box2DPhysicsObject;
-				var view : QuadBatch = object.view as QuadBatch;
-				view.setQuadColor(0,hex);
+				var object : ExBox2DPhysicsObject = getObjectByName(name) as ExBox2DPhysicsObject;
+				object.currentColor = hex;
+				switch (object.currentShape){
+					case Shapes.CIRCLE:
+						object.view = StarlingShape.Circle(object.width, object.currentColor);
+						break;
+					case Shapes.HEXAGON:
+						object.view = StarlingShape.polygon(object.width, 6, object.currentColor);
+						break;
+					case Shapes.RECTANGLE:
+						object.view = StarlingShape.Rectangle(object.width, object.height, object.currentColor);
+						break;
+					case Shapes.TRIANGLE:
+						object.view = StarlingShape.Triangle(object.width, object.height, object.currentColor);
+						break;
+				}
+
 				
+				//var view : QuadBatch = object.view as QuadBatch;
+				//view.setQuadColor(0,hex);
 			}
 		}
 

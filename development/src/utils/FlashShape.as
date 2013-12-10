@@ -1,9 +1,9 @@
 package utils
 {
 	import starling.display.Image;
-	import starling.display.Shape;
+	import flash.display.Shape;
 
-	public class StarlingShape
+	public class FlashShape
 	{
 		
 		public static function Rectangle(width : int, height : int, color : uint, stroked : Boolean = false, strokeW : int = 2, strokeC : uint = 0xC0FFEE) : Shape {
@@ -20,8 +20,6 @@ package utils
 		
 		
 		public static function Circle(radius : int, color : uint, stroked : Boolean = false, strokeW : int = 2, strokeC : uint = 0xC0FFEE) : Shape {
-			radius = radius + 1; // FIX
-			
 			var shape: Shape = new Shape();
 			
 			if(stroked) shape.graphics.lineStyle(strokeW, strokeC);
@@ -52,9 +50,9 @@ package utils
 		
 		
 		public static function polygon(radius:Number, sides:uint, color : uint = 0x505050, angle:Number=0): Shape {
-			radius = radius/2 + 1; // FIX
-			var x : int = radius;  // FIX
-			var y : int = radius;  // FIX
+			radius = radius/2 + 1;
+			var x : int = radius;
+			var y : int = radius;
 			
 			// check that sides is sufficient to build
 			if (sides <= 2) {

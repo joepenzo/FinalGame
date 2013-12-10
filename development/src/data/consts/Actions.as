@@ -26,9 +26,14 @@ package data.consts
 		
 		public static const HERO_SIZE:String = "HERO_SIZE";
 		
-		public static const SELECTED_COLOROBJ_BG:String = "SELECTED_COLOROBJ_BG";;
-		public static const SELECTED_COLOROBJ_HERO:String = "SELECTED_COLOROBJ_HERO";;
-		public static const SELECTED_COLOROBJ_PLAT:String = "SELECTED_COLOROBJ_PLAT";;
+		public static const SELECTED_COLOROBJ_BG:String = "SELECTED_COLOROBJ_BG";
+		public static const SELECTED_COLOROBJ_HERO:String = "SELECTED_COLOROBJ_HERO";
+		public static const SELECTED_COLOROBJ_PLAT:String = "SELECTED_COLOROBJ_PLAT";
+
+		public static const CHANGE_SHAPE_RECT:String = "CHANGE_SHAPE_RECT";
+		public static const CHANGE_SHAPE_TRIANGLE:String = "CHANGE_SHAPE_TRIANGLE";
+		public static const CHANGE_SHAPE_CIRCLE:String = "CHANGE_SHAPE_CIRCLE";
+		public static const CHANGE_SHAPE_HEXAGON:String = "CHANGE_SHAPE_HEXAGON";
 		
 	}
 }

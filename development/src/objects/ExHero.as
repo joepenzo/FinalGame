@@ -6,7 +6,6 @@ package objects {
 	
 	import citrus.input.controllers.Keyboard;
 	import citrus.math.MathVector;
-	import citrus.objects.Box2DPhysicsObject;
 	import citrus.objects.platformer.box2d.Crate;
 	import citrus.objects.platformer.box2d.Enemy;
 	import citrus.objects.platformer.box2d.Platform;
@@ -16,10 +15,6 @@ package objects {
 	import citrus.physics.box2d.Box2DUtils;
 	import citrus.physics.box2d.IBox2DPhysicsObject;
 	import citrus.utils.AGameData;
-	
-	//import data.GameData;
-	//import data.Pin;
-	//import data.SynthSounds;
 	
 	import flash.geom.Point;
 	import flash.utils.clearTimeout;
@@ -35,7 +30,7 @@ package objects {
 	
 	
 	
-	public class ExHero extends Box2DPhysicsObject
+	public class ExHero extends ExBox2DPhysicsObject
 	{
 		//properties
 		/**
@@ -150,6 +145,10 @@ package objects {
 		public var round : Boolean  = false;
 		public var doubleJumpEnabled : Boolean = false;
 		public var invertMovement : Boolean = false;
+		
+		private var _currentColor : uint;
+		
+		
 		//private var _sounds:SynthSounds;
 
 		/**
@@ -173,9 +172,7 @@ package objects {
 			//_sounds = _gameData.synthSounds;
 			_ce.input.keyboard.addKeyAction("jump",Keyboard.UP);
 		}
-		
-		
-		
+
 		override public function destroy():void
 		{
 			clearTimeout(_hurtTimeoutID);

@@ -14,16 +14,29 @@ package data
 		protected var _currentLevelType : String = "";
 		protected var _currentGravity : b2Vec2;
 		
-		protected var _currentColoring : String = "";
-
+		protected var _currentStyling : String = "";
+		protected var _currentShape:String = "";
+		
+		
 		protected var _levelColor : uint;
 		
 		protected var _red : int = 0;
 		protected var _green : int = 0;
 		protected var _blue : int = 0;
 		
+		
 		public function GameData() {
 			super();
+		}
+
+		public function get currentShape():String
+		{
+			return _currentShape;
+		}
+
+		public function set currentShape(value:String):void
+		{
+			_currentShape = value;
 		}
 
 		public function get levelColor():uint
@@ -36,14 +49,14 @@ package data
 			_levelColor = value;
 		}
 
-		public function get currentColoring():String
+		public function get currentStyling():String
 		{
-			return _currentColoring;
+			return _currentStyling;
 		}
 
-		public function set currentColoring(value:String):void
+		public function set currentStyling(value:String):void
 		{
-			_currentColoring = value;
+			_currentStyling = value;
 		}
 
 		public function get red():int
