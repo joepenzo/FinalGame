@@ -1,4 +1,4 @@
-package  {
+package objects  {
 	
 	import citrus.core.CitrusObject;
 	import citrus.core.State;
@@ -15,6 +15,7 @@ package  {
 	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	
+	import starling.display.BlendMode;
 	import starling.display.Image;
 	import starling.display.QuadBatch;
 	import starling.textures.Texture;
@@ -258,6 +259,8 @@ package  {
 					}
 				}
 			}
+			
+			quadBatch.blendMode = BlendMode.NONE;
 			
 			if (!
 				gameState.getObjectByName("citrusMapSprite"))  {

@@ -4,6 +4,7 @@ import flash.geom.Point;
 
 
 import generators.java.util.Random;
+import objects.Level;
 
 public class MarioGenerator
 {

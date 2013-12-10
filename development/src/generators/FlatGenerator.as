@@ -2,6 +2,7 @@ package generators {
 
 import generators.java.util.Random;
 import flash.geom.Point;
+import objects.Level;
 
 	public class FlatGenerator
 	{

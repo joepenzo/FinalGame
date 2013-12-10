@@ -18,6 +18,7 @@ package
 	
 	import utils.Functions;
 	import utils.StarlingDraw;
+	import objects.Level;
 	
 	public class GameState extends StarlingState
 	{
@@ -46,13 +47,13 @@ package
 			_box2D.visible = true;
 			add(_box2D);
 			
-//			_mapW = 150;
-//			_mapH = 25;
-//			_lvl = MarioGenerator.createlevel(_mapW, _mapH, 533, 0, 1);
+			_mapW = 150;
+			_mapH = 25;
+			_lvl = MarioGenerator.createlevel(_mapW, _mapH, 533, 0, 1);
 
-			_mapW = 100;
-			_mapH = 50;			
-			_lvl = CaveGenerator.createlevel(_mapW, _mapH);
+//			_mapW = 100;
+//			_mapH = 50;			
+//			_lvl = CaveGenerator.createlevel(_mapW, _mapH);
 		
 			_lvl.drawMapPlaftormsToGameState(this, tileSize);
 			

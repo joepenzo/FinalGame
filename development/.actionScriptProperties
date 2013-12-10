@@ -5,6 +5,8 @@
       <compilerSourcePathEntry kind="1" linkType="1" path="/Developer/Resources/actionscript/as3sfxr/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="/Developer/Resources/actionscript/CitrusEngine/Citrus-Engine-master/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="/Developer/Resources/actionscript/CitrusEngine/Citrus-Engine-master/srclib"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="/Developer/Resources/actionscript/minimalcomps-master/src"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="/Developer/Resources/actionscript/SimpleGUI/src"/>
     </compilerSourcePath>
     <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path="">
