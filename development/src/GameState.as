@@ -1,6 +1,8 @@
 package
 {
+	import citrus.core.CitrusObject;
 	import citrus.core.starling.StarlingState;
+	import citrus.objects.platformer.box2d.Platform;
 	import citrus.physics.box2d.Box2D;
 	import citrus.view.ACitrusCamera;
 	import citrus.view.starlingview.StarlingCamera;
@@ -13,8 +15,9 @@ package
 	import generators.MarioGenerator;
 	
 	import objects.ExHero;
-	import citrus.core.CitrusObject;
-	import citrus.objects.platformer.box2d.Platform;
+	
+	import utils.Functions;
+	import utils.StarlingDraw;
 	
 	public class GameState extends StarlingState
 	{
@@ -43,21 +46,23 @@ package
 			_box2D.visible = true;
 			add(_box2D);
 			
-			_mapW = 150;
-			_mapH = 25;
-			_lvl = MarioGenerator.createlevel(_mapW, _mapH, 533, 0, 1);
+//			_mapW = 150;
+//			_mapH = 25;
+//			_lvl = MarioGenerator.createlevel(_mapW, _mapH, 533, 0, 1);
 
-//			_mapW = 100;
-//			_mapH = 40;			
-//			_lvl = CaveGenerator.createlevel(_mapW, _mapH);
+			_mapW = 100;
+			_mapH = 50;			
+			_lvl = CaveGenerator.createlevel(_mapW, _mapH);
+		
 			_lvl.drawMapPlaftormsToGameState(this, tileSize);
+			
 			
 			var heroPos : Point = _lvl.randomPosition();
 			_hero = new ExHero("hero", {x:heroPos.x * tileSize, y:heroPos.y* tileSize, width:tileSize/2, height: tileSize/2, doubleJumpEnabled: true});
+			_hero.view = StarlingDraw.CircleQuadBatch(_hero.width, _hero.height, 0x0000FF);			
 			add(_hero);
 			
 			_bounds = new Rectangle(0, 0, _mapW*tileSize, _mapH*tileSize);
-			
 			_camera = view.camera as StarlingCamera;
 			_camera.setUp(_hero, new Point(stage.stageWidth/2, stage.stageHeight/2), _bounds, new Point(.5, .5));
 			_camera.allowRotation = true;
@@ -79,6 +84,7 @@ package
 			_ce.stage.addChild(_debugSprite);
 			_debugSprite.x = stage.stageWidth - _debugSprite.width - 10;
 			_debugSprite.y = 10;
+			
 			
 		}
 		

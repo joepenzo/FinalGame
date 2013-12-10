@@ -158,31 +158,17 @@ package  {
 		
 		public function drawMapPlaftormsToGameState(gameState :StarlingState, tileSize : int, color :uint = 0x000000, heroYoffset : Boolean = false, heroPos : Point = null) : void{
 			var linkedHorizontalTiles : Array = [];
-			var linkedVerticalTiles : Array = [];
 			
 			var mW:int = map[0].length;
 			var mH:int = map.length;
 			
 			var yOffset : int = 0;
-//			if (heroYoffset && heroPos != null) {
-//				for (var xt:int = 0; xt < mW; xt++) {    
-//					for (var yt:int = 0; yt < mH; yt++) {
-//						if (heroPos.x == xt) {
-//							//trace(getBlock(xt, yt)); // tile where player is stuck
-//							if (getBlock(xt,yt) == 141 || getBlock(xt,yt) == 136 || getBlock(xt,yt) == 137 || getBlock(xt,yt) == 129 || getBlock(xt,yt) == 16 || getBlock(xt,yt) == 21 || getBlock(xt,yt) == 129) {
-//								yOffset = yt * tileSize - heroPos.y * tileSize;
-//							}
-//						}
-//					}
-//				}
-//				
-//				trace(yOffset);
-//			}
-			
-			
+
+			var type: int;
+			var totalLinkedTilesWidth : int;
 			for (var yt:int = 0; yt < mH; yt++) { // Loop Left to right
 				for (var xt:int = 0; xt < mW; xt++) {    
-					var type:int = map[yt][xt];
+					type = map[yt][xt];
 					
 					if (type != 0) {
 						if (!Functions.isLinkedRight(map, xt, yt, type) && !Functions.isLinkedLeft(map, xt, yt, type)) { // no left or right neighboor - DRAW THE SINGLE TILES
@@ -191,59 +177,26 @@ package  {
 								y:(yt * tileSize) + tileSize/2 + yOffset, 
 								width:tileSize, 
 								height:tileSize
-//								,view : StarlingDraw.ColorImage(tileSize,tileSize, 0x000000)
-//								,view : StarlingDraw.RectangleShape(tileSize,tileSize, 0x000000)
 							}));
 							
 						}
 						
 						//CHECK FOR HORIZONTAL LINKED TILES AND COMBINE THEM TO ONE PLATFORM
-						if (Functions.isLinkedRight(map, xt, yt, type)) {
-							var pt : Point = new Point(xt, yt); 
-							linkedHorizontalTiles.push(pt);
-						} 
+						if (Functions.isLinkedRight(map, xt, yt, type)) linkedHorizontalTiles.push(new Point(xt, yt));
 						
 						else if (Functions.isLinkedLeft(map, xt, yt, type) ) {
-							pt = new Point(xt, yt); 
-							linkedHorizontalTiles.push(pt);
-							var totalLinkedTilesWidth : int = linkedHorizontalTiles.length * tileSize;
+							linkedHorizontalTiles.push(new Point(xt, yt));
+							totalLinkedTilesWidth  = linkedHorizontalTiles.length * tileSize;
 							
 							gameState.add(new Platform((xt +","+ yt +","+ type), {
 								x:(linkedHorizontalTiles[0].x * tileSize) + totalLinkedTilesWidth/2, 
 								y:(linkedHorizontalTiles[0].y * tileSize) + tileSize/2 + yOffset,
 								width:totalLinkedTilesWidth, 
 								height:tileSize
-//								,view : StarlingDraw.ColorImage(totalLinkedTilesWidth,tileSize, 0x000000)
-//								,view : StarlingDraw.RectangleShape(totalLinkedTilesWidth,tileSize, 0x000000)
 							}));
 							
 							linkedHorizontalTiles = [];
 						}  
-						
-						/*else if (Functions.isLinkedLeft(map, xt, yt, type) ) {
-							pt = new Point(xt, yt); 
-							linkedHorizontalTiles.push(pt);
-							var totalLinkedTilesWidth : int = linkedHorizontalTiles.length * tileSize;
-							if (totalLinkedTilesWidth > 2048) {
-								gameState.add(new Platform((xt +","+ yt +","+ type), {
-									x:(linkedHorizontalTiles[0].x * tileSize) + totalLinkedTilesWidth/2, 
-									y:(linkedHorizontalTiles[0].y * tileSize) + tileSize/2 + yOffset,
-									width:totalLinkedTilesWidth, 
-									height:tileSize
-//									,view : StarlingDraw.RectangleShape(totalLinkedTilesWidth,tileSize, 0x000000)}));
-							} else {
-								gameState.add(new Platform((xt +","+ yt +","+ type), {
-									x:(linkedHorizontalTiles[0].x * tileSize) + totalLinkedTilesWidth/2, 
-									y:(linkedHorizontalTiles[0].y * tileSize) + tileSize/2 + yOffset,
-									width:totalLinkedTilesWidth, 
-									height:tileSize
-//									,view : StarlingDraw.ColorImage(totalLinkedTilesWidth,tileSize, 0x000000)}));
-							}
-							
-							linkedHorizontalTiles = [];
-						}  */
-						
-						//END OF HORIZONTAL CHECK
 					}
 					
 				}
@@ -253,15 +206,6 @@ package  {
 			
 		}
 		
-		
-		/*
-		//No smoothing, also called "Nearest Neighbor". Pixels will scale up as big rectangles.
-		public static const NONE:String      = "none";
-		//Bilinear filtering. Creates smooth transitions between pixels.
-		public static const BILINEAR:String  = "bilinear";
-		// Trilinear filtering. Highest quality by taking the next mip map level into account.
-		public static const TRILINEAR:String = "trilinear";
-		*/
 		
 		
 		// DRAW ALL THE TILES TO ONE IMAGE!

@@ -144,7 +144,15 @@ package utils
 			trace("\nArray:");
 			//for (var i:int = 0; i < array[0].length; i++) {
 			for (var i:int = 0; i < array.length; i++) {
-				trace(array[i]);
+					trace(array[i]);
+			}
+		}
+
+		public static function swapIn2DArray(array : Array, oldI : int, newI : int) : void {
+			for ( var row:int = 0; row < array.length; row++ ) {
+				for ( var column:int = 0; column < array[row].length; column++ ) {
+					if (array[row][column] == oldI) array[row][column] = newI; 
+				} 
 			}
 		}
 		

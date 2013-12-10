@@ -119,10 +119,10 @@ public class MarioGenerator
 	private function addBorderBlocks():void {
 		for (var y:int = 0; y < lvl.height; y++) {
 			for (var x:int = 0; x < lvl.width; x++) {
-				if (y == 0) lvl.setBlock(x, y, uint(1) ); // TOP
-				if (y == lvl.height-1) lvl.setBlock(x, y, uint(1) ); // BOTOM
-				if (x == 0) lvl.setBlock(x, y, uint(1) ); // LEFT
-				if (x == lvl.width-1) lvl.setBlock(x, y, uint(1) ); // RIGHT
+				if (y == 0) lvl.setBlock(x, y, uint(111) ); // TOP
+				if (y == lvl.height-1) lvl.setBlock(x, y, uint(111) ); // BOTOM
+				if (x == 0) lvl.setBlock(x, y, uint(111) ); // LEFT
+				if (x == lvl.width-1) lvl.setBlock(x, y, uint(111) ); // RIGHT
 			}
 		}
 	}

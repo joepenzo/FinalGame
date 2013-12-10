@@ -27,6 +27,19 @@ package utils
 		}
 		
 		
+		public static function CircleQuadBatch(width : int, height : int, color : uint) : QuadBatch {
+			var quadBatch:QuadBatch = new QuadBatch();
+			
+			var tex:Texture = Texture.fromBitmapData(new BitmapData(width, height, true));
+			var image:Image = new Image(tex);
+			image.color = color;
+			
+			quadBatch.addImage(image);
+			
+			return quadBatch;
+		}
+		
+		
 		/*
 		This looks more heavy
 		*/
