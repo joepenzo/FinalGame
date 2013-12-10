@@ -5,6 +5,7 @@ package data.consts
 		public static const LEFT : String = "left";		
 		public static const RIGHT : String = "right";		
 		public static const JUMP : String = "jump";		
+		public static const SHOOT : String = "shoot";		
 		
 		
 		public static const AUDIO_SQUAREDUTY : String = "AUDIO_SQUAREDUTY";

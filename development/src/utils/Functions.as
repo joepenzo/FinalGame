@@ -8,13 +8,18 @@ package utils
 	import citrus.objects.Box2DPhysicsObject;
 	import citrus.physics.box2d.Box2DShapeMaker;
 	
+	import data.consts.Shapes;
+	
+	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
+	import flash.display.Shape;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	
+	import objects.ExBox2DPhysicsObject;
+	
 	import starling.display.Image;
-	import flash.display.BitmapData;
 	import starling.textures.Texture;
-	import flash.display.Shape;
 
 	public class Functions
 	{
@@ -72,9 +77,8 @@ package utils
 		
 		
 		public static function ResizeObjectValue(state : StarlingState, newW:Number, newH: Number, objectName : String, reDrawView : Boolean = true) : void { // Works for rectangle shape now
-			var object : Box2DPhysicsObject = state.getObjectByName(objectName) as Box2DPhysicsObject;
+			var object : ExBox2DPhysicsObject = state.getObjectByName(objectName) as ExBox2DPhysicsObject;
 			var body : b2Body = object.getBody() as b2Body;
-// save color in userdata of box2d and shit			
 			var newShape:b2PolygonShape = Box2DShapeMaker.BeveledRect(newW, newH, 0.1);
 			
 			body.DestroyFixture(body.GetFixtureList());
@@ -84,7 +88,22 @@ package utils
 				var height : Number = (body.GetFixtureList().GetAABB().upperBound.y - body.GetFixtureList().GetAABB().lowerBound.y) * 30; // standard box2d scale 30
 				var width : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
 //				object.view = StarlingDraw.RectangleShape(width,height, 0x2E2E2E);
-				object.view = StarlingDraw.RectangleImage(width,height, 0x2E2E2E);
+//				object.view = StarlingDraw.RectangleImage(width,height, object.currentColor);
+				
+				switch (object.currentShape){
+					case Shapes.CIRCLE:
+						object.view = StarlingShape.Circle(width, object.currentColor);
+						break;
+					case Shapes.HEXAGON:
+						object.view = StarlingShape.polygon(width, 6, object.currentColor);
+						break;
+					case Shapes.RECTANGLE:
+						object.view = StarlingShape.Rectangle(width, height, object.currentColor);
+						break;
+					case Shapes.TRIANGLE:
+						object.view = StarlingShape.Triangle(width, height, object.currentColor);
+						break;
+				}
 			}
 			
 		}

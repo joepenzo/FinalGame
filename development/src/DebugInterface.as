@@ -2,14 +2,15 @@ package
 {
 	import citrus.core.CitrusObject;
 	
+	import com.bit101.components.ComboBox;
+	import com.bit101.components.List;
+	
 	import data.consts.Actions;
 	import data.consts.ValueRange;
 	
 	import flash.display.Sprite;
 	
 	import uk.co.soulwire.gui.SimpleGUI;
-	import com.bit101.components.List;
-	import com.bit101.components.ComboBox;
 
 	
 	public class DebugInterface extends Sprite {
@@ -26,7 +27,7 @@ package
 		public var styledItem : String = "Platform";
 		public var shape : String = "Rectangle";
 		
-			
+		public var heroSize : int;	
 			
 			
 		public function DebugInterface() {
@@ -61,6 +62,10 @@ package
 				{label:"Hexagon", data: Actions.CHANGE_SHAPE_HEXAGON},
 				{label:"Circle", data: Actions.CHANGE_SHAPE_CIRCLE}
 			], { callback: function ():void{  _guiInput.triggerOnce(shape); }});
+			
+			
+			_gui.addGroup("Avatar");
+			_gui.addSlider("heroSize", ValueRange.HERO_SIZE.x, ValueRange.HERO_SIZE.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.HERO_SIZE, heroSize); }});
 			
 			_gui.show();
 		}

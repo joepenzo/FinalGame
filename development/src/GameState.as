@@ -33,6 +33,7 @@ package
 	import utils.Functions;
 	import utils.StarlingDraw;
 	import utils.StarlingShape;
+	import Box2D.Dynamics.b2Body;
 	
 	public class GameState extends StarlingState
 	{
@@ -134,6 +135,12 @@ package
 				debug(action.value);
 				_camera.setZoom(action.value);
 			}
+			// HERO SIZE - CHANGE
+			if(_ce.input.isDoing(Actions.HERO_SIZE)) {
+				action = _ce.input.getAction(Actions.HERO_SIZE) as InputAction;
+				Functions.ResizeObjectValue(this, action.value/30/2, action.value/30/2, "hero");
+			}
+			
 			
 			
 			//RED GREEN BLUE - CHANGE
@@ -180,18 +187,23 @@ package
 		private function changeObjectShape():void {
 			var object : ExBox2DPhysicsObject = getObjectByName("hero") as ExBox2DPhysicsObject;
 			object.currentShape = _gameData.currentShape;
+			
+			var body: b2Body = object.getBody() as b2Body;
+			var height : Number = (body.GetFixtureList().GetAABB().upperBound.y - body.GetFixtureList().GetAABB().lowerBound.y) * 30; // standard box2d scale 30
+			var width : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
+			
 			switch (object.currentShape){
 				case Shapes.CIRCLE:
-					object.view = StarlingShape.Circle(object.width, object.currentColor);
+					object.view = StarlingShape.Circle(width, object.currentColor);
 					break;
 				case Shapes.HEXAGON:
-					object.view = StarlingShape.polygon(object.width, 6, object.currentColor);
+					object.view = StarlingShape.polygon(width, 6, object.currentColor);
 					break;
 				case Shapes.RECTANGLE:
-					object.view = StarlingShape.Rectangle(object.width, object.height, object.currentColor);
+					object.view = StarlingShape.Rectangle(width, height, object.currentColor);
 					break;
 				case Shapes.TRIANGLE:
-					object.view = StarlingShape.Triangle(object.width, object.height, object.currentColor);
+					object.view = StarlingShape.Triangle(width, height, object.currentColor);
 					break;
 			}
 		}
@@ -209,21 +221,28 @@ package
 				return;
 			}
 			
+			
+			
 			if (getObjectByName(name)) { 
 				var object : ExBox2DPhysicsObject = getObjectByName(name) as ExBox2DPhysicsObject;
 				object.currentColor = hex;
+				var body: b2Body = object.getBody() as b2Body;
+				var height : Number = (body.GetFixtureList().GetAABB().upperBound.y - body.GetFixtureList().GetAABB().lowerBound.y) * 30; // standard box2d scale 30
+				var width : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
+
+				
 				switch (object.currentShape){
 					case Shapes.CIRCLE:
-						object.view = StarlingShape.Circle(object.width, object.currentColor);
+						object.view = StarlingShape.Circle(width, object.currentColor);
 						break;
 					case Shapes.HEXAGON:
-						object.view = StarlingShape.polygon(object.width, 6, object.currentColor);
+						object.view = StarlingShape.polygon(width, 6, object.currentColor);
 						break;
 					case Shapes.RECTANGLE:
-						object.view = StarlingShape.Rectangle(object.width, object.height, object.currentColor);
+						object.view = StarlingShape.Rectangle(width, height, object.currentColor);
 						break;
 					case Shapes.TRIANGLE:
-						object.view = StarlingShape.Triangle(object.width, object.height, object.currentColor);
+						object.view = StarlingShape.Triangle(width, height, object.currentColor);
 						break;
 				}
 

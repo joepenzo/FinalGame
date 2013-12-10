@@ -9,7 +9,8 @@ package data.consts
 		public static const RED : Point = new Point(0, 255);
 		public static const GREEN : Point = new Point(0, 255);
 		public static const BLUE : Point = new Point(0, 255);
-		public static const HERO_SIZE : Point = new Point(15, 75);
+//		public static const HERO_SIZE : Point = new Point(15, 75);
+		public static const HERO_SIZE : Point = new Point(15, 110);
 		
 	}
 }

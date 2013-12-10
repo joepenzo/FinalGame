@@ -16,12 +16,18 @@ package objects {
 	import citrus.physics.box2d.IBox2DPhysicsObject;
 	import citrus.utils.AGameData;
 	
+	import data.consts.Actions;
+	
 	import flash.geom.Point;
 	import flash.utils.clearTimeout;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.setTimeout;
 	
 	import org.osflash.signals.Signal;
+	import citrus.objects.platformer.box2d.Missile;
+	import utils.StarlingShape;
+	import starling.display.Shape;
+
 	//import data.Sounds;
 	
 	/**
@@ -146,10 +152,11 @@ package objects {
 		public var doubleJumpEnabled : Boolean = false;
 		public var invertMovement : Boolean = false;
 		
-		private var _currentColor : uint;
-		
+		private var _bulletcounter:int=0;
+
 		
 		//private var _sounds:SynthSounds;
+		private var _bulletView:Shape;
 
 		/**
 		 * Creates a new hero object.
@@ -170,7 +177,10 @@ package objects {
 
 			//_gameData = _ce.gameData as GameData;
 			//_sounds = _gameData.synthSounds;
-			_ce.input.keyboard.addKeyAction("jump",Keyboard.UP);
+			_ce.input.keyboard.addKeyAction(Actions.JUMP,Keyboard.UP);
+		
+			_ce.input.keyboard.addKeyAction(Actions.SHOOT,Keyboard.COMMAND);
+			_ce.input.keyboard.addKeyAction(Actions.SHOOT,Keyboard.CTRL);
 		}
 
 		override public function destroy():void
@@ -257,7 +267,7 @@ package objects {
 				
 				_ducking = (_ce.input.isDoing("duck",inputChannel) && _onGround && canDuck);
 				
-				if (_ce.input.isDoing("right",inputChannel) && !_ducking)
+				if (_ce.input.isDoing(Actions.RIGHT,inputChannel) && !_ducking)
 				{
 					if (!invertMovement) {
 						velocity.Add(getSlopeBasedMoveAngle());
@@ -268,7 +278,7 @@ package objects {
 					moveKeyPressed = true;
 				}
 				
-				if (_ce.input.isDoing("left",inputChannel) && !_ducking)
+				if (_ce.input.isDoing(Actions.LEFT,inputChannel) && !_ducking)
 				{
 					if (!invertMovement) {
 						velocity.Subtract(getSlopeBasedMoveAngle());
@@ -292,7 +302,7 @@ package objects {
 				}
 				
 				
-				if (_onGround && _ce.input.justDid("jump",inputChannel) && !_ducking) {
+				if (_onGround && _ce.input.justDid(Actions.JUMP,inputChannel) && !_ducking) {
 					if (!invertMovement) {
 						velocity.y = -jumpHeight;
 					} else {
@@ -307,20 +317,20 @@ package objects {
 				}
 				
 				if (!invertMovement) {
-					if (_ce.input.isDoing("jump",inputChannel) && !_onGround && velocity.y < 0) {
+					if (_ce.input.isDoing(Actions.JUMP,inputChannel) && !_onGround && velocity.y < 0) {
 						velocity.y -= jumpAcceleration;
 						if (doubleJumpEnabled) {
-							if (_canDoubleJump == true && _ce.input.justDid("jump",inputChannel)) {
+							if (_canDoubleJump == true && _ce.input.justDid(Actions.JUMP,inputChannel)) {
 								velocity.y = -jumpHeight;
 								_canDoubleJump = false;
 							}
 						}
 					}
 				} else {
-					if (_ce.input.isDoing("jump",inputChannel) && !_onGround && velocity.y > 0) {
+					if (_ce.input.isDoing(Actions.JUMP,inputChannel) && !_onGround && velocity.y > 0) {
 						velocity.y += jumpAcceleration;
 						if (doubleJumpEnabled) {
-							if (_canDoubleJump == true && _ce.input.justDid("jump",inputChannel)) {
+							if (_canDoubleJump == true && _ce.input.justDid(Actions.JUMP,inputChannel)) {
 								velocity.y = +jumpHeight;
 								_canDoubleJump = false;
 							}
@@ -329,11 +339,26 @@ package objects {
 				}	
 				
 				if (_springOffEnemy != -1) {
-					if (_ce.input.isDoing("jump",inputChannel))
+					if (_ce.input.isDoing(Actions.JUMP,inputChannel))
 						velocity.y = -enemySpringJumpHeight;
 					else
 						velocity.y = -enemySpringHeight;
 					_springOffEnemy = -1;
+				}
+				
+				
+				
+				//the shooting ability
+				if (_ce.input.justDid(Actions.SHOOT)) {
+					var bullet:Missile;
+					if (_inverted) {
+						bullet = new Missile("bullet"+_bulletcounter, {x:x -width, y:y, width:3, height:3, speed:30, explodeDuration:200, fuseDuration: 5000, angle:180});
+					} else {
+						bullet = new Missile("bullet"+_bulletcounter, {x:x + width, y:y, width:3, height:3, speed:30, explodeDuration:200, fuseDuration: 5000, angle:0});
+					}
+					bullet.view = StarlingShape.Rectangle(3,3,0x000000);
+					_bulletcounter++
+					_ce.state.add(bullet);
 				}
 				
 				//Cap velocities
