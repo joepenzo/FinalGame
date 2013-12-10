@@ -2,7 +2,7 @@ package data.consts
 {
 	import flash.geom.Point;
 
-	public class ValueParams	{
+	public class ValueRange	{
 		public static const GRAVITY : Point = new Point(20, -8);
 		public static const ZOOM : Point = new Point(.5, 10);
 

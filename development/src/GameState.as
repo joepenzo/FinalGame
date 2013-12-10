@@ -2,10 +2,14 @@ package
 {
 	import citrus.core.CitrusObject;
 	import citrus.core.starling.StarlingState;
+	import citrus.input.InputAction;
 	import citrus.objects.platformer.box2d.Platform;
 	import citrus.physics.box2d.Box2D;
 	import citrus.view.ACitrusCamera;
 	import citrus.view.starlingview.StarlingCamera;
+	
+	import data.GameData;
+	import data.consts.Actions;
 	
 	import flash.display.Sprite;
 	import flash.geom.Point;
@@ -15,10 +19,13 @@ package
 	import generators.MarioGenerator;
 	
 	import objects.ExHero;
+	import objects.Level;
 	
 	import utils.Functions;
 	import utils.StarlingDraw;
-	import objects.Level;
+	import citrus.utils.AGameData;
+	import citrus.objects.Box2DPhysicsObject;
+	import starling.display.QuadBatch;
 	
 	public class GameState extends StarlingState
 	{
@@ -33,6 +40,7 @@ package
 		private var _hero:ExHero;
 		private var _bounds:Rectangle;
 		private var _debugSprite:flash.display.Sprite;
+		private var _gameData:GameData;
 		
 		public function GameState() {
 			super();	
@@ -40,8 +48,8 @@ package
 		
 		override public function initialize():void {
 			super.initialize();
-			
-			
+			_gameData = _ce.gameData as GameData;
+
 			
 			_box2D = new Box2D("box2D");
 			_box2D.visible = true;
@@ -106,8 +114,76 @@ package
 			_camera.renderDebug(_debugSprite as flash.display.Sprite)
 			drawPlatformsToMiniMap();
 			
+		
+			// GRAVITY - CHANGE
+			if(_ce.input.isDoing(Actions.VALUE_GRAVITY)) {
+				var action:InputAction = _ce.input.getAction(Actions.VALUE_GRAVITY) as InputAction;
+				_box2D.gravity.Set(0, action.value); 
+			}
+			// ZOOM - CHANGE
+			if(_ce.input.isDoing(Actions.VALUE_ZOOM)) {
+				action = _ce.input.getAction(Actions.VALUE_ZOOM) as InputAction;
+				_camera.setZoom(action.value);
+			}
+			
+			
+			//RED GREEN BLUE - CHANGE
+			if(_ce.input.isDoing(Actions.VALUE_RED)) {
+				action = _ce.input.getAction(Actions.VALUE_RED) as InputAction;
+				_gameData.red = action.value;
+				changeObjectColor(_gameData.currentColoring, _gameData.red, _gameData.green, _gameData.blue);
+			}if(_ce.input.isDoing(Actions.VALUE_GREEN)) {
+				action = _ce.input.getAction(Actions.VALUE_GREEN) as InputAction;
+				_gameData.green = action.value;
+				changeObjectColor(_gameData.currentColoring, _gameData.red, _gameData.green, _gameData.blue);
+			}if(_ce.input.isDoing(Actions.VALUE_BLUE)) {
+				action = _ce.input.getAction(Actions.VALUE_BLUE) as InputAction;
+				_gameData.blue = action.value;
+				changeObjectColor(_gameData.currentColoring, _gameData.red, _gameData.green, _gameData.blue);
+			}
+			
+			if (_ce.input.justDid(Actions.SELECTED_COLOROBJ_HERO)) {
+				fatal("DID HERO");
+				_gameData.currentColoring = "hero";
+			} if (_ce.input.justDid(Actions.SELECTED_COLOROBJ_BG)) {
+				fatal("DID BG");
+				_gameData.currentColoring = "bg";
+			} if (_ce.input.justDid(Actions.SELECTED_COLOROBJ_PLAT)) {
+				fatal("DID PLATFRM");
+				_gameData.currentColoring = "platform";
+			} 
+			
+			
 				
 		}
 
+		
+		
+		private function changeObjectColor(name : String , red : int, green : int, blue : int):void{
+			var hex:uint = red << 16 | green << 8 | blue;
+			
+			if (name == "platform") {
+				_gameData.levelColor = hex;
+				_lvl.drawQuadMap(this, tileSize, hex);
+				return;
+			} else if ( name == "bg") {
+				stage.color = hex;
+				return;
+			}
+			
+			if (getObjectByName(name)) { 
+				var object :Box2DPhysicsObject = getObjectByName(name) as Box2DPhysicsObject;
+				var view : QuadBatch = object.view as QuadBatch;
+				view.setQuadColor(0,hex);
+				
+			}
+		}
+
+		
+		
+		
+			
+			
+	
 	}
 }
