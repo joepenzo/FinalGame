@@ -6,9 +6,10 @@ package utils
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
 	
+	import starling.display.BlendMode;
 	import starling.display.Image;
-	import starling.textures.Texture;
 	import starling.display.QuadBatch;
+	import starling.textures.Texture;
 	
 	public class StarlingDraw
 	{
@@ -25,20 +26,6 @@ package utils
 			
 			return quadBatch;
 		}
-		
-		
-		public static function CircleQuadBatch(width : int, height : int, color : uint) : QuadBatch {
-			var quadBatch:QuadBatch = new QuadBatch();
-			
-			var tex:Texture = Texture.fromBitmapData(new BitmapData(width, height, true));
-			var image:Image = new Image(tex);
-			image.color = color;
-			
-			quadBatch.addImage(image);
-			
-			return quadBatch;
-		}
-		
 		
 		/*
 		This looks more heavy

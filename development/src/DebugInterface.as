@@ -48,7 +48,7 @@ package
 				{label:"Avatar", data: Actions.SELECTED_COLOROBJ_HERO},
 				{label:"Platform", data: Actions.SELECTED_COLOROBJ_PLAT},
 				{label:"Background", data: Actions.SELECTED_COLOROBJ_BG}
-			], { callback: function ():void{  _guiInput.triggerOn(styledItem); }});
+			], { callback: function ():void{  _guiInput.triggerOnce(styledItem); }});
 			
 			_gui.addSlider("red", ValueRange.RED.x, ValueRange.RED.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.VALUE_RED, red);  }});
 			_gui.addSlider("green", ValueRange.GREEN.x, ValueRange.GREEN.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.VALUE_GREEN, green);  }});

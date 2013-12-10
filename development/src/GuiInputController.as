@@ -21,7 +21,7 @@ package
 			triggerOFF(action, value, "OFF");
 		}
 		
-		public function triggerOn(action : String) : void {
+		public function triggerOnce(action : String) : void {
 			triggerONCE(action, 1);
 			
 		}

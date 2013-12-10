@@ -3,8 +3,10 @@ package
 	import citrus.core.CitrusObject;
 	import citrus.core.starling.StarlingState;
 	import citrus.input.InputAction;
+	import citrus.objects.Box2DPhysicsObject;
 	import citrus.objects.platformer.box2d.Platform;
 	import citrus.physics.box2d.Box2D;
+	import citrus.utils.AGameData;
 	import citrus.view.ACitrusCamera;
 	import citrus.view.starlingview.StarlingCamera;
 	
@@ -21,11 +23,11 @@ package
 	import objects.ExHero;
 	import objects.Level;
 	
+	import starling.display.QuadBatch;
+	
 	import utils.Functions;
 	import utils.StarlingDraw;
-	import citrus.utils.AGameData;
-	import citrus.objects.Box2DPhysicsObject;
-	import starling.display.QuadBatch;
+	import utils.StarlingShape;
 	
 	public class GameState extends StarlingState
 	{
@@ -68,7 +70,8 @@ package
 			
 			var heroPos : Point = _lvl.randomPosition();
 			_hero = new ExHero("hero", {x:heroPos.x * tileSize, y:heroPos.y* tileSize, width:tileSize/2, height: tileSize/2, doubleJumpEnabled: true});
-			_hero.view = StarlingDraw.CircleQuadBatch(_hero.width, _hero.height, 0x0000FF);			
+			//_hero.view = StarlingDraw.RectangleImage(_hero.width,_hero.height, 0x000050);			
+			_hero.view = StarlingShape.CircleShape(_hero.width, 0x000050);
 			add(_hero);
 			
 			_bounds = new Rectangle(0, 0, _mapW*tileSize, _mapH*tileSize);

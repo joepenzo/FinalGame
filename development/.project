@@ -37,6 +37,11 @@
 			<location>/Developer/Resources/actionscript/as3sfxr/src</location>
 		</link>
 		<link>
+			<name>[source path] extension-src</name>
+			<type>2</type>
+			<location>/Developer/Resources/actionscript/Starling-Extension-Graphics-master/extension/src</location>
+		</link>
+		<link>
 			<name>[source path] minimalcomps-master-src</name>
 			<type>2</type>
 			<location>/Developer/Resources/actionscript/minimalcomps-master/src</location>
