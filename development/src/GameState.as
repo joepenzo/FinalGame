@@ -1,5 +1,7 @@
 package
 {
+	import Box2D.Dynamics.b2Body;
+	
 	import citrus.core.CitrusObject;
 	import citrus.core.starling.StarlingState;
 	import citrus.input.InputAction;
@@ -21,7 +23,9 @@ package
 	import generators.CaveGenerator;
 	import generators.MarioGenerator;
 	
+	import objects.EdgeDetectorEnemy;
 	import objects.ExBox2DPhysicsObject;
+	import objects.ExEnemy;
 	import objects.ExHero;
 	import objects.Level;
 	
@@ -33,7 +37,6 @@ package
 	import utils.Functions;
 	import utils.StarlingDraw;
 	import utils.StarlingShape;
-	import Box2D.Dynamics.b2Body;
 	
 	public class GameState extends StarlingState
 	{
@@ -60,7 +63,7 @@ package
 
 			
 			_box2D = new Box2D("box2D");
-			_box2D.visible = false;
+			_box2D.visible = true;
 			add(_box2D);
 			
 			_mapW = 150;
@@ -74,12 +77,14 @@ package
 			_lvl.drawMapPlaftormsToGameState(this, tileSize);
 			
 			
-			var heroPos : Point = _lvl.randomPosition();
-			_hero = new ExHero("hero", {x:heroPos.x * tileSize, y:heroPos.y* tileSize, width:tileSize/2, height: tileSize/2, doubleJumpEnabled: true});
+			var heroStartPos : Point = _lvl.randomPosition();
+			_hero = new ExHero("hero", {x:heroStartPos.x * tileSize, y:heroStartPos.y* tileSize, width:tileSize/2, height: tileSize/2, doubleJumpEnabled: true});
 			_hero.currentColor = 0x000050;
 			_hero.currentShape = Shapes.HEXAGON
 			_hero.view = StarlingShape.polygon(_hero.width, 6, _hero.currentColor);
 			add(_hero);
+		
+			add(new EdgeDetectorEnemy("enemy-test", {speed: .8, x : _hero.x + 150, y : _hero.y, width: 20, height: 20, view : StarlingShape.Rectangle(20,20, 0x00ff00)}));
 			
 			_bounds = new Rectangle(0, 0, _mapW*tileSize, _mapH*tileSize);
 			_camera = view.camera as StarlingCamera;
@@ -132,7 +137,6 @@ package
 			// ZOOM - CHANGE
 			if(_ce.input.isDoing(Actions.VALUE_ZOOM)) {
 				action = _ce.input.getAction(Actions.VALUE_ZOOM) as InputAction;
-				debug(action.value);
 				_camera.setZoom(action.value);
 			}
 			// HERO SIZE - CHANGE
