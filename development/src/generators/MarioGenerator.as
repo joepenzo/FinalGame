@@ -88,7 +88,7 @@ public class MarioGenerator
         for (var y:int = 0; y < height; y++) {
 		    for (var x:int = length; x < lvl.width; x++) {
                 if (y >= floor) {
-                    lvl.setBlock(x, y, uint((1 + 9 * 16)));
+					lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((1 + 9 * 16)));
                 }
             }
         }
@@ -104,7 +104,7 @@ public class MarioGenerator
                 }
                 for (y = 0; y < lvl.height; y++) {
                     if ((x > 4 && y <= ceiling) || x < 1) {
-                        lvl.setBlock(x, y, uint((1 + 9 * 16)));
+						lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((1 + 9 * 16)));
                     }
                 }
             }
@@ -120,10 +120,10 @@ public class MarioGenerator
 	private function addBorderBlocks():void {
 		for (var y:int = 0; y < lvl.height; y++) {
 			for (var x:int = 0; x < lvl.width; x++) {
-				if (y == 0) lvl.setBlock(x, y, uint(111) ); // TOP
-				if (y == lvl.height-1) lvl.setBlock(x, y, uint(111) ); // BOTOM
-				if (x == 0) lvl.setBlock(x, y, uint(111) ); // LEFT
-				if (x == lvl.width-1) lvl.setBlock(x, y, uint(111) ); // RIGHT
+				if (y == 0) lvl.setBlock(x, y, uint(1) ); // TOP
+				if (y == lvl.height-1) lvl.setBlock(x, y, uint(1) ); // BOTOM
+				if (x == 0) lvl.setBlock(x, y, uint(1) ); // LEFT
+				if (x == lvl.width-1) lvl.setBlock(x, y, uint(1) ); // RIGHT
 			}
 		}
 	}
@@ -171,15 +171,15 @@ public class MarioGenerator
             if (x < xo + js || x > xo + length - js - 1) {
                 for (var y:int = 0; y < height; y++) {
                     if (y >= floor) {
-                        lvl.setBlock(x, y, uint((1 + 9 * 16)));
+						lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((1 + 9 * 16)));
                     } else if (hasStairs) {
                         if (x < xo + js) {
                             if (y >= floor - (x - xo) + 1) {
-                                lvl.setBlock(x, y, uint((9 + 0 * 16)));
+								lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((9 + 0 * 16)));
                             }
                         } else {
                             if (y >= floor - ((xo + length) - x) + 2) {
-                                lvl.setBlock(x, y, uint((9 + 0 * 16)));
+								lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((9 + 0 * 16)));
                             }
                         }
                     }
@@ -236,7 +236,7 @@ public class MarioGenerator
             {
                 if (y >= floor)
                 {
-                    lvl.setBlock(x, y, uint((1 + 9 * 16)));
+					lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((1 + 9 * 16)));
                 }
             }
         }
@@ -287,12 +287,12 @@ public class MarioGenerator
 
                             if (lvl.getBlock(x, y) == 0)
                             {
-                                lvl.setBlock(x, y, uint((xx + yy * 16)));
+								lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((xx + yy * 16)));
                             }
                             else
                             {
-                                if (lvl.getBlock(x, y) == uint((4 + 8 * 16))) lvl.setBlock(x, y, uint((4 + 11 * 16)));
-                                if (lvl.getBlock(x, y) == uint((6 + 8 * 16))) lvl.setBlock(x, y, uint((6 + 11 * 16)));
+                                if (lvl.getBlock(x, y) == uint((4 + 8 * 16))) lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((4 + 11 * 16)));
+                                if (lvl.getBlock(x, y) == uint((6 + 8 * 16))) lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((6 + 11 * 16)));
                             }
                         }
                     }
@@ -341,14 +341,14 @@ public class MarioGenerator
 
             for (var y:int = 0; y < height; y++) {
                 if (y >= floor) {
-                    lvl.setBlock(x, y, uint((1 + 9 * 16)));
+					lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((1 + 9 * 16)));
                 } else {
                     if ((x == xTube || x == xTube + 1) && y >= tubeHeight) {
                         var xPic:int = 10 + x - xTube;
                         if (y == tubeHeight) {
-                            lvl.setBlock(x, y, uint((xPic + 0 * 16)));
+							lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((xPic + 0 * 16)));
                         } else {
-                            lvl.setBlock(x, y, uint((xPic + 1 * 16)));
+							lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((xPic + 1 * 16)));
                         }
                     }
                 }
@@ -366,7 +366,7 @@ public class MarioGenerator
         var floor:int = height - 1 - random.nextInt(4);
         for (var x:int = xo; x < xo + length; x++) {
             for (var y:int = 0; y < height; y++) {
-                if (y >= floor) lvl.setBlock(x, y, uint((1 + 9 * 16)));
+                if (y >= floor) lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((1 + 9 * 16)));
             }
         }
 
@@ -391,7 +391,7 @@ public class MarioGenerator
         if (floor - 2 > 0) {
             if ((x1 - 1 - e) - (x0 + 1 + s) > 1) {
                 for (var x:int = x0 + 1 + s; x < x1 - 1 - e; x++) {
-                    lvl.setBlock(x, floor - 2, uint((2 + 2 * 16)));
+					lvl.setBlock(x, floor - 2, 1);//lvl.setBlock(x, floor - 2, uint((2 + 2 * 16)));
                 }
             }
         }
@@ -405,18 +405,18 @@ public class MarioGenerator
                     if (rocks) {
                         if (x != x0 + 1 && x != x1 - 2 && random.nextInt(3) == 0) {
                             if (random.nextInt(4) == 0) {
-                                lvl.setBlock(x, floor - 4, uint((4 + 2 + 1 * 16)));
+								lvl.setBlock(x, floor - 4, 1);//lvl.setBlock(x, floor - 4, uint((4 + 2 + 1 * 16)));
                             } else {
-                                lvl.setBlock(x, floor - 4, uint((4 + 1 + 1 * 16)));
+								lvl.setBlock(x, floor - 4, 1);//lvl.setBlock(x, floor - 4, uint((4 + 1 + 1 * 16)));
                             }
                         } else if (random.nextInt(4) == 0) {
                             if (random.nextInt(4) == 0) {
-                                lvl.setBlock(x, floor - 4, uint((2 + 1 * 16)));
+								lvl.setBlock(x, floor - 4, 1);//lvl.setBlock(x, floor - 4, uint((2 + 1 * 16)));
                             } else {
-                                lvl.setBlock(x, floor - 4, uint((1 + 1 * 16)));
+								lvl.setBlock(x, floor - 4, 1);//lvl.setBlock(x, floor - 4, uint((1 + 1 * 16)));
                             }
                         } else {
-                            lvl.setBlock(x, floor - 4, uint((0 + 1 * 16)));
+							lvl.setBlock(x, floor - 4, 1);//lvl.setBlock(x, floor - 4, uint((0 + 1 * 16)));
                         }
                     }
                 }
@@ -478,55 +478,55 @@ public class MarioGenerator
                 if (b[0][0] == b[1][0] && b[0][1] == b[1][1]) {
                     if (b[0][0] == b[0][1]) {
                         if (b[0][0]) {
-                            lvl.setBlock(x, y, uint((1 + 9 * 16 + to)));
+							lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((1 + 9 * 16 + to)));
                         } else {
                             // KEEP OLD BLOCK!
                         }
                     } else {
                         if (b[0][0]) {
-                            lvl.setBlock(x, y, uint((1 + 10 * 16 + to)));
+							lvl.setBlock(x, y, 1);// lvl.setBlock(x, y, uint((1 + 10 * 16 + to)));
                         } else {
-                            lvl.setBlock(x, y, uint((1 + 8 * 16 + to)));
+							lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((1 + 8 * 16 + to)));
                         }
                     }
                 } else if (b[0][0] == b[0][1] && b[1][0] == b[1][1]) {
                     if (b[0][0])  {
-                        lvl.setBlock(x, y, uint((2 + 9 * 16 + to)));
+						lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((2 + 9 * 16 + to)));
                     } else {
-                        lvl.setBlock(x, y, uint((0 + 9 * 16 + to)));
+						lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((0 + 9 * 16 + to)));
                     }
                 } else if (b[0][0] == b[1][1] && b[0][1] == b[1][0]) {
                     lvl.setBlock(x, y, uint((1 + 9 * 16 + to)));
                 } else if (b[0][0] == b[1][0]) {
                     if (b[0][0]) {
                         if (b[0][1]) {
-                            lvl.setBlock(x, y, uint((3 + 10 * 16 + to)));
+							lvl.setBlock(x, y, 1);// lvl.setBlock(x, y, uint((3 + 10 * 16 + to)));
                         } else {
-                            lvl.setBlock(x, y, uint((3 + 11 * 16 + to)));
+							lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((3 + 11 * 16 + to)));
                         }
                     } else {
                         if (b[0][1]) {
-                            lvl.setBlock(x, y, uint((2 + 8 * 16 + to)));
+							lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((2 + 8 * 16 + to)));
                         } else {
-                            lvl.setBlock(x, y, uint((0 + 8 * 16 + to)));
+							lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((0 + 8 * 16 + to)));
                         }
                     }
                 } else if (b[0][1] == b[1][1]) {
                     if (b[0][1]) {
                         if (b[0][0]) {
-                            lvl.setBlock(x, y, uint((3 + 9 * 16 + to)));
+							lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((3 + 9 * 16 + to)));
 						} else {
-                            lvl.setBlock(x, y, uint((3 + 8 * 16 + to)));
+							lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((3 + 8 * 16 + to)));
                         }
                     } else {
                         if (b[0][0]) {
-                            lvl.setBlock(x, y, uint((2 + 10 * 16 + to)));
+							lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((2 + 10 * 16 + to)));
                         } else {
-                            lvl.setBlock(x, y, uint((0 + 10 * 16 + to)));
+							lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((0 + 10 * 16 + to)));
                         }
                     }
                 } else {
-                    lvl.setBlock(x, y, uint((0 + 1 * 16 + to)));
+					lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((0 + 1 * 16 + to)));
                 }
             }
         }
