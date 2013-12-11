@@ -74,6 +74,8 @@ package objects
 			
 			super(name, params);
 			
+			startingDirection = (Math.random() > .5) ? "left" : "right";
+
 			if (startingDirection == "left")
 				_inverted = true;
 		}
@@ -191,7 +193,7 @@ package objects
 						
 			if (_body.GetLinearVelocity().x < 0 && (contact.GetFixtureA() == _rightSensorFixture || contact.GetFixtureB() == _rightSensorFixture))
 				return;
-			
+
 			if (_body.GetLinearVelocity().x > 0 && (contact.GetFixtureA() == _leftSensorFixture || contact.GetFixtureB() == _leftSensorFixture))
 				return;
 			

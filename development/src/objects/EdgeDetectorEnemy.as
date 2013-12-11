@@ -1,12 +1,16 @@
 package objects
 {
 	import Box2D.Collision.Shapes.b2PolygonShape;
+	import Box2D.Collision.b2Manifold;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.Contacts.b2Contact;
+	import Box2D.Dynamics.b2Body;
 	import Box2D.Dynamics.b2Fixture;
+	import Box2D.Dynamics.b2FixtureDef;
 	
 	import citrus.math.MathVector;
 	import citrus.objects.platformer.box2d.Platform;
+	import citrus.physics.PhysicsCollisionCategories;
 	import citrus.physics.box2d.Box2DUtils;
 	import citrus.physics.box2d.IBox2DPhysicsObject;
 	
@@ -25,6 +29,16 @@ package objects
 		{
 			super(name, params);
 			_endContactCallEnabled = true;
+			_preContactCallEnabled = true;
+			
+			if (Math.random() < .5) {
+				startingDirection = "left";
+				_inverted = true;
+			} else {
+				startingDirection = "right";
+				_inverted = false;
+			}
+		
 
 		}
 		
@@ -45,9 +59,20 @@ package objects
 			_rightEdgeSensorShape.SetAsOrientedBox(sensorWidth, sensorHeight, sensorOffset);
 		}
 		
-		override protected function defineFixture():void {
+		override protected function defineFixture():void
+		{
 			super.defineFixture();
 			_fixtureDef.restitution = 0;
+			_fixtureDef.friction = 0;
+			_fixtureDef.filter.categoryBits = PhysicsCollisionCategories.Get("BadGuys");
+			_fixtureDef.filter.maskBits = PhysicsCollisionCategories.GetAllExcept("Items","BadGuys");
+			
+			_sensorFixtureDef = new b2FixtureDef();
+			_sensorFixtureDef.shape = _leftSensorShape;
+			_sensorFixtureDef.isSensor = true;
+			_sensorFixtureDef.filter.categoryBits = PhysicsCollisionCategories.Get("BadGuys");
+			_sensorFixtureDef.filter.maskBits = PhysicsCollisionCategories.GetAllExcept("Items","BadGuys");
+			
 		}
 		
 		override protected function createFixture():void {
@@ -58,7 +83,40 @@ package objects
 			
 			_sensorFixtureDef.shape = _rightEdgeSensorShape;
 			_rightEdgeSensorFixture = body.CreateFixture(_sensorFixtureDef);
+			
+			
 		}
+		
+	
+//		override public function handlePreSolve(contact:b2Contact, oldManifold:b2Manifold):void {
+//			var a:b2Fixture = contact.GetFixtureA();
+//			var b:b2Fixture = contact.GetFixtureB();
+//			
+//			var abody:b2Body = a.GetBody()
+//			var bbody:b2Body = b.GetBody()
+//
+//			if (abody.GetUserData().name.indexOf("enemy") >= 0 && bbody.GetUserData().name.indexOf("enemy") >= 0 ) {
+//				contact.SetEnabled(false);
+//			}
+//		}
+		
+		/*
+		void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold){
+			b2Body* bodyA = contact->GetFixtureA()->GetBody();
+			b2Body* bodyB = contact->GetFixtureB()->GetBody();
+			CCNode* spriteA = (CCNode*)bodyA->GetUserData();
+			CCNode* spriteB = (CCNode*)bodyB->GetUserData();
+			
+			if ([spriteA isKindOfClass:[Hero class]] && bodyB->GetType() ==b2_staticBody) {
+				contact->SetEnabled(false);
+				return;
+			}
+		
+			if ([spriteB isKindOfClass:[Hero class]] && bodyA->GetType() ==b2_staticBody) {
+				contact->SetEnabled(false);
+			}
+		}
+		*/
 		
 		
 		override public function handleEndContact(contact:b2Contact):void {
@@ -76,6 +134,7 @@ package objects
 		override public function handleBeginContact(contact:b2Contact):void {
 			var collider:IBox2DPhysicsObject = Box2DUtils.CollisionGetOther(this, contact);
 		//	notice(collider);
+
 			
 			if (contact.GetFixtureA() == _leftEdgeSensorFixture ||  contact.GetFixtureA() == _rightEdgeSensorFixture) return;
 		

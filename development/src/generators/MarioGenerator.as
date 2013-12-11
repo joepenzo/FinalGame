@@ -445,7 +445,7 @@ public class MarioGenerator
                 blockMap[x][y] = blocks == 4;
             }
         }
-        blockify(lvl, blockMap, width + 1, height + 1);
+        blockify(lvl, blockMap, width + 1, height + 1); // WTF DOES THIS SHIT??????
     }
 
     // @param blocks Boolean[][] 

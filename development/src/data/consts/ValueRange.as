@@ -3,6 +3,8 @@ package data.consts
 	import flash.geom.Point;
 
 	public class ValueRange	{
+		public static const PERCENTAGE : Point = new Point(0, 100);
+
 		public static const GRAVITY : Point = new Point(20, -8);
 		public static const ZOOM : Point = new Point(1, 10);
 

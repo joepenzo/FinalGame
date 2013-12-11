@@ -35,6 +35,8 @@ package data.consts
 		public static const CHANGE_SHAPE_TRIANGLE:String = "CHANGE_SHAPE_TRIANGLE";
 		public static const CHANGE_SHAPE_CIRCLE:String = "CHANGE_SHAPE_CIRCLE";
 		public static const CHANGE_SHAPE_HEXAGON:String = "CHANGE_SHAPE_HEXAGON";
+
+		public static const ENEMY_PERCANTAGE:String = "ENEMY_PERCANTAGE";
 		
 	}
 }

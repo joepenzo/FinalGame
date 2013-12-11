@@ -28,6 +28,7 @@ package
 		public var shape : String = "Rectangle";
 		
 		public var heroSize : int;	
+		public var enemyPercentage : int;	
 			
 			
 		public function DebugInterface() {
@@ -66,6 +67,10 @@ package
 			
 			_gui.addGroup("Avatar");
 			_gui.addSlider("heroSize", ValueRange.HERO_SIZE.x, ValueRange.HERO_SIZE.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.HERO_SIZE, heroSize); }});
+			
+			_gui.addColumn("Obstacles");
+			_gui.addGroup("Enemies");
+			_gui.addSlider("enemyPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.ENEMY_PERCANTAGE, enemyPercentage); }});
 			
 			_gui.show();
 		}

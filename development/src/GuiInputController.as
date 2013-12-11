@@ -8,7 +8,10 @@ package
 	public class GuiInputController extends InputController
 	{
 		
+		private static const INPUT_DELAY:int = 300;
+		
 		private var _interval:uint = 0;
+		
 		public function GuiInputController(name:String, params:Object=null) {
 			super(name, params);
 		}
@@ -33,7 +36,7 @@ package
 			
 			var action :InputAction = _ce.input.getAction(actionName) as InputAction;
 			clearTimeout(_interval);
-			_interval = setTimeout(myDelayedFunction, 100, action, value);
+			_interval = setTimeout(myDelayedFunction, INPUT_DELAY, action, value);
 			
 			function myDelayedFunction(action : InputAction, value : Number):void { // Kills the input after no change
 				if (action && action.message == "ON") triggerOFF(actionName, value, "OFF");

@@ -22,6 +22,7 @@ package objects  {
 	
 	import utils.Functions;
 	import utils.StarlingDraw;
+	import utils.StarlingShape;
 	
 	public class Level
 	{
@@ -58,6 +59,7 @@ package objects  {
 		public var yExit:int;
 		
 		private var _mapView: flash.display.Sprite;
+		private var _tilesAbovePlatTiles:Array;
 		
 		public function Level(width:int, height:int, defaultTile : int = 0) {        
 			this.width = width;
@@ -203,6 +205,8 @@ package objects  {
 				}
 			}
 			
+			
+			_tilesAbovePlatTiles  = getTilesAbovePlatformTiles() as Array;
 			drawQuadMap(gameState, tileSize, color);
 			
 		}
@@ -275,5 +279,46 @@ package objects  {
 		
 		
 
+		public function placeEnemies(state: StarlingState, amount : int):void {
+			var totalTilesAbovePlat : Number = _tilesAbovePlatTiles.length;
+			var enemies : int = totalTilesAbovePlat*(amount/100);
+			
+			for (var i:int=0; i<enemies; i++) {
+				var enemyX : int = uint((_tilesAbovePlatTiles[i].x * 32) + 32/2 );
+				var enemyY : int = uint(_tilesAbovePlatTiles[i].y * 32);
+				
+				state.add(new EdgeDetectorEnemy("enemy-" + i, {speed: 1, x : enemyX , y : enemyY, width: 20, height: 20,
+					view : StarlingShape.Circle(20, 0xBF2626),
+					leftBound: enemyX - 100, // TILESIZE INSTEAD 
+					rightBound: enemyX + 100 
+				}));
+
+			}
+
+			
+			//_tilesAbovePlatTiles
+			
+			
+		}
+		
+		
+		private function getTilesAbovePlatformTiles(): Array{
+			var tiles : Array = [];
+			
+			var mW:int = map[0].length;
+			var mH:int = map.length;
+			for (var y:int=0; y<mH; y++) {
+				for (var x:int=0; x<mW; x++) {
+					if (map[y][x] == 0 && Functions.isLinkedBottom(map,x,y,1) ) { // ALL TILES ABOVE A PLATFORM TILE
+						//map[y][x] = newIndex;
+						tiles.push(new Point(x,y));	
+					}
+				}
+			}
+			return tiles;
+		}
+		
+		
+		
 	}
 }

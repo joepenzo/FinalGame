@@ -40,7 +40,7 @@ package
 	
 	public class GameState extends StarlingState
 	{
-		private var tileSize:int = 32;
+		private var _tileSize:int = 32;
 		private var _mapW:int = 100;
 		private var _mapH:int = 40;
 		
@@ -66,27 +66,34 @@ package
 			_box2D.visible = true;
 			add(_box2D);
 			
-			_mapW = 150;
+			_mapW = 50;//_mapW = 150;
 			_mapH = 25;
 			_lvl = MarioGenerator.createlevel(_mapW, _mapH, 533, 0, 1);
 
 //			_mapW = 100;
 //			_mapH = 50;			
 //			_lvl = CaveGenerator.createlevel(_mapW, _mapH);
-		
-			_lvl.drawMapPlaftormsToGameState(this, tileSize);
+			
+			_lvl.drawMapPlaftormsToGameState(this, _tileSize);
 			
 			
 			var heroStartPos : Point = _lvl.randomPosition();
-			_hero = new ExHero("hero", {x:heroStartPos.x * tileSize, y:heroStartPos.y* tileSize, width:tileSize/2, height: tileSize/2, doubleJumpEnabled: true});
+			_hero = new ExHero("hero", {x:heroStartPos.x * _tileSize, y:heroStartPos.y* _tileSize, width:_tileSize/2, height: _tileSize/2, doubleJumpEnabled: true});
 			_hero.currentColor = 0x000050;
 			_hero.currentShape = Shapes.HEXAGON
 			_hero.view = StarlingShape.polygon(_hero.width, 6, _hero.currentColor);
 			add(_hero);
 		
-			add(new EdgeDetectorEnemy("enemy-test", {speed: .8, x : _hero.x + 150, y : _hero.y, width: 20, height: 20, view : StarlingShape.Rectangle(20,20, 0x00ff00)}));
 			
-			_bounds = new Rectangle(0, 0, _mapW*tileSize, _mapH*tileSize);
+//			var enemyX : int = _hero.x + 50;
+//			var enemyY : int = _hero.y;
+//			add(new EdgeDetectorEnemy("enemy-test", {speed: .8, x : enemyX , y : enemyY, width: 15, height: 20,
+//				//view : StarlingShape.Rectangle(20,20, 0x00ff00),
+//				leftBound: enemyX - 5, // TILESIZE INSTEAD 
+//				rightBound: enemyX + 5 
+//			}));
+			
+			_bounds = new Rectangle(0, 0, _mapW*_tileSize, _mapH*_tileSize);
 			_camera = view.camera as StarlingCamera;
 			_camera.setUp(_hero, new Point(stage.stageWidth/2, stage.stageHeight/2), _bounds, new Point(.5, .5));
 			_camera.allowRotation = true;
@@ -128,6 +135,11 @@ package
 			_camera.renderDebug(_debugSprite as flash.display.Sprite)
 			drawPlatformsToMiniMap();
 			
+			
+			if(_ce.input.justDid("shoot")) {
+				_lvl.placeEnemies(this, 10);
+				notice(getObjectsByType(EdgeDetectorEnemy).length);
+			}
 		
 			// GRAVITY - CHANGE
 			if(_ce.input.isDoing(Actions.VALUE_GRAVITY)) {
@@ -143,6 +155,13 @@ package
 			if(_ce.input.isDoing(Actions.HERO_SIZE)) {
 				action = _ce.input.getAction(Actions.HERO_SIZE) as InputAction;
 				Functions.ResizeObjectValue(this, action.value/30/2, action.value/30/2, "hero");
+			}
+
+			
+			// ENEMY AMOUND - CHANGE
+			if(_ce.input.isDoing(Actions.ENEMY_PERCANTAGE)) {
+				action = _ce.input.getAction(Actions.ENEMY_PERCANTAGE) as InputAction;
+				//_lvl.placeEnemies(this, int(action.value));
 			}
 			
 			
@@ -218,7 +237,7 @@ package
 			
 			if (name == "platform") {
 				_gameData.levelColor = hex;
-				_lvl.drawQuadMap(this, tileSize, hex);
+				_lvl.drawQuadMap(this, _tileSize, hex);
 				return;
 			} else if ( name == "bg") {
 				stage.color = hex;
