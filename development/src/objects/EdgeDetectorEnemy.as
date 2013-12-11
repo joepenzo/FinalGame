@@ -45,6 +45,11 @@ package objects
 			_rightEdgeSensorShape.SetAsOrientedBox(sensorWidth, sensorHeight, sensorOffset);
 		}
 		
+		override protected function defineFixture():void {
+			super.defineFixture();
+			_fixtureDef.restitution = 0;
+		}
+		
 		override protected function createFixture():void {
 			super.createFixture();
 
@@ -57,10 +62,8 @@ package objects
 		
 		
 		override public function handleEndContact(contact:b2Contact):void {
-			
 			var collider:IBox2DPhysicsObject = Box2DUtils.CollisionGetOther(this, contact);
 			if (contact.GetFixtureA() == _leftEdgeSensorFixture ||  contact.GetFixtureA() == _rightEdgeSensorFixture) {
-			error(collider);
 				if (contact.GetManifold().m_localPoint) {
 					var normalPoint:Point = new Point(contact.GetManifold().m_localPoint.x, contact.GetManifold().m_localPoint.y);
 					var collisionAngle:Number = new MathVector(normalPoint.x, normalPoint.y).angle * 180 / Math.PI;
@@ -72,6 +75,7 @@ package objects
 		
 		override public function handleBeginContact(contact:b2Contact):void {
 			var collider:IBox2DPhysicsObject = Box2DUtils.CollisionGetOther(this, contact);
+		//	notice(collider);
 			
 			if (contact.GetFixtureA() == _leftEdgeSensorFixture ||  contact.GetFixtureA() == _rightEdgeSensorFixture) return;
 		
