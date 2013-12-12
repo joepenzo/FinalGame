@@ -341,17 +341,16 @@ package objects  {
 		
 		
 		public function placeEnemies(state: StarlingState, percentage : int):void {
-			fatal(percentage);
-			
-			var currentEnemiesInState : Vector.<CitrusObject> = state.getObjectsByName("enemy") as Vector.<CitrusObject>;
+	fatal(percentage);
 
 			_newEnemiesAmount = _possibleTileForEnemies*(percentage/100);
-			
 			_freeTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
 			_enemiesToPlaceAmount = _freeTilesArray.length*(percentage/100);			
 			
-			placeEnemiesInMap(currentEnemiesInState);
-			Functions.trace2DArray(map);	
+			placeEnemiesInMap();
+	Functions.trace2DArray(map);
+			
+			var currentEnemiesInState : Vector.<CitrusObject> = state.getObjectsByName("enemy") as Vector.<CitrusObject>;
 		}
 		
 		
@@ -374,7 +373,7 @@ package objects  {
 //			
 //		}
 		
-		private function placeEnemiesInMap(enemiesInState : Vector.<CitrusObject>):void {
+		private function placeEnemiesInMap():void {
 			//fatal(_newEnemiesAmount + "  " + _oldEnemyAmount);
 			
 			if (_newEnemiesAmount > _oldEnemyAmount) { // ADD THE MOFO ENEMIES
@@ -387,6 +386,7 @@ package objects  {
 				}
 			} else if (_newEnemiesAmount < _oldEnemyAmount) { // REMOVE THE MOFO ENEMIES
 				var enemiesToRemove = _oldEnemyAmount - _newEnemiesAmount;
+				error('removeEnemies ' + enemiesToRemove);
 				for (var i:int=0; i<enemiesToRemove-1; i++) {
 					var randomIdx:int = Math.floor(Math.random() * _currentEnemyTilesArray.length);
 					var coord : Point = _currentEnemyTilesArray[randomIdx] as Point;

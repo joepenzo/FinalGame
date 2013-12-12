@@ -19,6 +19,7 @@ package
 	import flash.display.Sprite;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.*;
 	
 	import generators.CaveGenerator;
 	import generators.MarioGenerator;
@@ -52,6 +53,7 @@ package
 		private var _bounds:Rectangle;
 		private var _debugSprite:flash.display.Sprite;
 		private var _gameData:GameData;
+		private var ENEMY_AMOUNT_INTERVAL:Number = new Number();
 		
 		public function GameState() {
 			super();	
@@ -160,10 +162,16 @@ package
 
 			
 			// ENEMY AMOUND - CHANGE
-			if(_ce.input.justDid(Actions.ENEMY_PERCANTAGE)) {
-//				fatal("enemy");
+			if(_ce.input.hasDone(Actions.ENEMY_PERCANTAGE)) {
 				action = _ce.input.getAction(Actions.ENEMY_PERCANTAGE) as InputAction;
-				_lvl.placeEnemies(this, int(action.value));
+								
+				clearTimeout(ENEMY_AMOUNT_INTERVAL);
+				ENEMY_AMOUNT_INTERVAL = setTimeout(myDelayedFunction, 100, this, action);
+				function myDelayedFunction(state : StarlingState, action : InputAction):void { // Kills the input after no change
+					_lvl.placeEnemies(state, int(action.value));
+				}
+				
+			
 			}
 			
 			
