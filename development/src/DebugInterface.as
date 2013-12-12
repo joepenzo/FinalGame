@@ -51,7 +51,7 @@ package
 				{label:"Platform", data: Actions.SELECTED_COLOROBJ_PLAT},
 				{label:"Avatar", data: Actions.SELECTED_COLOROBJ_HERO},
 				{label:"Background", data: Actions.SELECTED_COLOROBJ_BG}
-			], { callback: function ():void{  _guiInput.triggerOnce(styledItem); }});
+			], { callback: function ():void{  _guiInput.triggerOnce(styledItem,1); }});
 			
 			_gui.addSlider("red", ValueRange.RED.x, ValueRange.RED.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.VALUE_RED, red);  }});
 			_gui.addSlider("green", ValueRange.GREEN.x, ValueRange.GREEN.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.VALUE_GREEN, green);  }});
@@ -62,7 +62,7 @@ package
 				{label:"Triangle", data: Actions.CHANGE_SHAPE_TRIANGLE},
 				{label:"Hexagon", data: Actions.CHANGE_SHAPE_HEXAGON},
 				{label:"Circle", data: Actions.CHANGE_SHAPE_CIRCLE}
-			], { callback: function ():void{  _guiInput.triggerOnce(shape); }});
+			], { callback: function ():void{  _guiInput.triggerOnce(shape,1); }});
 			
 			
 			_gui.addGroup("Avatar");
@@ -70,7 +70,7 @@ package
 			
 			_gui.addColumn("Obstacles");
 			_gui.addGroup("Enemies");
-			_gui.addSlider("enemyPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.ENEMY_PERCANTAGE, enemyPercentage); }});
+			_gui.addSlider("enemyPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, { callback: function ():void{  _guiInput.triggerOnce(Actions.ENEMY_PERCANTAGE, enemyPercentage); }});
 			
 			_gui.show();
 		}

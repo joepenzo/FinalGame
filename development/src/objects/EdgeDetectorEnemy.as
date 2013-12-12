@@ -87,37 +87,6 @@ package objects
 			
 		}
 		
-	
-//		override public function handlePreSolve(contact:b2Contact, oldManifold:b2Manifold):void {
-//			var a:b2Fixture = contact.GetFixtureA();
-//			var b:b2Fixture = contact.GetFixtureB();
-//			
-//			var abody:b2Body = a.GetBody()
-//			var bbody:b2Body = b.GetBody()
-//
-//			if (abody.GetUserData().name.indexOf("enemy") >= 0 && bbody.GetUserData().name.indexOf("enemy") >= 0 ) {
-//				contact.SetEnabled(false);
-//			}
-//		}
-		
-		/*
-		void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold){
-			b2Body* bodyA = contact->GetFixtureA()->GetBody();
-			b2Body* bodyB = contact->GetFixtureB()->GetBody();
-			CCNode* spriteA = (CCNode*)bodyA->GetUserData();
-			CCNode* spriteB = (CCNode*)bodyB->GetUserData();
-			
-			if ([spriteA isKindOfClass:[Hero class]] && bodyB->GetType() ==b2_staticBody) {
-				contact->SetEnabled(false);
-				return;
-			}
-		
-			if ([spriteB isKindOfClass:[Hero class]] && bodyA->GetType() ==b2_staticBody) {
-				contact->SetEnabled(false);
-			}
-		}
-		*/
-		
 		
 		override public function handleEndContact(contact:b2Contact):void {
 			var collider:IBox2DPhysicsObject = Box2DUtils.CollisionGetOther(this, contact);
@@ -133,8 +102,6 @@ package objects
 		
 		override public function handleBeginContact(contact:b2Contact):void {
 			var collider:IBox2DPhysicsObject = Box2DUtils.CollisionGetOther(this, contact);
-		//	notice(collider);
-
 			
 			if (contact.GetFixtureA() == _leftEdgeSensorFixture ||  contact.GetFixtureA() == _rightEdgeSensorFixture) return;
 		

@@ -6,6 +6,8 @@ package objects  {
 	import citrus.objects.CitrusSprite;
 	import citrus.objects.platformer.box2d.Platform;
 	
+	import data.consts.Tile;
+	
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;
 	import flash.display.Shape;
@@ -59,7 +61,8 @@ package objects  {
 		public var yExit:int;
 		
 		private var _mapView: flash.display.Sprite;
-		private var _tilesAbovePlatTiles:Array;
+		private var _enemiesAmount: int;
+		private var _freeTilesArray:Array;
 		
 		public function Level(width:int, height:int, defaultTile : int = 0) {        
 			this.width = width;
@@ -206,7 +209,6 @@ package objects  {
 			}
 			
 			
-			_tilesAbovePlatTiles  = getTilesAbovePlatformTiles() as Array;
 			drawQuadMap(gameState, tileSize, color);
 			
 		}
@@ -280,29 +282,116 @@ package objects  {
 		
 
 		public function placeEnemies(state: StarlingState, amount : int):void {
-			var totalTilesAbovePlat : Number = _tilesAbovePlatTiles.length;
-			var enemies : int = totalTilesAbovePlat*(amount/100);
-			
-			for (var i:int=0; i<enemies; i++) {
-				var enemyX : int = uint((_tilesAbovePlatTiles[i].x * 32) + 32/2 );
-				var enemyY : int = uint(_tilesAbovePlatTiles[i].y * 32);
-				
-				state.add(new EdgeDetectorEnemy("enemy-" + i, {speed: 1, x : enemyX , y : enemyY, width: 20, height: 20,
-					view : StarlingShape.Circle(20, 0xBF2626),
-					leftBound: enemyX - 100, // TILESIZE INSTEAD 
-					rightBound: enemyX + 100 
-				}));
+			var mW:int = map[0].length;
+			var mH:int = map.length;
 
+			var currentEnemiesInState : Vector.<CitrusObject> = state.getObjectsByName("enemy") as Vector.<CitrusObject>;
+			
+			_freeTilesArray = getTilesPointArrayAbovePlatformTiles() as Array;
+			_enemiesAmount = _freeTilesArray.length*(amount/100);
+			
+			addEnemiesToMap();
+			
+						
+			var currentEnemiesStatelength:uint = currentEnemiesInState.length;
+			
+			if (currentEnemiesStatelength - _enemiesAmount >= 1) {
+				removeEmemiesFromMap(currentEnemiesStatelength - _enemiesAmount);
 			}
-
 			
-			//_tilesAbovePlatTiles
 			
+			for (var y:int=0; y<mH; y++) {
+				for (var x:int=0; x<mW; x++) {
+				
+					if (currentEnemiesStatelength != 0) {
+						
+						for ( var i:uint=0; i<currentEnemiesStatelength; i++ ) {
+							var excistingEnemy : ExBox2DPhysicsObject = currentEnemiesInState[i] as ExBox2DPhysicsObject;
+							if (map[y][x] == 0) {
+								if (excistingEnemy.tile.x == x && excistingEnemy.tile.y == y) {
+									state.remove(excistingEnemy);
+								}
+							}
+						}
+						
+					} 
+					
+					if (map[y][x] == Tile.ENEMY) {
+						for ( var i:uint=0; i<currentEnemiesStatelength; i++ ) {
+							var excistingEnemy : ExBox2DPhysicsObject = currentEnemiesInState[i] as ExBox2DPhysicsObject;
+							if (excistingEnemy.tile.x == x && excistingEnemy.tile.y == y) return;
+						}
+						
+						state.add(new ExBox2DPhysicsObject('enemy', { width : 30, height : 30, x: x*32 + 15, y: y*32 }, new Point(x,y)));
+						for ( i =0; i<_freeTilesArray.length; i++ ) {
+							if (_freeTilesArray[i].x == x && _freeTilesArray[i].y == y) _freeTilesArray.splice(i,1);
+						}							
+					}
+				
+				}
+			}
+		}		
+		
+		private function removeEmemiesFromMap(enemiesToRemove: int):void {
+			var i : int;
+			var mW:int = map[0].length;
+			var mH:int = map.length;
+			for (var y:int=0; y<mH; y++) {
+				for (var x:int=0; x<mW; x++) {
+					if (map[y][x] == Tile.ENEMY) {
+						if (enemiesToRemove == i) return;
+						i++;
+						map[y][x] = 0; // MOET RANDMOM MAN
+						
+					}
+				}
+			}
 			
 		}
 		
 		
-		private function getTilesAbovePlatformTiles(): Array{
+		/*			
+			for (var i:int=0; i<_enemiesAmount; i++) {
+				var enemyX : int = uint((_tilesAbovePlatTiles[i].x * 32) + 32/2 );
+				var enemyY : int = uint(_tilesAbovePlatTiles[i].y * 32);
+				
+				state.add(new EdgeDetectorEnemy("enemy-" + i, {hurtDuration: 0, speed: 1, x : enemyX , y : enemyY, width: 20, height: 20,
+					view : StarlingShape.Circle(20, 0xBF2626),
+					leftBound: enemyX - 32, // TILESIZE INSTEAD 
+					rightBound: enemyX + 32 
+				}));
+
+			}
+			*/
+
+			
+		
+		private function addEnemiesToMap():void {
+			
+			for (var i:int=0; i<_enemiesAmount-1; i++) {
+				var randomIdx:int = Math.floor(Math.random() * _freeTilesArray.length);
+				var coord : Point = _freeTilesArray[randomIdx] as Point;
+				_freeTilesArray.splice(randomIdx, 1);
+				map[coord.y][coord.x] = Tile.ENEMY;
+			}
+		}
+		
+		private function getFreeTilesAmountAbovePlatformTiles(): int{
+			var tiles : int;
+			
+			var mW:int = map[0].length;
+			var mH:int = map.length;
+			for (var y:int=0; y<mH; y++) {
+				for (var x:int=0; x<mW; x++) {
+					if (map[y][x] == 0 && Functions.isLinkedBottom(map,x,y,1) ) { // ALL TILES ABOVE A PLATFORM TILE
+						tiles++;	
+					}
+				}
+			}
+			return tiles;
+		}
+		
+		private function getTilesPointArrayAbovePlatformTiles(): Array{
 			var tiles : Array = [];
 			
 			var mW:int = map[0].length;
@@ -311,6 +400,7 @@ package objects  {
 				for (var x:int=0; x<mW; x++) {
 					if (map[y][x] == 0 && Functions.isLinkedBottom(map,x,y,1) ) { // ALL TILES ABOVE A PLATFORM TILE
 						//map[y][x] = newIndex;
+					//	debug(x + "  -  " + y);
 						tiles.push(new Point(x,y));	
 					}
 				}

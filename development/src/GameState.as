@@ -80,8 +80,8 @@ package
 			var heroStartPos : Point = _lvl.randomPosition();
 			_hero = new ExHero("hero", {x:heroStartPos.x * _tileSize, y:heroStartPos.y* _tileSize, width:_tileSize/2, height: _tileSize/2, doubleJumpEnabled: true});
 			_hero.currentColor = 0x000050;
-			_hero.currentShape = Shapes.HEXAGON
-			_hero.view = StarlingShape.polygon(_hero.width, 6, _hero.currentColor);
+			_hero.currentShape = Shapes.RECTANGLE;
+			_hero.view = StarlingShape.Rectangle(_hero.width, _hero.height, _hero.currentColor);
 			add(_hero);
 		
 			
@@ -136,13 +136,14 @@ package
 			drawPlatformsToMiniMap();
 			
 			
-			if(_ce.input.justDid("shoot")) {
-				_lvl.placeEnemies(this, 10);
-				notice(getObjectsByType(EdgeDetectorEnemy).length);
-			}
+			//if(_ce.input.justDid("shoot")) {
+				//_lvl.placeEnemies(this, 20);
+				//notice(getObjectsByType(EdgeDetectorEnemy).length);
+			//}
 		
 			// GRAVITY - CHANGE
 			if(_ce.input.isDoing(Actions.VALUE_GRAVITY)) {
+				fatal('grav');
 				var action:InputAction = _ce.input.getAction(Actions.VALUE_GRAVITY) as InputAction;
 				_box2D.gravity.Set(0, action.value); 
 			}
@@ -159,9 +160,10 @@ package
 
 			
 			// ENEMY AMOUND - CHANGE
-			if(_ce.input.isDoing(Actions.ENEMY_PERCANTAGE)) {
+			if(_ce.input.justDid(Actions.ENEMY_PERCANTAGE)) {
+//				fatal("enemy");
 				action = _ce.input.getAction(Actions.ENEMY_PERCANTAGE) as InputAction;
-				//_lvl.placeEnemies(this, int(action.value));
+				_lvl.placeEnemies(this, int(action.value));
 			}
 			
 			
