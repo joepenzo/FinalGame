@@ -1,10 +1,14 @@
 package generators {
 
+import data.consts.Tile;
+
 import flash.geom.Point;
 
-
 import generators.java.util.Random;
+
+import objects.ExHero;
 import objects.Level;
+import utils.Functions;
 
 public class MarioGenerator
 {
@@ -15,10 +19,10 @@ public class MarioGenerator
     private static var levelSeedRandom:Random = new Random();
     public static var lastSeed:Number;
 
-    public static function createlevel(width:int, height:int, seed:Number, difficulty:int, type:int = 1, heroPos : Point = null):Level
+    public static function createlevel(width:int, height:int, seed:Number, difficulty:int, type:int = 1, heroPos : Point = null, hero :ExHero = null):Level
     {
         var levelGenerator:MarioGenerator = new MarioGenerator(width, height);
-        return levelGenerator.createlevel(seed, difficulty, type, heroPos);
+        return levelGenerator.createlevel(seed, difficulty, type, heroPos, hero);
     }
 
     private var width:int;
@@ -48,7 +52,7 @@ public class MarioGenerator
         this.height = height;
     }
 
-    private function createlevel(seed:Number, difficulty:int, type:int, heroPos : Point):Level
+    private function createlevel(seed:Number, difficulty:int, type:int, heroPos : Point, hero : ExHero):Level
     {
 		
         this.type = type;
@@ -112,12 +116,12 @@ public class MarioGenerator
 
    
 		addBorderBlocks();
-		//fixHeroPosIfStuck();
+		fixHeroPosIfStuck(hero);
         
 		return lvl;
     }
 	
-	private function addBorderBlocks():void {
+	private function addBorderBlocks( ):void {
 		for (var y:int = 0; y < lvl.height; y++) {
 			for (var x:int = 0; x < lvl.width; x++) {
 				if (y == 0) lvl.setBlock(x, y, uint(1) ); // TOP
@@ -128,10 +132,18 @@ public class MarioGenerator
 		}
 	}
 	
-//	private function fixHeroPosIfStuck():void {
-//		if (heroPos == null && lvl.getBlock(heroPos.x, heroPos.y) == 0) return;
-//		trace("stuck and unstuck");
-//	}	
+	private function fixHeroPosIfStuck(hero :ExHero):void {
+		if (heroPos == null) return;
+		
+		if (lvl.getBlock(heroPos.x, heroPos.y) == Tile.LAND) {
+			for (var y:uint = lvl.height; y > 0; y--) {
+				if (lvl.map[y-1][heroPos.x] == 0) {
+					hero.y = (y)*32;//hero.y = (y-1)*32;
+					break;
+				}
+			}
+		}
+	}	
 	
     private function buildZone(x:int, maxLength:int):int
     {
