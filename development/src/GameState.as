@@ -147,6 +147,11 @@ package
 				var action:InputAction = _ce.input.getAction(Actions.CHANGE_LVL_MARIO) as InputAction;
 				redrawLevel("mario");
 			}
+			// CAVE LEVEL - CHANGE
+			else if(_ce.input.justDid(Actions.CHANGE_LVL_CAVE)) {
+				var action:InputAction = _ce.input.getAction(Actions.CHANGE_LVL_CAVE) as InputAction;
+				redrawLevel("cave");
+			}
 
 			// GRAVITY - CHANGE
 			if(_ce.input.isDoing(Actions.VALUE_GRAVITY)) {

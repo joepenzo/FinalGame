@@ -44,6 +44,7 @@ package
 			
 			_gui.addColumn("Level Settings");
 			_gui.addButton("platformLevel", { callback: function ():void{  _guiInput.triggerOnce(Actions.CHANGE_LVL_MARIO, 1);  }});
+			_gui.addButton("caveLevel", { callback: function ():void{  _guiInput.triggerOnce(Actions.CHANGE_LVL_CAVE, 1);  }});
 			
 			_gui.addSlider("zoom", ValueRange.ZOOM.x, ValueRange.ZOOM.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.VALUE_ZOOM, zoom);  }});
 			_gui.addSlider("gravity", ValueRange.GRAVITY.x, ValueRange.GRAVITY.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.VALUE_GRAVITY, gravity); }});
