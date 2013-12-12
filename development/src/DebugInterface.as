@@ -70,7 +70,7 @@ package
 			
 			_gui.addColumn("Obstacles");
 			_gui.addGroup("Enemies");
-			_gui.addSlider("enemyPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, { callback: function ():void{  _guiInput.triggerOnce(Actions.ENEMY_PERCANTAGE, enemyPercentage); }});
+			_gui.addSlider("enemyPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, { width: 300, callback: function ():void{  _guiInput.triggerOnce(Actions.ENEMY_PERCANTAGE, enemyPercentage); }});
 			
 			_gui.show();
 		}

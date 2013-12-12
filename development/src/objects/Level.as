@@ -61,8 +61,12 @@ package objects  {
 		public var yExit:int;
 		
 		private var _mapView: flash.display.Sprite;
-		private var _enemiesAmount: int;
+		private var _enemiesToPlaceAmount: int;
 		private var _freeTilesArray:Array;
+		private var _oldEnemyAmount:int;
+		private var _possibleTileForEnemies:uint;
+		private var _newEnemiesAmount:uint;
+		private var _currentEnemyTilesArray:Array = [];
 		
 		public function Level(width:int, height:int, defaultTile : int = 0) {        
 			this.width = width;
@@ -211,6 +215,7 @@ package objects  {
 			
 			drawQuadMap(gameState, tileSize, color);
 			
+			_possibleTileForEnemies = getTilePointsArrayAbovePlatformTiles().length as int;
 		}
 		
 		
@@ -280,25 +285,25 @@ package objects  {
 		
 		
 		
-
+		
+		
+		/*
 		public function placeEnemies(state: StarlingState, amount : int):void {
 			var mW:int = map[0].length;
 			var mH:int = map.length;
 
 			var currentEnemiesInState : Vector.<CitrusObject> = state.getObjectsByName("enemy") as Vector.<CitrusObject>;
 			
-			_freeTilesArray = getTilesPointArrayAbovePlatformTiles() as Array;
+			_freeTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
 			_enemiesAmount = _freeTilesArray.length*(amount/100);
 			
 			addEnemiesToMap();
 			
-						
 			var currentEnemiesStatelength:uint = currentEnemiesInState.length;
 			
 			if (currentEnemiesStatelength - _enemiesAmount >= 1) {
 				removeEmemiesFromMap(currentEnemiesStatelength - _enemiesAmount);
 			}
-			
 			
 			for (var y:int=0; y<mH; y++) {
 				for (var x:int=0; x<mW; x++) {
@@ -331,49 +336,67 @@ package objects  {
 				}
 			}
 		}		
+		*/
 		
-		private function removeEmemiesFromMap(enemiesToRemove: int):void {
-			var i : int;
-			var mW:int = map[0].length;
-			var mH:int = map.length;
-			for (var y:int=0; y<mH; y++) {
-				for (var x:int=0; x<mW; x++) {
-					if (map[y][x] == Tile.ENEMY) {
-						if (enemiesToRemove == i) return;
-						i++;
-						map[y][x] = 0; // MOET RANDMOM MAN
-						
-					}
-				}
-			}
+		
+		
+		public function placeEnemies(state: StarlingState, percentage : int):void {
+			fatal(percentage);
 			
+			var currentEnemiesInState : Vector.<CitrusObject> = state.getObjectsByName("enemy") as Vector.<CitrusObject>;
+
+			_newEnemiesAmount = _possibleTileForEnemies*(percentage/100);
+			
+			_freeTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
+			_enemiesToPlaceAmount = _freeTilesArray.length*(percentage/100);			
+			
+			placeEnemiesInMap(currentEnemiesInState);
+			Functions.trace2DArray(map);	
 		}
 		
 		
-		/*			
-			for (var i:int=0; i<_enemiesAmount; i++) {
-				var enemyX : int = uint((_tilesAbovePlatTiles[i].x * 32) + 32/2 );
-				var enemyY : int = uint(_tilesAbovePlatTiles[i].y * 32);
-				
-				state.add(new EdgeDetectorEnemy("enemy-" + i, {hurtDuration: 0, speed: 1, x : enemyX , y : enemyY, width: 20, height: 20,
-					view : StarlingShape.Circle(20, 0xBF2626),
-					leftBound: enemyX - 32, // TILESIZE INSTEAD 
-					rightBound: enemyX + 32 
-				}));
-
-			}
-			*/
-
-			
 		
-		private function addEnemiesToMap():void {
+		
+		
+//		private function removeEmemiesFromMap(enemiesToRemove: int):void {
+//			var i : int;
+//			var mW:int = map[0].length;
+//			var mH:int = map.length;
+//			for (var y:int=0; y<mH; y++) {
+//				for (var x:int=0; x<mW; x++) {
+//					if (map[y][x] == Tile.ENEMY) {
+//						if (enemiesToRemove == i) return;
+//						i++;
+//						map[y][x] = 0; // MOET RANDMOM MAN
+//					}
+//				}
+//			}
+//			
+//		}
+		
+		private function placeEnemiesInMap(enemiesInState : Vector.<CitrusObject>):void {
+			//fatal(_newEnemiesAmount + "  " + _oldEnemyAmount);
 			
-			for (var i:int=0; i<_enemiesAmount-1; i++) {
-				var randomIdx:int = Math.floor(Math.random() * _freeTilesArray.length);
-				var coord : Point = _freeTilesArray[randomIdx] as Point;
-				_freeTilesArray.splice(randomIdx, 1);
-				map[coord.y][coord.x] = Tile.ENEMY;
+			if (_newEnemiesAmount > _oldEnemyAmount) { // ADD THE MOFO ENEMIES
+				for (var i:int=0; i<_enemiesToPlaceAmount-1; i++) {
+					var randomIdx:int = Math.floor(Math.random() * _freeTilesArray.length);
+					var coord : Point = _freeTilesArray[randomIdx] as Point;
+					_freeTilesArray.splice(randomIdx, 1);
+					_currentEnemyTilesArray.push(coord);
+					map[coord.y][coord.x] = Tile.ENEMY;
+				}
+			} else if (_newEnemiesAmount < _oldEnemyAmount) { // REMOVE THE MOFO ENEMIES
+				var enemiesToRemove = _oldEnemyAmount - _newEnemiesAmount;
+				for (var i:int=0; i<enemiesToRemove-1; i++) {
+					var randomIdx:int = Math.floor(Math.random() * _currentEnemyTilesArray.length);
+					var coord : Point = _currentEnemyTilesArray[randomIdx] as Point;
+					_currentEnemyTilesArray.splice(randomIdx, 1);
+					_freeTilesArray.push(coord);
+					map[coord.y][coord.x] = 0;
+				}
 			}
+			
+			_oldEnemyAmount = _newEnemiesAmount;
 		}
 		
 		private function getFreeTilesAmountAbovePlatformTiles(): int{
@@ -391,7 +414,7 @@ package objects  {
 			return tiles;
 		}
 		
-		private function getTilesPointArrayAbovePlatformTiles(): Array{
+		private function getTilePointsArrayAbovePlatformTiles(): Array{
 			var tiles : Array = [];
 			
 			var mW:int = map[0].length;

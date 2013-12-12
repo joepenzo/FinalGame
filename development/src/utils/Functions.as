@@ -20,6 +20,7 @@ package utils
 	
 	import starling.display.Image;
 	import starling.textures.Texture;
+	import data.consts.Tile;
 
 	public class Functions
 	{
@@ -171,10 +172,10 @@ package utils
 		}
 		
 		public static function trace2DArray(array : Array) : void {
-			trace("\nArray:");
+			notice("\nArray:");
 			//for (var i:int = 0; i < array[0].length; i++) {
 			for (var i:int = 0; i < array.length; i++) {
-					trace(array[i]);
+				debug(array[i]);
 			}
 		}
 

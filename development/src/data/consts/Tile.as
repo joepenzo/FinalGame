@@ -2,7 +2,7 @@ package data.consts
 {
 	public class Tile
 	{
-		public static const ENEMY : String = "x";		
+		public static const ENEMY : String = "_";		
 		
 	}
 }
