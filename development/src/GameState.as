@@ -1,5 +1,7 @@
 package
 {
+	import Box2D.Dynamics.Contacts.b2Contact;
+	import Box2D.Dynamics.Contacts.b2ContactEdge;
 	import Box2D.Dynamics.b2Body;
 	
 	import citrus.core.CitrusObject;
@@ -65,7 +67,7 @@ package
 
 			
 			_box2D = new Box2D("box2D");
-			_box2D.visible = true;
+			_box2D.visible = false;
 			add(_box2D);
 			
 			_mapW = 50;//_mapW = 150;
@@ -136,16 +138,17 @@ package
 			//camera render debug 
 			_camera.renderDebug(_debugSprite as flash.display.Sprite)
 			drawPlatformsToMiniMap();
+
 			
 			
-			//if(_ce.input.justDid("shoot")) {
-				//_lvl.placeEnemies(this, 20);
-				//notice(getObjectsByType(EdgeDetectorEnemy).length);
-			//}
-		
+			// PLATFORM LEVEL - CHANGE
+			if(_ce.input.justDid(Actions.CHANGE_LVL_MARIO)) {
+				var action:InputAction = _ce.input.getAction(Actions.CHANGE_LVL_MARIO) as InputAction;
+				redrawLevel("mario");
+			}
+
 			// GRAVITY - CHANGE
 			if(_ce.input.isDoing(Actions.VALUE_GRAVITY)) {
-				fatal('grav');
 				var action:InputAction = _ce.input.getAction(Actions.VALUE_GRAVITY) as InputAction;
 				_box2D.gravity.Set(0, action.value); 
 			}
@@ -216,6 +219,34 @@ package
 			
 				
 		}
+		
+		
+		private function redrawLevel(type:String):void {
+			
+			var heroPos:Point = new Point(Math.floor(_hero.x/_tileSize), Math.floor(_hero.y/_tileSize));
+			for each (var object:CitrusObject in objects) { // remove old platforms
+				if (object is Platform) {
+					object.kill = true; 
+					remove(object);
+				}
+			}
+			
+			if(type == "cave"){
+				//mapH = 40;
+				//mapW = 70;
+				_lvl = CaveGenerator.createlevel(_mapW, _mapH, heroPos);
+			} else if (type == "mario") {
+				//mapH = 40;
+				//mapW = 200;
+				_lvl = MarioGenerator.createlevel(_mapW, _mapH, Math.random()*999,  Math.round(Math.random() * 10), Math.round(Math.random() * 2), heroPos);
+			}
+			
+//			_camera.bounds = new Rectangle(0, 0, mapW*tileSize, mapH*tileSize); 
+			_lvl.drawMapPlaftormsToGameState(this, _tileSize, _gameData.levelColor);
+			
+			var heroContactList : b2ContactEdge = _hero.body.GetContactList(); // Force begin contact, with new platform.. otherwise is doesn't and then.. you can't jump
+			if (heroContactList) for (var contact: b2Contact = _hero.body.GetContactList().contact ; contact ; contact = contact.GetNext())  _hero.handleBeginContact(contact);
+		}		
 		
 		private function changeObjectShape():void {
 			var object : ExBox2DPhysicsObject = getObjectByName("hero") as ExBox2DPhysicsObject;

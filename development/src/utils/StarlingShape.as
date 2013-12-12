@@ -1,5 +1,6 @@
 package utils
 {
+	import starling.display.BlendMode;
 	import starling.display.Image;
 	import starling.display.Shape;
 
@@ -79,6 +80,7 @@ package utils
 					shape.graphics.lineTo(dx, dy);
 				}
 			}
+			
 			return shape;
 		}
 		

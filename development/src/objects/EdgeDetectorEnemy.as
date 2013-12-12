@@ -19,17 +19,21 @@ package objects
 	public class EdgeDetectorEnemy extends ExEnemy
 	{
 		
+		private var _tile:Point;
+
 		protected var _leftEdgeSensorShape:b2PolygonShape;
 		protected var _rightEdgeSensorShape:b2PolygonShape;
 		
 		protected var _leftEdgeSensorFixture:b2Fixture;
 		protected var _rightEdgeSensorFixture:b2Fixture;
 		
-		public function EdgeDetectorEnemy(name:String, params:Object=null)
+		public function EdgeDetectorEnemy(name:String, params:Object=null, tile : Point = null)
 		{
 			super(name, params);
+			_tile = tile;
 			_endContactCallEnabled = true;
 			_preContactCallEnabled = true;
+			hurtDuration = 0;
 			
 			if (Math.random() < .5) {
 				startingDirection = "left";
@@ -41,8 +45,6 @@ package objects
 		
 
 		}
-		
-		
 		
 		override protected function createShape():void {
 			super.createShape();

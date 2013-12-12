@@ -287,95 +287,44 @@ package objects  {
 		
 		
 		
-		/*
-		public function placeEnemies(state: StarlingState, amount : int):void {
-			var mW:int = map[0].length;
-			var mH:int = map.length;
-
-			var currentEnemiesInState : Vector.<CitrusObject> = state.getObjectsByName("enemy") as Vector.<CitrusObject>;
-			
-			_freeTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
-			_enemiesAmount = _freeTilesArray.length*(amount/100);
-			
-			addEnemiesToMap();
-			
-			var currentEnemiesStatelength:uint = currentEnemiesInState.length;
-			
-			if (currentEnemiesStatelength - _enemiesAmount >= 1) {
-				removeEmemiesFromMap(currentEnemiesStatelength - _enemiesAmount);
-			}
-			
-			for (var y:int=0; y<mH; y++) {
-				for (var x:int=0; x<mW; x++) {
-				
-					if (currentEnemiesStatelength != 0) {
-						
-						for ( var i:uint=0; i<currentEnemiesStatelength; i++ ) {
-							var excistingEnemy : ExBox2DPhysicsObject = currentEnemiesInState[i] as ExBox2DPhysicsObject;
-							if (map[y][x] == 0) {
-								if (excistingEnemy.tile.x == x && excistingEnemy.tile.y == y) {
-									state.remove(excistingEnemy);
-								}
-							}
-						}
-						
-					} 
-					
-					if (map[y][x] == Tile.ENEMY) {
-						for ( var i:uint=0; i<currentEnemiesStatelength; i++ ) {
-							var excistingEnemy : ExBox2DPhysicsObject = currentEnemiesInState[i] as ExBox2DPhysicsObject;
-							if (excistingEnemy.tile.x == x && excistingEnemy.tile.y == y) return;
-						}
-						
-						state.add(new ExBox2DPhysicsObject('enemy', { width : 30, height : 30, x: x*32 + 15, y: y*32 }, new Point(x,y)));
-						for ( i =0; i<_freeTilesArray.length; i++ ) {
-							if (_freeTilesArray[i].x == x && _freeTilesArray[i].y == y) _freeTilesArray.splice(i,1);
-						}							
-					}
-				
-				}
-			}
-		}		
-		*/
-		
 		
 		
 		public function placeEnemies(state: StarlingState, percentage : int):void {
-	fatal(percentage);
 
 			_newEnemiesAmount = _possibleTileForEnemies*(percentage/100);
 			_freeTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
 			_enemiesToPlaceAmount = _freeTilesArray.length*(percentage/100);			
 			
 			placeEnemiesInMap();
-	Functions.trace2DArray(map);
 			
 			var currentEnemiesInState : Vector.<CitrusObject> = state.getObjectsByName("enemy") as Vector.<CitrusObject>;
+			var currentEnemiesStatelength:int = currentEnemiesInState.length;
+			
+			// write this more epic, that some enemies can stay!!
+			if (currentEnemiesStatelength != 0) { // REMOVE ALL ENEMiES IN STATE IF THERE ARE
+				for each (var currentEnemy:ExBox2DPhysicsObject in currentEnemiesInState) state.remove(currentEnemy);
+			}
+			var boundDistance : int;
+			for each (var currentEnemyPos:Point in _currentEnemyTilesArray) { // ADD ALL ENEMIES TO STATE
+				boundDistance =  Functions.randomIntRange(32, 32*5);
+				state.add(new EdgeDetectorEnemy('enemy', { 
+					speed : 0.8,
+					width : 20, 
+					height : 20, 
+					x: currentEnemyPos.x*32 +10, 
+					y: currentEnemyPos.y*32 +10,
+					leftBound: currentEnemyPos.x*32 - boundDistance, // TILESIZE INSTEAD
+					rightBound: currentEnemyPos.x*32 + boundDistance,
+					view : StarlingShape.polygon(20,6, 0xAB1A1A)
+				}, currentEnemyPos));
+			}
+			
 		}
 		
 		
-		
-		
-		
-//		private function removeEmemiesFromMap(enemiesToRemove: int):void {
-//			var i : int;
-//			var mW:int = map[0].length;
-//			var mH:int = map.length;
-//			for (var y:int=0; y<mH; y++) {
-//				for (var x:int=0; x<mW; x++) {
-//					if (map[y][x] == Tile.ENEMY) {
-//						if (enemiesToRemove == i) return;
-//						i++;
-//						map[y][x] = 0; // MOET RANDMOM MAN
-//					}
-//				}
-//			}
-//			
-//		}
-		
+	
 		private function placeEnemiesInMap():void {
 			//fatal(_newEnemiesAmount + "  " + _oldEnemyAmount);
-			
 			if (_newEnemiesAmount > _oldEnemyAmount) { // ADD THE MOFO ENEMIES
 				for (var i:int=0; i<_enemiesToPlaceAmount-1; i++) {
 					var randomIdx:int = Math.floor(Math.random() * _freeTilesArray.length);
@@ -386,7 +335,6 @@ package objects  {
 				}
 			} else if (_newEnemiesAmount < _oldEnemyAmount) { // REMOVE THE MOFO ENEMIES
 				var enemiesToRemove = _oldEnemyAmount - _newEnemiesAmount;
-				error('removeEnemies ' + enemiesToRemove);
 				for (var i:int=0; i<enemiesToRemove-1; i++) {
 					var randomIdx:int = Math.floor(Math.random() * _currentEnemyTilesArray.length);
 					var coord : Point = _currentEnemyTilesArray[randomIdx] as Point;
