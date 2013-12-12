@@ -6,6 +6,7 @@ package objects  {
 	import citrus.objects.CitrusSprite;
 	import citrus.objects.platformer.box2d.Platform;
 	
+	import data.GameData;
 	import data.consts.Tile;
 	
 	import flash.display.BitmapData;
@@ -26,7 +27,7 @@ package objects  {
 	import utils.StarlingDraw;
 	import utils.StarlingShape;
 	
-	public class Level
+	public class Level 
 	{
 		// String[] 
 		public static const BIT_DESCRIPTIONS:Array = [
@@ -53,6 +54,8 @@ package objects  {
 		public static const BIT_ANIMATED:int = 1 << 7;
 		private static const FILE_HEADER:int = 0x271c4178;
 		
+		private var _gameData:GameData;
+		
 		public var width:int;
 		public var height:int;
 		public var map:Array;                // ByteArray[]
@@ -68,7 +71,8 @@ package objects  {
 		private var _newEnemiesAmount:uint;
 		private var _currentEnemyTilesArray:Array = [];
 		
-		public function Level(width:int, height:int, defaultTile : int = 0) {        
+		public function Level(width:int, height:int, defaultTile : int = 0) {
+			
 			this.width = width;
 			this.height = height;
 			xExit = 10;
@@ -164,8 +168,6 @@ package objects  {
 			return (Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum);  
 		}  
 		
-
-		
 		public function drawMapPlaftormsToGameState(gameState :StarlingState, tileSize : int, color :uint = 0x000000, heroYoffset : Boolean = false, heroPos : Point = null) : void{
 			var linkedHorizontalTiles : Array = [];
 			
@@ -212,82 +214,11 @@ package objects  {
 				}
 			}
 			
-			
 			drawQuadMap(gameState, tileSize, color);
-			
 			_possibleTileForEnemies = getTilePointsArrayAbovePlatformTiles().length as int;
-		}
-		
-		
-		
-		// DRAW ALL THE TILES TO ONE IMAGE!
-		private function drawBitmapMap(gameState : StarlingState, tileSize : int, color : uint = 0x000000):void {
-			_mapView = new flash.display.Sprite();
-			
-			var mW:int = map[0].length;
-			var mH:int = map.length;
-			
-			for (var y:int=0; y<mH; y++) {
-				for (var x:int=0; x<mW; x++) {
-					if (map[y][x] != 0) {
-						var tile : flash.display.Shape = new flash.display.Shape();
-						tile.graphics.beginFill(color);
-						tile.graphics.drawRect(0,0,tileSize,tileSize);
-						tile.graphics.endFill();
-						
-						tile.x = x*tileSize;
-						tile.y = y*tileSize;
-						
-						_mapView.addChild(tile);
-					}
-				}
-			}
-			var bmd:BitmapData = new BitmapData(2048, 2048, true);// var bmd:BitmapData = new BitmapData(mW*tileSize, mH*tileSize, false);
-			bmd.draw(_mapView);
-			
-			var img:Image = new Image(Texture.fromBitmapData(bmd));
-			img.smoothing = "none"; 
-			
-			gameState.add(new CitrusSprite("citrusMapSprite", {view:img}));
-		}		
-		
-		public function drawQuadMap(gameState : StarlingState, tileSize : int, color : uint):void {
-			var quadBatch:QuadBatch = new QuadBatch();
-			
-			var tex:Texture = Texture.fromBitmapData(new BitmapData(tileSize, tileSize, true));
-			var image:Image = new Image(tex);
-			image.color = color;
-			
-			var mW:int = map[0].length;
-			var mH:int = map.length;
-			
-			for (var y:int=0; y<mH; y++) {
-				for (var x:int=0; x<mW; x++) {
-					if (map[y][x] != 0) {
-						image.x = x*tileSize;
-						image.y = y*tileSize;
-						quadBatch.addImage(image);
-					}
-				}
-			}
-			
-			quadBatch.blendMode = BlendMode.NONE;
-			
-			if (!
-				gameState.getObjectByName("citrusMapSprite"))  {
-				gameState.add(new CitrusSprite("citrusMapSprite", {view:quadBatch}));	
-			} else {
-				var mapSprite:CitrusSprite = gameState.getObjectByName("citrusMapSprite") as CitrusSprite;
-				mapSprite.view = quadBatch;
-			}
 			
 		}
-		
-		
-		
-		
-		
-		
+
 		
 		public function placeEnemies(state: StarlingState, percentage : int):void {
 
@@ -295,7 +226,7 @@ package objects  {
 			_freeTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
 			_enemiesToPlaceAmount = _freeTilesArray.length*(percentage/100);			
 			
-			placeEnemiesInMap();
+			placeEnemiesInMap(); // EDIT MAP ARRAY SO ENEMIES ARE SHOWN IN THERE
 			
 			var currentEnemiesInState : Vector.<CitrusObject> = state.getObjectsByName("enemy") as Vector.<CitrusObject>;
 			var currentEnemiesStatelength:int = currentEnemiesInState.length;
@@ -311,7 +242,8 @@ package objects  {
 					speed : 0.8,
 					width : 20, 
 					height : 20, 
-					x: currentEnemyPos.x*32 +10, 
+//					x: currentEnemyPos.x*32 +10, 
+					x: currentEnemyPos.x*32 +10 + 5, // +5 for bug fixx that enemy fall of platform 
 					y: currentEnemyPos.y*32 +10,
 					leftBound: currentEnemyPos.x*32 - boundDistance, // TILESIZE INSTEAD
 					rightBound: currentEnemyPos.x*32 + boundDistance,
@@ -378,6 +310,40 @@ package objects  {
 			}
 			return tiles;
 		}
+		
+		public function drawQuadMap(gameState : StarlingState, tileSize : int, color : uint):void {
+			var quadBatch:QuadBatch = new QuadBatch();
+			
+			var tex:Texture = Texture.fromBitmapData(new BitmapData(tileSize, tileSize, true));
+			var image:Image = new Image(tex);
+			image.color = color;
+			
+			var mW:int = map[0].length;
+			var mH:int = map.length;
+			
+			for (var y:int=0; y<mH; y++) {
+				for (var x:int=0; x<mW; x++) {
+					if (map[y][x] != 0) {
+						image.x = x*tileSize;
+						image.y = y*tileSize;
+						quadBatch.addImage(image);
+					}
+				}
+			}
+			
+			quadBatch.blendMode = BlendMode.NONE;
+			
+			if (!
+				gameState.getObjectByName("citrusMapSprite"))  {
+				gameState.add(new CitrusSprite("citrusMapSprite", {view:quadBatch}));	
+			} else {
+				var mapSprite:CitrusSprite = gameState.getObjectByName("citrusMapSprite") as CitrusSprite;
+				mapSprite.view = quadBatch;
+			}
+			
+		}
+		
+		
 		
 		
 		

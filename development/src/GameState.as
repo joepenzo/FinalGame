@@ -43,6 +43,8 @@ package
 	
 	public class GameState extends StarlingState
 	{
+		private var _gameData:GameData;
+
 		private var _tileSize:int = 32;
 		private var _mapW:int = 100;
 		private var _mapH:int = 40;
@@ -54,7 +56,6 @@ package
 		private var _hero:ExHero;
 		private var _bounds:Rectangle;
 		private var _debugSprite:flash.display.Sprite;
-		private var _gameData:GameData;
 		private var ENEMY_AMOUNT_INTERVAL:Number = new Number();
 		
 		public function GameState() {
@@ -167,11 +168,12 @@ package
 			// ENEMY AMOUND - CHANGE
 			if(_ce.input.hasDone(Actions.ENEMY_PERCANTAGE)) {
 				action = _ce.input.getAction(Actions.ENEMY_PERCANTAGE) as InputAction;
-								
+				_gameData.enemyPercentage = action.value;			
+				
 				clearTimeout(ENEMY_AMOUNT_INTERVAL);
 				ENEMY_AMOUNT_INTERVAL = setTimeout(myDelayedFunction, 100, this, action);
 				function myDelayedFunction(state : StarlingState, action : InputAction):void { // Kills the input after no change
-					_lvl.placeEnemies(state, int(action.value));
+					_lvl.placeEnemies(state, _gameData.enemyPercentage);
 				}
 				
 			
@@ -231,6 +233,7 @@ package
 				}
 			}
 			
+			
 			if(type == "cave"){
 				//mapH = 40;
 				//mapW = 70;
@@ -238,7 +241,7 @@ package
 			} else if (type == "mario") {
 				//mapH = 40;
 				//mapW = 200;
-				_lvl = MarioGenerator.createlevel(_mapW, _mapH, Math.random()*999,  Math.round(Math.random() * 10), Math.round(Math.random() * 2), heroPos);
+				_lvl = MarioGenerator.createlevel(_mapW, _mapH, 533, 0, 1, heroPos);
 			}
 			
 //			_camera.bounds = new Rectangle(0, 0, mapW*tileSize, mapH*tileSize); 
@@ -246,6 +249,11 @@ package
 			
 			var heroContactList : b2ContactEdge = _hero.body.GetContactList(); // Force begin contact, with new platform.. otherwise is doesn't and then.. you can't jump
 			if (heroContactList) for (var contact: b2Contact = _hero.body.GetContactList().contact ; contact ; contact = contact.GetNext())  _hero.handleBeginContact(contact);
+			
+			if (getObjectsByType(EdgeDetectorEnemy).length > 0) { // DO PLACE ENEMIES FUNCTIES IF THERE ARE ANY IN THE STATE
+				_lvl.placeEnemies(this, _gameData.enemyPercentage);
+			}
+			
 		}		
 		
 		private function changeObjectShape():void {

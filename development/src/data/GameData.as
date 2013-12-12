@@ -24,9 +24,22 @@ package data
 		protected var _green : int = 0;
 		protected var _blue : int = 0;
 		
+		protected var _enemyPercentage : int = 0;
+		
+		
 		
 		public function GameData() {
 			super();
+		}
+
+		public function get enemyPercentage():int
+		{
+			return _enemyPercentage;
+		}
+
+		public function set enemyPercentage(value:int):void
+		{
+			_enemyPercentage = value;
 		}
 
 		public function get currentShape():String
