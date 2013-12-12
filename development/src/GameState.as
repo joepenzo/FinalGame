@@ -233,7 +233,6 @@ package
 				}
 			}
 			
-			
 			if(type == "cave"){
 				//mapH = 40;
 				//mapW = 70;
@@ -250,11 +249,11 @@ package
 			var heroContactList : b2ContactEdge = _hero.body.GetContactList(); // Force begin contact, with new platform.. otherwise is doesn't and then.. you can't jump
 			if (heroContactList) for (var contact: b2Contact = _hero.body.GetContactList().contact ; contact ; contact = contact.GetNext())  _hero.handleBeginContact(contact);
 			
-			if (getObjectsByType(EdgeDetectorEnemy).length > 0) { // DO PLACE ENEMIES FUNCTIES IF THERE ARE ANY IN THE STATE
-				_lvl.placeEnemies(this, _gameData.enemyPercentage);
-			}
+			// DO PLACE ENEMIES FUNCTIES IF THERE ARE ANY IN THE STATE
+			if (getObjectsByType(EdgeDetectorEnemy).length > 0) _lvl.placeEnemies(this, _gameData.enemyPercentage);
 			
-		}		
+			
+		}	
 		
 		private function changeObjectShape():void {
 			var object : ExBox2DPhysicsObject = getObjectByName("hero") as ExBox2DPhysicsObject;

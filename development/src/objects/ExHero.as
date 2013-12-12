@@ -8,6 +8,7 @@ package objects {
 	import citrus.math.MathVector;
 	import citrus.objects.platformer.box2d.Crate;
 	import citrus.objects.platformer.box2d.Enemy;
+	import citrus.objects.platformer.box2d.Missile;
 	import citrus.objects.platformer.box2d.Platform;
 	import citrus.objects.platformer.box2d.Sensor;
 	import citrus.physics.PhysicsCollisionCategories;
@@ -24,9 +25,10 @@ package objects {
 	import flash.utils.setTimeout;
 	
 	import org.osflash.signals.Signal;
-	import citrus.objects.platformer.box2d.Missile;
-	import utils.StarlingShape;
+	
 	import starling.display.Shape;
+	
+	import utils.StarlingShape;
 
 	//import data.Sounds;
 	
@@ -524,8 +526,9 @@ package objects {
 			}
 			
 			//Collision angle if we don't touch a Sensor.
-			if (contact.GetManifold().m_localPoint && !(collider is Sensor)) //The normal property doesn't come through all the time. I think doesn't come through against sensors.
+			if (contact.GetManifold().m_localPoint && !(collider is Sensor) ) //The normal property doesn't come through all the time. I think doesn't come through against sensors.
 			{	
+				if(contact.normal == null) return; // BUG FIX?
 				var collisionAngle:Number = Math.atan2(contact.normal.y, contact.normal.x);
 				
 				if (collisionAngle >= Math.PI*.25 && collisionAngle <= 3*Math.PI*.25 ) // normal angle between pi/4 and 3pi/4
