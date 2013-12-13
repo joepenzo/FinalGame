@@ -17,8 +17,13 @@ package
 	import citrus.utils.AGameData;
 	
 	
-	
 	public class AfstudeerGame extends StarlingCitrusEngine {
+		
+		
+		
+		// that unicode range is for basic latin set (upper, lower case chars, numerals and common symbols/punctuations)
+		[Embed(source="./assets/PixelUniCode.ttf", embedAsCFF="false", fontFamily="PixelUniCode", unicodeRange = "U+0020-U+007e")]
+		private static const PixelUniCode:Class;
 		
 		private var _gameData:GameData;
 //		private var _sounds:SynthSounds;
@@ -40,7 +45,10 @@ package
 
 			var debugInterface = new DebugInterface();
 			stage.addChild(debugInterface);
+			
+			
 		}		
+		
 		
 		
 		

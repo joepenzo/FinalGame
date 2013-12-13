@@ -30,11 +30,15 @@ package
 	import objects.ExBox2DPhysicsObject;
 	import objects.ExEnemy;
 	import objects.ExHero;
+	import objects.GameInterface;
 	import objects.Level;
 	
 	import starling.display.Image;
 	import starling.display.QuadBatch;
 	import starling.display.Shape;
+	import starling.text.TextField;
+	import starling.utils.HAlign;
+	import starling.utils.VAlign;
 	
 	import utils.FlashShape;
 	import utils.Functions;
@@ -56,6 +60,7 @@ package
 		private var _bounds:Rectangle;
 		private var _debugSprite:flash.display.Sprite;
 		private var ENEMY_AMOUNT_INTERVAL:Number = new Number();
+		private var _gameInterface:GameInterface;
 		
 		public function GameState() {
 			super();	
@@ -126,7 +131,7 @@ package
 			_debugSprite.x = stage.stageWidth - _debugSprite.width - 10;
 			_debugSprite.y = 10;
 			
-			
+			_gameInterface = new GameInterface(this);
 		}
 		
 		override public function update(timeDelta:Number):void {
@@ -138,15 +143,19 @@ package
 			drawEnemiesToMiniMap();
 
 			
-			// PLATFORM LEVEL - CHANGE
+			// GAME GOAL
 			if (_ce.input.justDid(Actions.GOAL_KILL)) {
-				_gameData.goal = "KILL";	
+				_gameData.goal = "KILL";
+				_gameInterface.updateGoalType(_gameData);
 			} if(_ce.input.justDid(Actions.GOAL_COLLECT)) {
 				_gameData.goal = "COLLECT";
+				_gameInterface.updateGoalType(_gameData);
 			} if(_ce.input.justDid(Actions.GOAL_A_TO_B)) {
 				_gameData.goal = "ATOB";
+				_gameInterface.updateGoalType(_gameData);
 			} if(_ce.input.justDid(Actions.GOAL_NO_GOAL)) {
 				_gameData.goal = "NOGOAL";
+				_gameInterface.updateGoalType(_gameData);
 			}
 			
 			
