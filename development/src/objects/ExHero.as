@@ -306,11 +306,8 @@ package objects {
 					_fixture.SetFriction(_friction); //Add friction so that he stops running
 				}
 				
-				
-				
 				switch (jumpType){
 					case "Single":
-						// JUMP
 						if (_onGround && _ce.input.justDid("jump", inputChannel) && !_ducking) {
 							velocity.y = -jumpHeight;
 							onJump.dispatch();
@@ -318,7 +315,6 @@ package objects {
 						}
 						
 						if (_ce.input.isDoing("jump", inputChannel) && !_onGround && velocity.y < 0) velocity.y -= jumpAcceleration;
-						// END JUMP
 						break;
 					case "Double":
 						if (_onGround && _ce.input.justDid("jump", inputChannel) && !_ducking) {
@@ -335,23 +331,22 @@ package objects {
 						
 						break;
 					case "Unlimited":
-						
 						if (_onGround && _ce.input.justDid("jump", inputChannel) && !_ducking) {
 							velocity.y = -jumpHeight;
 							onJump.dispatch();
 							_onGround = false; // also removed in the handleEndContact. Useful here if permanent contact e.g. box on hero.
 						}
-						
-						if (_ce.input.isDoing("jump", inputChannel) && !_onGround && velocity.y < 0) { // INAIR AND HOLDING JUMP
-							velocity.y -= jumpAcceleration;
-						}
-						
+						// INAIR AND HOLDING JUMP
+						if (_ce.input.isDoing("jump", inputChannel) && !_onGround && velocity.y < 0) velocity.y -= jumpAcceleration;
 						if ( !_onGround && _ce.input.justDid("jump", inputChannel)) {
 							velocity.y = -jumpHeight;
 							onJump.dispatch();
 						}
 						break;
 					case "Jetpack":
+						if (_ce.input.isDoing("jump", inputChannel)) {
+							velocity.y -= 1;
+						}
 						break;
 				}
 				

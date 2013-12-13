@@ -87,8 +87,8 @@ package
 			_hero.currentColor = 0x000050;
 			_hero.currentShape = Shapes.RECTANGLE;
 			_hero.view = StarlingShape.Rectangle(_hero.width, _hero.height, _hero.currentColor);
+			_hero.jumpType = "Unlimited";
 			add(_hero);
-			_hero.jumpType = "Double";
 			
 		
 			
@@ -175,6 +175,19 @@ package
 			if(_ce.input.justDid(Actions.HERO_SHOOT)) {
 				action = _ce.input.getAction(Actions.HERO_SHOOT) as InputAction;
 				_hero.shootingEnabled = action.value;
+			}
+			// HERO JUMPS
+			if(_ce.input.justDid(Actions.CHANGE_JUMP_SINGLE)) {
+				_hero.jumpType = "Single";
+			}
+			if(_ce.input.justDid(Actions.CHANGE_JUMP_DOUBLE)) {
+				_hero.jumpType = "Double";
+			}
+			if(_ce.input.justDid(Actions.CHANGE_JUMP_UNLIMETID)) {
+				_hero.jumpType = "Unlimited";
+			}
+			if(_ce.input.justDid(Actions.CHANGE_JUMP_JETPACK)) {
+				_hero.jumpType = "Jetpack";
 			}
 
 			
