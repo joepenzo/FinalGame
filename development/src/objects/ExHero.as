@@ -29,6 +29,7 @@ package objects {
 	import starling.display.Shape;
 	
 	import utils.StarlingShape;
+	import citrus.objects.platformer.box2d.Hero;
 
 	//import data.Sounds;
 	
@@ -147,18 +148,19 @@ package objects {
 		protected var _controlsEnabled:Boolean = true;
 		protected var _ducking:Boolean = false;
 		protected var _combinedGroundAngle:Number = 0;
-		
-		private var _canDoubleJump : Boolean;
-		
-		public var round : Boolean  = false;
-		public var doubleJumpEnabled : Boolean = false;
-		public var invertMovement : Boolean = false;
-		
 		private var _bulletcounter:int=0;
+		private var _bulletGraphic:Shape;
+		
 
 		
-		//private var _sounds:SynthSounds;
-		private var _bulletView:Shape;
+		public var shootingEnabled : Boolean = true;
+		public var jumpType : String = "Single"; // Single, Double, Unlimited, Jetpack
+		
+		public var round : Boolean  = false;
+		public var invertMovement : Boolean = false;
+		
+
+		
 
 		/**
 		 * Creates a new hero object.
@@ -304,54 +306,60 @@ package objects {
 				}
 				
 				
-				if (_onGround && _ce.input.justDid(Actions.JUMP,inputChannel) && !_ducking) {
-					if (!invertMovement) {
-						velocity.y = -jumpHeight;
-					} else {
-						velocity.y = +jumpHeight;
-					}
+				
+				switch (jumpType){
+					case "Single":
+						// JUMP
+						if (_onGround && _ce.input.justDid("jump", inputChannel) && !_ducking) {
+							velocity.y = -jumpHeight;
+							onJump.dispatch();
+							_onGround = false; // also removed in the handleEndContact. Useful here if permanent contact e.g. box on hero.
+						}
+						
+						if (_ce.input.isDoing("jump", inputChannel) && !_onGround && velocity.y < 0) velocity.y -= jumpAcceleration;
+						// END JUMP
+						break;
+					case "Double":
+						error(jumpType + velocity.y);
+						
+						
+						
+						break;
+					case "Unlimited":
 					
-					_canDoubleJump = true;
-					onJump.dispatch();
-					
-//					_sounds.play(Sounds.JUMP);
-					
+						if (_onGround && _ce.input.justDid("jump", inputChannel) && !_ducking) {
+							velocity.y = -jumpHeight;
+							onJump.dispatch();
+							_onGround = false; // also removed in the handleEndContact. Useful here if permanent contact e.g. box on hero.
+						}
+						
+						if (_ce.input.isDoing("jump", inputChannel) && !_onGround && velocity.y < 0) { // INAIR AND HOLDING JUMP
+							velocity.y -= jumpAcceleration;
+						}
+						
+						if ( !_onGround && _ce.input.justDid("jump", inputChannel)) {
+							velocity.y = -jumpHeight;
+							onJump.dispatch();
+						}
+						
+						break;
+					case "Jetpack":
+						break;
 				}
 				
-				if (!invertMovement) {
-					if (_ce.input.isDoing(Actions.JUMP,inputChannel) && !_onGround && velocity.y < 0) {
-						velocity.y -= jumpAcceleration;
-						if (doubleJumpEnabled) {
-							if (_canDoubleJump == true && _ce.input.justDid(Actions.JUMP,inputChannel)) {
-								velocity.y = -jumpHeight;
-								_canDoubleJump = false;
-							}
-						}
-					}
-				} else {
-					if (_ce.input.isDoing(Actions.JUMP,inputChannel) && !_onGround && velocity.y > 0) {
-						velocity.y += jumpAcceleration;
-						if (doubleJumpEnabled) {
-							if (_canDoubleJump == true && _ce.input.justDid(Actions.JUMP,inputChannel)) {
-								velocity.y = +jumpHeight;
-								_canDoubleJump = false;
-							}
-						}
-					}
-				}	
-				
+				// JUMPOFF ENEMY
 				if (_springOffEnemy != -1) {
-					if (_ce.input.isDoing(Actions.JUMP,inputChannel))
+					if (_ce.input.isDoing("jump", inputChannel))
 						velocity.y = -enemySpringJumpHeight;
 					else
 						velocity.y = -enemySpringHeight;
 					_springOffEnemy = -1;
 				}
 				
+			
 				
-				
-				//the shooting ability
-				if (_ce.input.justDid(Actions.SHOOT)) {
+				//The Shooting ability - IF SHOOTING IS ENABLED
+ 				if (shootingEnabled && _ce.input.justDid(Actions.SHOOT)) {
 					var bullet:Missile;
 					if (_inverted) {
 						bullet = new Missile("bullet"+_bulletcounter, {x:x -width, y:y, width:3, height:3, speed:30, explodeDuration:200, fuseDuration: 5000, angle:180});
@@ -362,6 +370,8 @@ package objects {
 					_bulletcounter++
 					_ce.state.add(bullet);
 				}
+				// END SHOOTING
+				
 				
 				//Cap velocities
 				if (velocity.x > (maxVelocity))
@@ -447,58 +457,7 @@ package objects {
 			if (objectBottom < heroTop)
 				contact.SetEnabled(false);
 		}
-		
-		// TODO:: TO FIX THE BUG WHERE YOU CAN"T JUMP.. FORCE HANDLEBEGIN WHEN YOU TOUCHED A SIDE THINGY
-		/*override public function handleBeginContact(contact:b2Contact):void {
-			super.handleBeginContact(contact);
-			var collider:IBox2DPhysicsObject = Box2DUtils.CollisionGetOther(this, contact);
-			if (_enemyClass && collider is _enemyClass)
-			{
-				if (_body.GetLinearVelocity().y < killVelocity && !_hurt)
-				{
-					hurt();
-					
-					//fling the hero
-					var hurtVelocity:b2Vec2 = _body.GetLinearVelocity();
-					hurtVelocity.y = -hurtVelocityY;
-					hurtVelocity.x = hurtVelocityX;
-					if (collider.x > x)
-						hurtVelocity.x = -hurtVelocityX;
-					_body.SetLinearVelocity(hurtVelocity);
-				}
-				else
-				{
-					_springOffEnemy = collider.y - height;
-					onGiveDamage.dispatch();
-				}
-			}
-			
-			//Collision angle if we don't touch a Sensor.
-			if (contact.GetManifold().m_localPoint && !(collider is Sensor)) //The normal property doesn't come through all the time. I think doesn't come through against sensors.
-			{				
-				var collisionAngle:Number = (((new MathVector(contact.normal.x, contact.normal.y).angle) * 180 / Math.PI) + 360) % 360;// 0º <-> 360º
-				var adjustedMinCollisionAngle:int = 45; // normal
-				var adjustedMaxCollisionAngle:int = 135; // normal
-				// TODO: REMOVE THIS HERE AND PLACE IT AD THE SIGNAL FROM ONCHANGE OR SOMEHTING
-				switch(_gameData.worldState) {
-					case WorldState.NORMAL: // Collision Angle perpendicular to floor = 90
-						adjustedMinCollisionAngle = 45;
-						adjustedMaxCollisionAngle = 135;
-						break;
-					case WorldState.UPSIDE_DOWN: // Collision Angle perpendicular to floor = 270
-						adjustedMinCollisionAngle = 225;
-						adjustedMaxCollisionAngle = 315;
-						break;
-				}
 
-				if ((collisionAngle > adjustedMinCollisionAngle && collisionAngle < adjustedMaxCollisionAngle))
-				{
-					_groundContacts.push(collider.body.GetFixtureList());
-					_onGround = true;
-					updateCombinedGroundAngle();
-				}
-			}
-		}*/
 		
 		override public function handleBeginContact(contact:b2Contact):void {
 			
@@ -528,7 +487,7 @@ package objects {
 			//Collision angle if we don't touch a Sensor.
 			if (contact.GetManifold().m_localPoint && !(collider is Sensor) ) //The normal property doesn't come through all the time. I think doesn't come through against sensors.
 			{	
-				if(contact.normal == null) return; // BUG FIX?
+				if(contact.normal == null) return; // BUG FIX? // ON LEVEL RELOAD WHEN TOUCHED OR TOUCHING ENEMY
 				var collisionAngle:Number = Math.atan2(contact.normal.y, contact.normal.x);
 				
 				if (collisionAngle >= Math.PI*.25 && collisionAngle <= 3*Math.PI*.25 ) // normal angle between pi/4 and 3pi/4
@@ -542,7 +501,6 @@ package objects {
 		
 		override public function handleEndContact(contact:b2Contact):void {
 			var collider:IBox2DPhysicsObject = Box2DUtils.CollisionGetOther(this, contact);
-//			trace("EndContact " + collider);
 			//Remove from ground contacts, if it is one.
 			var index:int = _groundContacts.indexOf(collider.body.GetFixtureList());
 			if (index != -1)
