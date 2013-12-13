@@ -148,6 +148,7 @@ package objects {
 		protected var _controlsEnabled:Boolean = true;
 		protected var _ducking:Boolean = false;
 		protected var _combinedGroundAngle:Number = 0;
+		private var _mayDoubleJump:Boolean;
 		private var _bulletcounter:int=0;
 		private var _bulletGraphic:Shape;
 		
@@ -320,13 +321,21 @@ package objects {
 						// END JUMP
 						break;
 					case "Double":
-						error(jumpType + velocity.y);
-						
-						
+						if (_onGround && _ce.input.justDid("jump", inputChannel) && !_ducking) {
+							velocity.y = -jumpHeight;
+							onJump.dispatch();
+							_onGround = false; // also removed in the handleEndContact. Useful here if permanent contact e.g. box on hero.
+							_mayDoubleJump = true;
+						} else if (!_onGround && _mayDoubleJump && _ce.input.justDid("jump", inputChannel)) {
+							velocity.y = -jumpHeight;
+							onJump.dispatch();
+							_mayDoubleJump = false;
+						}
+						if (_onGround) _mayDoubleJump = false;
 						
 						break;
 					case "Unlimited":
-					
+						
 						if (_onGround && _ce.input.justDid("jump", inputChannel) && !_ducking) {
 							velocity.y = -jumpHeight;
 							onJump.dispatch();
@@ -341,7 +350,6 @@ package objects {
 							velocity.y = -jumpHeight;
 							onJump.dispatch();
 						}
-						
 						break;
 					case "Jetpack":
 						break;
