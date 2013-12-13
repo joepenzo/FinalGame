@@ -137,7 +137,7 @@ package objects {
 
 //		private var _gameData: GameData;
 		
-		protected var _groundContacts:Array = [];//Used to determine if he's on ground or not.
+		protected var _groundContacts:Array = [];//Used to determine if he is on ground or not.
 		protected var _enemyClass:Class = Enemy;
 		protected var _onGround:Boolean = false;
 		protected var _springOffEnemy:Number = -1;
@@ -159,7 +159,6 @@ package objects {
 		
 		public var round : Boolean  = false;
 		public var invertMovement : Boolean = false;
-		
 
 		
 

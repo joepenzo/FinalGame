@@ -56,6 +56,8 @@ package objects  {
 		
 		private var _gameData:GameData;
 		
+		private var _tileSize:int;
+		
 		public var width:int;
 		public var height:int;
 		public var map:Array;                // ByteArray[]
@@ -169,6 +171,8 @@ package objects  {
 		}  
 		
 		public function drawMapPlaftormsToGameState(gameState :StarlingState, tileSize : int, color :uint = 0x000000, heroYoffset : Boolean = false, heroPos : Point = null) : void{
+			_tileSize = tileSize;
+			
 			var linkedHorizontalTiles : Array = [];
 			
 			var mW:int = map[0].length;
@@ -185,10 +189,10 @@ package objects  {
 					if (type != 0) {
 						if (!Functions.isLinkedRight(map, xt, yt, type) && !Functions.isLinkedLeft(map, xt, yt, type)) { // no left or right neighboor - DRAW THE SINGLE TILES
 							gameState.add(new Platform((xt +","+ yt +","+ type) , {
-								x:(xt * tileSize) + tileSize/2, 
-								y:(yt * tileSize) + tileSize/2 + yOffset, 
-								width:tileSize, 
-								height:tileSize
+								x:(xt * _tileSize) + _tileSize/2, 
+								y:(yt * _tileSize) + _tileSize/2 + yOffset, 
+								width:_tileSize, 
+								height:_tileSize
 							}));
 							
 						}
@@ -198,13 +202,13 @@ package objects  {
 						
 						else if (Functions.isLinkedLeft(map, xt, yt, type) ) {
 							linkedHorizontalTiles.push(new Point(xt, yt));
-							totalLinkedTilesWidth  = linkedHorizontalTiles.length * tileSize;
+							totalLinkedTilesWidth  = linkedHorizontalTiles.length * _tileSize;
 							
 							gameState.add(new Platform((xt +","+ yt +","+ type), {
-								x:(linkedHorizontalTiles[0].x * tileSize) + totalLinkedTilesWidth/2, 
-								y:(linkedHorizontalTiles[0].y * tileSize) + tileSize/2 + yOffset,
+								x:(linkedHorizontalTiles[0].x * _tileSize) + totalLinkedTilesWidth/2, 
+								y:(linkedHorizontalTiles[0].y * _tileSize) + _tileSize/2 + yOffset,
 								width:totalLinkedTilesWidth, 
-								height:tileSize
+								height:_tileSize
 							}));
 							
 							linkedHorizontalTiles = [];
@@ -214,7 +218,7 @@ package objects  {
 				}
 			}
 			
-			drawQuadMap(gameState, tileSize, color);
+			drawQuadMap(gameState, _tileSize, color);
 			_possibleTileForEnemies = getTilePointsArrayAbovePlatformTiles().length as int;
 			
 		}
@@ -242,10 +246,10 @@ package objects  {
 					speed : 0.8,
 					width : 20, 
 					height : 20, 
-					x: currentEnemyPos.x*32 +10 + 5, // +5 for bug fixx that enemy fall of platform  //	x: currentEnemyPos.x*32 +10,
-					y: currentEnemyPos.y*32 +10,
-					leftBound: currentEnemyPos.x*32 - boundDistance, // TILESIZE INSTEAD
-					rightBound: currentEnemyPos.x*32 + boundDistance,
+					x: (currentEnemyPos.x*_tileSize) +10 + 5, // +5 for bug fixx that enemy fall of platform  //	x: currentEnemyPos.x*32 +10,
+					y: (currentEnemyPos.y*_tileSize) +10,
+					leftBound: (currentEnemyPos.x*_tileSize) - boundDistance, // TILESIZE INSTEAD
+					rightBound: (currentEnemyPos.x*_tileSize) + boundDistance,
 					view : StarlingShape.polygon(20,6, 0xAB1A1A)
 				}, currentEnemyPos));
 			}

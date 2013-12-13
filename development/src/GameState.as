@@ -45,7 +45,7 @@ package
 	{
 		private var _gameData:GameData;
 
-		private var _tileSize:int = 32;
+		private var _tileSize:int = 40; // 32 
 		private var _mapW:int = 100;
 		private var _mapH:int = 40;
 		
