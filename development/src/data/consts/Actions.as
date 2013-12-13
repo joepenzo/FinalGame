@@ -45,6 +45,11 @@ package data.consts
 
 		public static const ENEMY_PERCANTAGE:String = "ENEMY_PERCANTAGE";
 		
+		public static const GOAL_NO_GOAL:String = "GOAL_NO_GOAL";
+		public static const GOAL_A_TO_B:String = "GOAL_A_TO_B";
+		public static const GOAL_COLLECT:String = "GOAL_COLlECT";
+		public static const GOAL_KILL:String = "GOAL_KILL";
+		
 		
 	}
 }

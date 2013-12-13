@@ -17,6 +17,7 @@ package data
 		protected var _currentStyling : String = "";
 		protected var _currentShape:String = "";
 		
+		protected var _goal:String = "";
 		
 		protected var _levelColor : uint;
 		
@@ -30,6 +31,16 @@ package data
 		
 		public function GameData() {
 			super();
+		}
+
+		public function get goal():String
+		{
+			return _goal;
+		}
+
+		public function set goal(value:String):void
+		{
+			_goal = value;
 		}
 
 		public function get enemyPercentage():int

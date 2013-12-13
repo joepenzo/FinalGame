@@ -8,6 +8,7 @@ package objects
 	
 	import citrus.math.MathVector;
 	import citrus.objects.Box2DPhysicsObject;
+	import citrus.objects.platformer.box2d.Missile;
 	import citrus.objects.platformer.box2d.Platform;
 	import citrus.physics.PhysicsCollisionCategories;
 	import citrus.physics.box2d.Box2DShapeMaker;
@@ -18,6 +19,7 @@ package objects
 	import flash.utils.clearTimeout;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.setTimeout;
+	
 	import starling.display.Shape;
 	
 	/**

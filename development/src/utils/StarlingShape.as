@@ -84,9 +84,5 @@ package utils
 			return shape;
 		}
 		
-		
-		
-		
-		
 	}
 }

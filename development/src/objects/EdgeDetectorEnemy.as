@@ -43,7 +43,6 @@ package objects
 				startingDirection = "right";
 				_inverted = false;
 			}
-		
 
 		}
 		

@@ -6,8 +6,10 @@ package objects {
 	
 	import citrus.input.controllers.Keyboard;
 	import citrus.math.MathVector;
+	import citrus.objects.Box2DPhysicsObject;
 	import citrus.objects.platformer.box2d.Crate;
 	import citrus.objects.platformer.box2d.Enemy;
+	import citrus.objects.platformer.box2d.Hero;
 	import citrus.objects.platformer.box2d.Missile;
 	import citrus.objects.platformer.box2d.Platform;
 	import citrus.objects.platformer.box2d.Sensor;
@@ -29,7 +31,6 @@ package objects {
 	import starling.display.Shape;
 	
 	import utils.StarlingShape;
-	import citrus.objects.platformer.box2d.Hero;
 
 	//import data.Sounds;
 	
@@ -368,6 +369,7 @@ package objects {
 					} else {
 						bullet = new Missile("bullet"+_bulletcounter, {x:x + width, y:y, width:3, height:3, speed:30, explodeDuration:200, fuseDuration: 5000, angle:0});
 					}
+					bullet.onExplode.add(handleBulletExplode);
 					bullet.view = StarlingShape.Rectangle(3,3,0x000000);
 					_bulletcounter++
 					_ce.state.add(bullet);
@@ -388,6 +390,13 @@ package objects {
 			updateAnimation();
 		}
 		
+		private function handleBulletExplode(bullet:Missile,collidedObject:Box2DPhysicsObject):void {
+			if (collidedObject.name == "enemy") {
+				var enemy :ExEnemy = collidedObject as ExEnemy;
+				enemy.hurt();
+			}
+			
+		}		
 		
 		/**
 		 * Returns the absolute walking speed, taking moving platforms into account.

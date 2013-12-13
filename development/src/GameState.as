@@ -49,7 +49,6 @@ package
 		private var _mapW:int = 100;
 		private var _mapH:int = 40;
 		
-		
 		private var _box2D:Box2D;
 		private var _lvl:Level;
 		private var _camera:StarlingCamera;
@@ -138,6 +137,17 @@ package
 			drawPlatformsToMiniMap();
 			drawEnemiesToMiniMap();
 
+			
+			// PLATFORM LEVEL - CHANGE
+			if (_ce.input.justDid(Actions.GOAL_KILL)) {
+				_gameData.goal = "KILL";	
+			} if(_ce.input.justDid(Actions.GOAL_COLLECT)) {
+				_gameData.goal = "COLLECT";
+			} if(_ce.input.justDid(Actions.GOAL_A_TO_B)) {
+				_gameData.goal = "ATOB";
+			} if(_ce.input.justDid(Actions.GOAL_NO_GOAL)) {
+				_gameData.goal = "NOGOAL";
+			}
 			
 			
 			// PLATFORM LEVEL - CHANGE
