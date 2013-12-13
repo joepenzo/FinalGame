@@ -88,6 +88,8 @@ package
 			_hero.currentShape = Shapes.RECTANGLE;
 			_hero.view = StarlingShape.Rectangle(_hero.width, _hero.height, _hero.currentColor);
 			add(_hero);
+			_hero.jumpType = "Double";
+			
 		
 			
 //			var enemyX : int = _hero.x + 50;
@@ -163,10 +165,16 @@ package
 				action = _ce.input.getAction(Actions.VALUE_ZOOM) as InputAction;
 				_camera.setZoom(action.value);
 			}
+
 			// HERO SIZE - CHANGE
 			if(_ce.input.isDoing(Actions.HERO_SIZE)) {
 				action = _ce.input.getAction(Actions.HERO_SIZE) as InputAction;
 				Functions.ResizeObjectValue(this, action.value/30/2, action.value/30/2, "hero");
+			}
+			// HERO SHOOTING _ONOFF
+			if(_ce.input.justDid(Actions.HERO_SHOOT)) {
+				action = _ce.input.getAction(Actions.HERO_SHOOT) as InputAction;
+				_hero.shootingEnabled = action.value;
 			}
 
 			
@@ -201,14 +209,18 @@ package
 				changeObjectColor(_gameData.currentStyling, _gameData.red, _gameData.green, _gameData.blue);
 			}
 			
+			// CHANGE CURRENT STYLING OBJECT
 			if (_ce.input.justDid(Actions.SELECTED_COLOROBJ_HERO)) {
 				_gameData.currentStyling = "hero";
 			} if (_ce.input.justDid(Actions.SELECTED_COLOROBJ_BG)) {
 				_gameData.currentStyling = "bg";
 			} if (_ce.input.justDid(Actions.SELECTED_COLOROBJ_PLAT)) {
 				_gameData.currentStyling = "platform";
-			} 
+			} if (_ce.input.justDid(Actions.SELECTED_COLOROBJ_ENEMIES)) {
+				_gameData.currentStyling = "enemies";
+			}
 			
+			// CHANGE SHAPE OF SELECTED ITEM
 			if (_ce.input.justDid(Actions.CHANGE_SHAPE_RECT)) {
 				_gameData.currentShape = Shapes.RECTANGLE;
 				changeObjectShape();
@@ -241,7 +253,7 @@ package
 			if(type == "cave"){
 				//mapH = 40;
 				//mapW = 70;
-				_lvl = CaveGenerator.createlevel(_mapW, _mapH, heroPos);
+				_lvl = CaveGenerator.createlevel(_mapW, _mapH, heroPos, _hero);
 			} else if (type == "mario") {
 				//mapH = 40;
 				//mapW = 200;
@@ -253,6 +265,7 @@ package
 			
 			var heroContactList : b2ContactEdge = _hero.body.GetContactList(); // Force begin contact, with new platform.. otherwise is doesn't and then.. you can't jump
 			if (heroContactList) for (var contact: b2Contact = _hero.body.GetContactList().contact ; contact ; contact = contact.GetNext())  _hero.handleBeginContact(contact);
+//			_hero.y = _hero.y - 5; // set hero some pixels above platform so he can jump.. FIX JUMP BUG - ?
 			
 			// DO PLACE ENEMIES FUNCTIES IF THERE ARE ANY IN THE STATE
 			if (getObjectsByType(EdgeDetectorEnemy).length > 0) _lvl.placeEnemies(this, _gameData.enemyPercentage);
@@ -262,27 +275,58 @@ package
 		
 		
 		private function changeObjectShape():void {
-			var object : ExBox2DPhysicsObject = getObjectByName("hero") as ExBox2DPhysicsObject;
-			object.currentShape = _gameData.currentShape;
 			
-			var body: b2Body = object.getBody() as b2Body;
-			var height : Number = (body.GetFixtureList().GetAABB().upperBound.y - body.GetFixtureList().GetAABB().lowerBound.y) * 30; // standard box2d scale 30
-			var width : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
-			
-			switch (object.currentShape){
-				case Shapes.CIRCLE:
-					object.view = StarlingShape.Circle(width, object.currentColor);
-					break;
-				case Shapes.HEXAGON:
-					object.view = StarlingShape.polygon(width, 6, object.currentColor);
-					break;
-				case Shapes.RECTANGLE:
-					object.view = StarlingShape.Rectangle(width, height, object.currentColor);
-					break;
-				case Shapes.TRIANGLE:
-					object.view = StarlingShape.Triangle(width, height, object.currentColor);
-					break;
+			if (_gameData.currentStyling == "hero") {
+				var object : ExBox2DPhysicsObject = getObjectByName("hero") as ExBox2DPhysicsObject;
+				object.currentShape = _gameData.currentShape;
+				
+				var body: b2Body = object.getBody() as b2Body;
+				var height : Number = (body.GetFixtureList().GetAABB().upperBound.y - body.GetFixtureList().GetAABB().lowerBound.y) * 30; // standard box2d scale 30
+				var width : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
+				
+				switch (object.currentShape){
+					case Shapes.CIRCLE:
+						object.view = StarlingShape.Circle(width, object.currentColor);
+						break;
+					case Shapes.HEXAGON:
+						object.view = StarlingShape.polygon(width, 6, object.currentColor);
+						break;
+					case Shapes.RECTANGLE:
+						object.view = StarlingShape.Rectangle(width, height, object.currentColor);
+						break;
+					case Shapes.TRIANGLE:
+						object.view = StarlingShape.Triangle(width, height, object.currentColor);
+						break;
+				}	
 			}
+			else if (_gameData.currentStyling == "enemies") {
+				for each (var test :CitrusObject in objects) {
+					if (test is ExEnemy) {
+						var enemy : ExEnemy = test as ExEnemy;
+	
+						enemy.currentShape = _gameData.currentShape;	
+						var width = enemy.width;
+						var height = enemy.height;
+						
+						switch (enemy.currentShape){
+							case Shapes.CIRCLE:
+								enemy.view = StarlingShape.Circle(width, enemy.currentColor);
+								break;
+							case Shapes.HEXAGON:
+								enemy.view = StarlingShape.polygon(width, 6, enemy.currentColor);
+								break;
+							case Shapes.RECTANGLE:
+								enemy.view = StarlingShape.Rectangle(width, height, enemy.currentColor);
+								break;
+							case Shapes.TRIANGLE:
+								enemy.view = StarlingShape.Triangle(width, height, enemy.currentColor);
+								break;
+						}
+					}
+				}
+			}
+			
+			
 		}
 		
 		
@@ -300,13 +344,12 @@ package
 			
 			
 			
-			if (getObjectByName(name)) { 
+			if (name == "hero") { 
 				var object : ExBox2DPhysicsObject = getObjectByName(name) as ExBox2DPhysicsObject;
 				object.currentColor = hex;
 				var body: b2Body = object.getBody() as b2Body;
 				var height : Number = (body.GetFixtureList().GetAABB().upperBound.y - body.GetFixtureList().GetAABB().lowerBound.y) * 30; // standard box2d scale 30
 				var width : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
-
 				
 				switch (object.currentShape){
 					case Shapes.CIRCLE:
@@ -322,11 +365,35 @@ package
 						object.view = StarlingShape.Triangle(width, height, object.currentColor);
 						break;
 				}
-
-				
-				//var view : QuadBatch = object.view as QuadBatch;
-				//view.setQuadColor(0,hex);
 			}
+			
+			if (name == "enemies") {
+				for each (var enemyObj :CitrusObject in objects) {
+					if (enemyObj is ExEnemy) {
+						var enemy : ExEnemy = enemyObj as ExEnemy;
+						enemy.currentColor = hex;
+						
+						var width = enemy.width;
+						var height = enemy.height;
+						
+						switch (enemy.currentShape){
+							case Shapes.CIRCLE:
+								enemy.view = StarlingShape.Circle(width, enemy.currentColor);
+								break;
+							case Shapes.HEXAGON:
+								enemy.view = StarlingShape.polygon(width, 6, enemy.currentColor);
+								break;
+							case Shapes.RECTANGLE:
+								enemy.view = StarlingShape.Rectangle(width, height, enemy.currentColor);
+								break;
+							case Shapes.TRIANGLE:
+								enemy.view = StarlingShape.Triangle(width, height, enemy.currentColor);
+								break;
+						}
+					}
+				}
+			}
+			
 		}
 
 		

@@ -27,10 +27,11 @@ package objects
 		protected var _leftEdgeSensorFixture:b2Fixture;
 		protected var _rightEdgeSensorFixture:b2Fixture;
 		
-		public function EdgeDetectorEnemy(name:String, params:Object=null, tile : Point = null)
+		public function EdgeDetectorEnemy(name:String, enemyColor : uint, params:Object=null, tile : Point = null)
 		{
 			super(name, params);
 			_tile = tile;
+			currentColor = enemyColor;
 			_endContactCallEnabled = true;
 			_preContactCallEnabled = true;
 			hurtDuration = 0;

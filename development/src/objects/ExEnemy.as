@@ -18,6 +18,7 @@ package objects
 	import flash.utils.clearTimeout;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.setTimeout;
+	import starling.display.Shape;
 	
 	/**
 	 * This is a common example of a side-scrolling bad guy. He has limited logic, basically
@@ -69,15 +70,13 @@ package objects
 		
 		public function ExEnemy(name:String, params:Object=null)
 		{
-			updateCallEnabled = true;
-			_beginContactCallEnabled = true;
-			
 			super(name, params);
 			
-			startingDirection = (Math.random() > .5) ? "left" : "right";
+			updateCallEnabled = true;
+			_beginContactCallEnabled = true;
 
-			if (startingDirection == "left")
-				_inverted = true;
+			startingDirection = (Math.random() > .5) ? "left" : "right";
+			if (startingDirection == "left") _inverted = true;
 		}
 		
 		override public function destroy():void

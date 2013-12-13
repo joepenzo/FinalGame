@@ -26,10 +26,17 @@ package data.consts
 		public static const CHANGE_LVL_FLAT:String = "CHANGE_LVL_FLAT";
 		
 		public static const HERO_SIZE:String = "HERO_SIZE";
+		public static const HERO_SHOOT:String = "HERO_SHOOT";
+		
+		public static const CHANGE_JUMP_SINGLE:String = "CHANGE_JUMP_SINGLE";
+		public static const CHANGE_JUMP_DOUBLE:String = "CHANGE_JUMP_DOUBLE";
+		public static const CHANGE_JUMP_UNLIMETID:String = "CHANGE_JUMP_UNLIMETID";
+		public static const CHANGE_JUMP_JETPACK:String = "CHANGE_JUMP_UNLIMETID";
 		
 		public static const SELECTED_COLOROBJ_BG:String = "SELECTED_COLOROBJ_BG";
 		public static const SELECTED_COLOROBJ_HERO:String = "SELECTED_COLOROBJ_HERO";
 		public static const SELECTED_COLOROBJ_PLAT:String = "SELECTED_COLOROBJ_PLAT";
+		public static const SELECTED_COLOROBJ_ENEMIES:String = "SELECTED_COLOROBJ_ENEMIES";
 
 		public static const CHANGE_SHAPE_RECT:String = "CHANGE_SHAPE_RECT";
 		public static const CHANGE_SHAPE_TRIANGLE:String = "CHANGE_SHAPE_TRIANGLE";
@@ -37,6 +44,7 @@ package data.consts
 		public static const CHANGE_SHAPE_HEXAGON:String = "CHANGE_SHAPE_HEXAGON";
 
 		public static const ENEMY_PERCANTAGE:String = "ENEMY_PERCANTAGE";
+		
 		
 	}
 }

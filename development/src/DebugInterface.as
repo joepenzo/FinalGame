@@ -28,6 +28,9 @@ package
 		public var shape : String = "Rectangle";
 		
 		public var heroSize : int;	
+		public var shootEnabled : Boolean = true;	
+		public var jump : String = "Single";
+		
 		public var enemyPercentage : int;	
 			
 			
@@ -53,7 +56,8 @@ package
 			_gui.addComboBox("styledItem", [
 				{label:"Platform", data: Actions.SELECTED_COLOROBJ_PLAT},
 				{label:"Avatar", data: Actions.SELECTED_COLOROBJ_HERO},
-				{label:"Background", data: Actions.SELECTED_COLOROBJ_BG}
+				{label:"Background", data: Actions.SELECTED_COLOROBJ_BG},
+				{label:"Enemies", data: Actions.SELECTED_COLOROBJ_ENEMIES}
 			], { callback: function ():void{  _guiInput.triggerOnce(styledItem,1); }});
 			
 			_gui.addSlider("red", ValueRange.RED.x, ValueRange.RED.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.VALUE_RED, red);  }});
@@ -70,6 +74,14 @@ package
 			
 			_gui.addGroup("Avatar");
 			_gui.addSlider("heroSize", ValueRange.HERO_SIZE.x, ValueRange.HERO_SIZE.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.HERO_SIZE, heroSize); }});
+			_gui.addToggle("shootEnabled", { callback: function ():void{  _guiInput.triggerOnce(Actions.HERO_SHOOT, int(shootEnabled)); }});
+			_gui.addComboBox("jump", [
+				{label:"Single", data: Actions.CHANGE_JUMP_SINGLE},
+				{label:"Double", data: Actions.CHANGE_JUMP_DOUBLE},
+				{label:"Unlimited", data: Actions.CHANGE_JUMP_UNLIMETID},
+				{label:"Jetpack", data: Actions.CHANGE_JUMP_JETPACK}
+			], { callback: function ():void{  _guiInput.triggerOnce(jump,1); }});
+
 			
 			_gui.addColumn("Obstacles");
 			_gui.addGroup("Enemies");

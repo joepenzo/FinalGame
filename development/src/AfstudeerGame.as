@@ -32,7 +32,7 @@ package
 			_gameData = gameData as GameData;
 
 			_gameData.currentStyling = "platform";
-//			
+
 //			_sounds = new SynthSounds("synthSounds");
 //			_gameData.synthSounds = _sounds;
 			

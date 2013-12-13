@@ -1,7 +1,10 @@
 package generators {
 
-import generators.java.util.Random;
 import flash.geom.Point;
+
+import generators.java.util.Random;
+
+import objects.ExHero;
 import objects.Level;
 
 	public class CaveGenerator
@@ -10,9 +13,9 @@ import objects.Level;
 	    public static const TYPE_UNDERGROUND:int = 1;
 	    public static const TYPE_CASTLE:int = 2;
 	
-	    public static function createlevel(width:int, height:int, heroPos : Point = null):Level
+	    public static function createlevel(width:int, height:int, heroPos : Point = null, hero : ExHero = null):Level
 	    {
-	        var levelGenerator:CaveGenerator = new CaveGenerator(width, height, heroPos);
+	        var levelGenerator:CaveGenerator = new CaveGenerator(width, height, heroPos, hero);
 	        return levelGenerator.createlevel();
 	    }
 	
@@ -35,7 +38,7 @@ import objects.Level;
 		private var _heroPos:Point;
 	
 	
-	    public function CaveGenerator(width:int, height:int, heroPos : Point) {
+	    public function CaveGenerator(width:int, height:int, heroPos : Point, hero : ExHero) {
 	        this.width = width;
 	        this.height = height;
 			_heroPos = heroPos;

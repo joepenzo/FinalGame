@@ -238,12 +238,11 @@ package objects  {
 			var boundDistance : int;
 			for each (var currentEnemyPos:Point in _currentEnemyTilesArray) { // ADD ALL ENEMIES TO STATE
 				boundDistance =  Functions.randomIntRange(32, 32*5);
-				state.add(new EdgeDetectorEnemy('enemy', { 
+				state.add(new EdgeDetectorEnemy('enemy', 0xAB1A1A, { 
 					speed : 0.8,
 					width : 20, 
 					height : 20, 
-//					x: currentEnemyPos.x*32 +10, 
-					x: currentEnemyPos.x*32 +10 + 5, // +5 for bug fixx that enemy fall of platform 
+					x: currentEnemyPos.x*32 +10 + 5, // +5 for bug fixx that enemy fall of platform  //	x: currentEnemyPos.x*32 +10,
 					y: currentEnemyPos.y*32 +10,
 					leftBound: currentEnemyPos.x*32 - boundDistance, // TILESIZE INSTEAD
 					rightBound: currentEnemyPos.x*32 + boundDistance,
