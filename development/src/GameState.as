@@ -85,7 +85,7 @@ package
 //			_lvl = CaveGenerator.createlevel(_mapW, _mapH);
 			
 			_lvl.drawMapPlaftormsToGameState(this, _tileSize, 0x000000);
-			//_lvl.drawDebugGrid(this);
+			_lvl.drawDebugGrid(this);
 			
 			var heroStartPos : Point = _lvl.randomPosition();
 			_hero = new ExHero("hero", {
@@ -252,7 +252,7 @@ package
 				
 				clearTimeout(ENEMY_AMOUNT_INTERVAL);
 				ENEMY_AMOUNT_INTERVAL = setTimeout(function (state : StarlingState):void { 
-					_lvl.placeStaticTraps(state, _gameData.trapPercantage);
+					_lvl.placeStaticTraps(state, _gameData.trapPercantage, new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize) ));
 				}, 100, this);
 				
 			}
@@ -351,10 +351,14 @@ package
 			var heroContactList : b2ContactEdge = _hero.body.GetContactList(); // Force begin contact, with new platform.. otherwise is doesn't and then.. you can't jump
 			if (heroContactList) for (var contact: b2Contact = _hero.body.GetContactList().contact ; contact ; contact = contact.GetNext())  _hero.handleBeginContact(contact);
 			
-			// DO PLACE ENEMIES FUNCTIES IF THERE ARE ANY IN THE STATE
+			// DO PLACE ENEMIES BACK IF THERE ARE ANY IN THE STATE
 			if (getObjectsByType(EdgeDetectorEnemy).length > 0) {
-				_lvl.placeEnemies(this, _gameData.enemyPercentage);
+				_lvl.placeEnemies(this, _gameData.enemyPercentage);// replace enemies
 				_gameData.totalEnemies = _lvl.getTotalEnemiesAmount; // save total enemies for the enemy kill counter
+			}
+			
+			if (getObjectsByType(StaticTrap).length > 0) {
+				_lvl.placeStaticTraps(this, _gameData.trapPercantage,heroPos);
 			}
 			
 		}	

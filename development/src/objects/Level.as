@@ -249,12 +249,13 @@ package objects  {
 		}	
 		
 		
-		public function placeStaticTraps(state: StarlingState, percentage : int):void {
+		public function placeStaticTraps(state: StarlingState, percentage : int, heroPos : Point):void {
 			_newStaticTrapAmount = _possibleTileForEnemies*(percentage/100);
 			_freeStaticTrapTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
 			_staticTrapsToPlaceAmount = _freeStaticTrapTilesArray.length*(percentage/100);		
 			
-			placeStaticTrapsInMap();
+			placeStaticTrapsInMap(heroPos);
+			Functions.trace2DArray(map);
 			
 			// CODE TO PLACE AND DELETE THE TRAPS IN THE GAMESTATE// write this more epic, that some TRAPS can stay!!
 			var currentTrapsInState : Vector.<CitrusObject> = state.getObjectsByName("staticTrap") as Vector.<CitrusObject>;
@@ -274,7 +275,8 @@ package objects  {
 			}
 		}
 		
-		private function placeStaticTrapsInMap():void {
+		
+		private function placeStaticTrapsInMap(heroPos:Point):void {
 			if (_newStaticTrapAmount > _oldStaticTrapAmount) { 
 				for (var i:int=0; i < _staticTrapsToPlaceAmount-1; i++) {
 					var randomIdx:int = Math.floor(Math.random() * _freeStaticTrapTilesArray.length);
