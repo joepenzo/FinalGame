@@ -30,7 +30,7 @@ public class MarioGenerator
     internal var lvl:Level = new Level(width, height);
     internal var random:Random;
 
-	private const LEVELRIGHTMARING:int = 5; // 64 standard
+	private const LEVELRIGHTMARING:int = 10; // 64 standard - flat platform from right border into map
 	
     private static const ODDS_STRAIGHT:int = 0;
     private static const ODDS_HILL_STRAIGHT:int = 1;
@@ -59,10 +59,9 @@ public class MarioGenerator
         this.difficulty = difficulty;
 		this.heroPos = heroPos;
         odds[ODDS_STRAIGHT] = 20;
-    //    odds[ODDS_HILL_STRAIGHT] = 10;
-      //  odds[ODDS_TUBES] = 2 + 1 * difficulty;
-       // odds[ODDS_JUMP] = 2 * difficulty;
-//        odds[ODDS_CANNONS] = -10 + 5 * difficulty;
+        odds[ODDS_HILL_STRAIGHT] = 10;
+        odds[ODDS_TUBES] = 2 + 1 * difficulty;
+        odds[ODDS_JUMP] = 2 * difficulty;
 
         if (type != CaveGenerator.TYPE_OVERGROUND) {
             odds[ODDS_HILL_STRAIGHT] = 0;
@@ -116,7 +115,6 @@ public class MarioGenerator
 
    
 		addBorderBlocks();
-		fixHeroPosIfStuck(hero);
         
 		return lvl;
     }
@@ -132,18 +130,6 @@ public class MarioGenerator
 		}
 	}
 	
-	private function fixHeroPosIfStuck(hero :ExHero):void {
-		if (heroPos == null) return;
-		
-		if (lvl.getBlock(heroPos.x, heroPos.y) == Tile.LAND) {
-			for (var y:uint = lvl.height; y > 0; y--) {
-				if (lvl.map[y-1][heroPos.x] == 0) {
-					hero.y = (y)*32;//hero.y = (y-1)*32;
-					break;
-				}
-			}
-		}
-	}	
 	
     private function buildZone(x:int, maxLength:int):int
     {
@@ -165,8 +151,6 @@ public class MarioGenerator
                 return buildTubes(x, maxLength);
             case ODDS_JUMP:
                 return buildJump(x, maxLength);
-//            case ODDS_CANNONS:
-//                return buildCannons(x, maxLength);
         }
         return 0;
     }
@@ -202,40 +186,6 @@ public class MarioGenerator
         return length;
     }
 
-    /*private function buildCannons(xo:int, maxLength:int):int
-    {
-        var length:int = random.nextInt(10) + 2;
-        if (length > maxLength) length = maxLength;
-
-        var floor:int = height - 1 - random.nextInt(4);
-        var xCannon:int = xo + 1 + random.nextInt(4);
-        for (var x:int = xo; x < xo + length; x++) {
-            if (x > xCannon) {
-                xCannon += 2 + random.nextInt(4);
-            }
-            if (xCannon == xo + length - 1) xCannon += 10;
-            var cannonHeight:int = floor - random.nextInt(4) - 1;
-
-            for (var y:int = 0; y < height; y++) {
-                if (y >= floor) {
-                    lvl.setBlock(x, y, uint((1 + 9 * 16)));
-                } else {
-                    if (x == xCannon && y >= cannonHeight) {
-                        if (y == cannonHeight) {
-                            lvl.setBlock(x, y, uint((14 + 0 * 16)));
-                        } else if (y == cannonHeight + 1) {
-                            lvl.setBlock(x, y, uint((14 + 1 * 16)));
-                        } else {
-                            lvl.setBlock(x, y, uint((14 + 2 * 16)));
-                        }
-                    }
-                }
-            }
-        }
-
-        return length;
-    }
-*/
 	
     private function buildHillStraight(xo:int, maxLength:int):int {
         var length:int = random.nextInt(10) + 10;
@@ -316,6 +266,7 @@ public class MarioGenerator
     }
 
     private function addEnemyLine(x0:int, x1:int, y:int):void {
+		error('addEnemyLine');
         for (var x:int = x0; x < x1; x++)
         {
             if (random.nextInt(35) < difficulty + 1)

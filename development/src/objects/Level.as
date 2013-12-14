@@ -224,7 +224,22 @@ package objects  {
 			drawQuadMap(gameState, _tileSize, color);
 			_possibleTileForEnemies = getTilePointsArrayAbovePlatformTiles().length as int;
 			
+			
+			fixHeroPosIfStuck(heroPos, gameState.getObjectByName("hero") as ExHero);
 		}
+		
+		private function fixHeroPosIfStuck(heroPos : Point, hero : ExHero):void {
+			if (heroPos == null) return;
+			if (getBlock(heroPos.x, heroPos.y) == Tile.LAND) {
+				for (var y:uint = height; y > 0; y--) {
+					if (map[y-1][heroPos.x] == 0) {
+						var heroHeight : Number = (hero.body.GetFixtureList().GetAABB().upperBound.y - hero.body.GetFixtureList().GetAABB().lowerBound.y) * 30; // standard box2d scale 30
+						hero.y = (y*_tileSize) -heroHeight/2;//hero.y = (y-1)*32;
+						break;
+					}
+				}
+			}
+		}	
 
 		
 		public function placeEnemies(state: StarlingState, percentage : int):void {

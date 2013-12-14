@@ -83,7 +83,7 @@ package
 //			_mapH = 50;			
 //			_lvl = CaveGenerator.createlevel(_mapW, _mapH);
 			
-			_lvl.drawMapPlaftormsToGameState(this, _tileSize);
+			_lvl.drawMapPlaftormsToGameState(this, _tileSize, 0x000000);
 			_lvl.drawDebugGrid(this);
 			
 			var heroStartPos : Point = _lvl.randomPosition();
@@ -336,7 +336,7 @@ package
 			}
 			
 //			_camera.bounds = new Rectangle(0, 0, mapW*tileSize, mapH*tileSize); 
-			_lvl.drawMapPlaftormsToGameState(this, _tileSize, _gameData.levelColor);
+			_lvl.drawMapPlaftormsToGameState(this, _tileSize, _gameData.levelColor, false, heroPos);
 			
 			var heroContactList : b2ContactEdge = _hero.body.GetContactList(); // Force begin contact, with new platform.. otherwise is doesn't and then.. you can't jump
 			if (heroContactList) for (var contact: b2Contact = _hero.body.GetContactList().contact ; contact ; contact = contact.GetNext())  _hero.handleBeginContact(contact);
