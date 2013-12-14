@@ -2,9 +2,6 @@
 		- platform sizes compared to objects like enemies and avatar, and open stops
 
 
-	Fix bullets/shooting when enemy is big ( Bullets stop because of the size, they are fired from the inside of the avatar)
-
-
 	Remove all enemies when percentage is 0 - some enemies stay in the level is % = 0
 
 

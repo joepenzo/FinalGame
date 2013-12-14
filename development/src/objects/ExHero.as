@@ -31,6 +31,7 @@ package objects {
 	import starling.display.Shape;
 	
 	import utils.StarlingShape;
+	import utils.ObjSize;
 
 	//import data.Sounds;
 	
@@ -152,7 +153,6 @@ package objects {
 		private var _mayDoubleJump:Boolean;
 		private var _bulletcounter:int=0;
 		private var _bulletGraphic:Shape;
-		
 
 		
 		public var shootingEnabled : Boolean = true;
@@ -357,15 +357,16 @@ package objects {
 					_springOffEnemy = -1;
 				}
 				
-			
+				
 				
 				//The Shooting ability - IF SHOOTING IS ENABLED
  				if (shootingEnabled && _ce.input.justDid(Actions.SHOOT)) {
+					var bodyWidth : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
 					var bullet:Missile;
 					if (_inverted) {
-						bullet = new Missile("bullet"+_bulletcounter, {x:x -width, y:y, width:5, height:5, speed:30, explodeDuration:200, fuseDuration: 5000, angle:180});
+						bullet = new Missile("bullet"+_bulletcounter, {x:x -(bodyWidth/2) - 5, y:y, width:5, height:5, speed:30, explodeDuration:10, fuseDuration: 5000, angle:180});
 					} else {
-						bullet = new Missile("bullet"+_bulletcounter, {x:x + width, y:y, width:5, height:5, speed:30, explodeDuration:200, fuseDuration: 5000, angle:0});
+						bullet = new Missile("bullet"+_bulletcounter, {x:x +(bodyWidth/2) + 5, y:y, width:5, height:5, speed:30, explodeDuration:10, fuseDuration: 5000, angle:0});
 					}
 					bullet.onExplode.add(handleBulletExplode);
 					bullet.view = StarlingShape.Rectangle(width/2,height/2,0x000000);

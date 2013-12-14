@@ -143,7 +143,6 @@ package
 			if (_gameData.goal == Goals.KILL_ENEMIES) {
 				if (data == "totalEnemiesInState" || data == "totalEnemiesKilled") {
 					_gameInterface.updateGoalStatus( (_gameData.enemiesKilled.toString() + " / " + _gameData.totalEnemies.toString()) );	
-					
 					if (_gameData.enemiesKilled == _gameData.totalEnemies) { // MADE YOUR GOAL, RESET THE MOTHERFUCKER
 						_gameInterface.updateGoalStatus("DONE - RESETTING");
 						setTimeout(function () {
@@ -152,7 +151,7 @@ package
 						}, 2000);
 					}
 				}
-			}
+			} 
 			
 		}
 		
@@ -169,7 +168,6 @@ package
 			// GAME GOAL
 			if (_ce.input.justDid(Actions.GOAL_KILL)) {
 				_gameData.goal = Goals.KILL_ENEMIES;
-				
 				_gameInterface.updateGoalType(_gameData);
 				_gameInterface.updateGoalStatus( (_gameData.enemiesKilled.toString() + " / " + _gameData.totalEnemies.toString()) );
 			}
