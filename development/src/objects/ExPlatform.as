@@ -54,7 +54,6 @@ package objects
 		}
 		
 		override public function handlePreSolve(contact:b2Contact, oldManifold:b2Manifold):void {
-			
 			if (_oneWay) {
 				
 				// Get the half-height of the collider, if we can guess what it is (we are hoping the collider extends PhysicsObject).
@@ -76,5 +75,7 @@ package objects
 					contact.SetEnabled(false);
 			}
 		}
+		
+		
 	}
 }

@@ -30,8 +30,9 @@ package objects {
 	
 	import starling.display.Shape;
 	
-	import utils.StarlingShape;
 	import utils.ObjSize;
+	import utils.StarlingShape;
+	import data.GameData;
 
 	//import data.Sounds;
 	
@@ -137,7 +138,7 @@ package objects {
 		 */		
 		public var onAnimationChange:Signal;
 
-//		private var _gameData: GameData;
+		private var _gameData: GameData;
 		
 		protected var _groundContacts:Array = [];//Used to determine if he is on ground or not.
 		protected var _enemyClass:Class = Enemy;
@@ -174,13 +175,14 @@ package objects {
 			_endContactCallEnabled = true;
 			
 			super(name, params);
+
+			_gameData = _ce.gameData as GameData;
 			
 			onJump = new Signal();
 			onGiveDamage = new Signal();
 			onTakeDamage = new Signal();
 			onAnimationChange = new Signal();
 
-			//_gameData = _ce.gameData as GameData;
 			//_sounds = _gameData.synthSounds;
 			_ce.input.keyboard.addKeyAction(Actions.JUMP,Keyboard.UP);
 			_ce.input.keyboard.addKeyAction(Actions.SHOOT,Keyboard.Z);
@@ -476,7 +478,7 @@ package objects {
 		override public function handleBeginContact(contact:b2Contact):void {
 			
 			var collider:IBox2DPhysicsObject = Box2DUtils.CollisionGetOther(this, contact);
-			
+
 			if (_enemyClass && collider is _enemyClass)
 			{
 				if (_body.GetLinearVelocity().y < killVelocity && !_hurt)
@@ -504,8 +506,11 @@ package objects {
 				if(contact.normal == null) return; // BUG FIX? // ON LEVEL RELOAD WHEN TOUCHED OR TOUCHING ENEMY
 				var collisionAngle:Number = Math.atan2(contact.normal.y, contact.normal.x);
 				
+				
+				
 				if (collisionAngle >= Math.PI*.25 && collisionAngle <= 3*Math.PI*.25 ) // normal angle between pi/4 and 3pi/4
 				{
+					if(collider is StaticTrap) _gameData.lives--;
 					_groundContacts.push(collider.body.GetFixtureList());
 					_onGround = true;
 					updateCombinedGroundAngle();
@@ -563,26 +568,16 @@ package objects {
 			
 			if (_hurt)
 				_animation = "hurt";
-				
 			else if (!_onGround) {
-				
 				_animation = "jump";
-//				if (walkingSpeed < -acceleration)
-//					_inverted = true;
-//				else if (walkingSpeed > acceleration)
-//					_inverted = false;
-				
 			} else if (_ducking)
 				_animation = "duck";
-			
 				
 			else {
 				
 				if (walkingSpeed < -acceleration) {
-//					_inverted = true;
 					_animation = "walk";
 				} else if (walkingSpeed > acceleration) {
-//					_inverted = false;
 					_animation = "walk";
 				} else
 					_animation = "idle";
