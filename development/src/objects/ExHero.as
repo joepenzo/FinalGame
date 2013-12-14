@@ -264,25 +264,28 @@ package objects {
 			
 			var velocity:b2Vec2 = _body.GetLinearVelocity();
 			
+			if (_ce.input.justDid(Actions.RIGHT)) {
+				_inverted = false;
+			} if (_ce.input.justDid(Actions.LEFT)) {
+				_inverted = true;
+			}
+			
 			if (controlsEnabled)
 			{
 				var moveKeyPressed:Boolean = false;
 				
 				_ducking = (_ce.input.isDoing("duck",inputChannel) && _onGround && canDuck);
 				
-				if (_ce.input.isDoing(Actions.RIGHT,inputChannel) && !_ducking)
-				{
+				if (_ce.input.isDoing(Actions.RIGHT,inputChannel) && !_ducking) {
 					if (!invertMovement) {
 						velocity.Add(getSlopeBasedMoveAngle());
 					} else {
 						velocity.Subtract(getSlopeBasedMoveAngle());
 					}
-					
 					moveKeyPressed = true;
 				}
 				
-				if (_ce.input.isDoing(Actions.LEFT,inputChannel) && !_ducking)
-				{
+				if (_ce.input.isDoing(Actions.LEFT,inputChannel) && !_ducking) {
 					if (!invertMovement) {
 						velocity.Subtract(getSlopeBasedMoveAngle());
 					} else {
@@ -361,6 +364,7 @@ package objects {
 				
 				//The Shooting ability - IF SHOOTING IS ENABLED
  				if (shootingEnabled && _ce.input.justDid(Actions.SHOOT)) {
+					error(  _inverted + "   " +  invertMovement);
 					var bodyWidth : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
 					var bullet:Missile;
 					if (_inverted) {
@@ -563,11 +567,10 @@ package objects {
 			else if (!_onGround) {
 				
 				_animation = "jump";
-
-				if (walkingSpeed < -acceleration)
-					_inverted = true;
-				else if (walkingSpeed > acceleration)
-					_inverted = false;
+//				if (walkingSpeed < -acceleration)
+//					_inverted = true;
+//				else if (walkingSpeed > acceleration)
+//					_inverted = false;
 				
 			} else if (_ducking)
 				_animation = "duck";
@@ -576,14 +579,11 @@ package objects {
 			else {
 				
 				if (walkingSpeed < -acceleration) {
-					_inverted = true;
+//					_inverted = true;
 					_animation = "walk";
-					
 				} else if (walkingSpeed > acceleration) {
-					
-					_inverted = false;
+//					_inverted = false;
 					_animation = "walk";
-					
 				} else
 					_animation = "idle";
 			}

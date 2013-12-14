@@ -1,11 +1,7 @@
 	Make level more logic
 		- platform sizes compared to objects like enemies and avatar, and open stops
 
-
 	Remove all enemies when percentage is 0 - some enemies stay in the level is % = 0
 
-
-	Fix bullet direction change, on left or right key down
-	
 	Sometimes enemies fall of the ledge..
 	

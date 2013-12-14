@@ -15,7 +15,6 @@ package utils
 			shape.graphics.beginFill(color);
 			shape.graphics.drawRect(0,0,width, height);
 			shape.graphics.endFill();
-			
 			return shape;
 		}
 		
