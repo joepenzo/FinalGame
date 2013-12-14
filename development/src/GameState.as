@@ -332,7 +332,7 @@ package
 			} else if (type == "mario") {
 				//mapH = 40;
 				//mapW = 200;
-				_lvl = MarioGenerator.createlevel(_mapW, _mapH, 533, 0, 1, heroPos, _hero);
+				_lvl = MarioGenerator.createlevel(_mapW, _mapH, 533, Functions.randomIntRange(1,10), 1, heroPos, _hero);
 			}
 			
 //			_camera.bounds = new Rectangle(0, 0, mapW*tileSize, mapH*tileSize); 
