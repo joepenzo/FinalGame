@@ -19,7 +19,7 @@ package objects {
 	import citrus.physics.box2d.IBox2DPhysicsObject;
 	import citrus.utils.AGameData;
 	
-	import data.consts.Actions;
+	import data.types.Actions;
 	
 	import flash.geom.Point;
 	import flash.utils.clearTimeout;
@@ -183,9 +183,7 @@ package objects {
 			//_gameData = _ce.gameData as GameData;
 			//_sounds = _gameData.synthSounds;
 			_ce.input.keyboard.addKeyAction(Actions.JUMP,Keyboard.UP);
-		
-			_ce.input.keyboard.addKeyAction(Actions.SHOOT,Keyboard.COMMAND);
-			_ce.input.keyboard.addKeyAction(Actions.SHOOT,Keyboard.CTRL);
+			_ce.input.keyboard.addKeyAction(Actions.SHOOT,Keyboard.Z);
 		}
 
 		override public function destroy():void
@@ -365,12 +363,12 @@ package objects {
  				if (shootingEnabled && _ce.input.justDid(Actions.SHOOT)) {
 					var bullet:Missile;
 					if (_inverted) {
-						bullet = new Missile("bullet"+_bulletcounter, {x:x -width, y:y, width:3, height:3, speed:30, explodeDuration:200, fuseDuration: 5000, angle:180});
+						bullet = new Missile("bullet"+_bulletcounter, {x:x -width, y:y, width:5, height:5, speed:30, explodeDuration:200, fuseDuration: 5000, angle:180});
 					} else {
-						bullet = new Missile("bullet"+_bulletcounter, {x:x + width, y:y, width:3, height:3, speed:30, explodeDuration:200, fuseDuration: 5000, angle:0});
+						bullet = new Missile("bullet"+_bulletcounter, {x:x + width, y:y, width:5, height:5, speed:30, explodeDuration:200, fuseDuration: 5000, angle:0});
 					}
 					bullet.onExplode.add(handleBulletExplode);
-					bullet.view = StarlingShape.Rectangle(3,3,0x000000);
+					bullet.view = StarlingShape.Rectangle(width/2,height/2,0x000000);
 					_bulletcounter++
 					_ce.state.add(bullet);
 				}

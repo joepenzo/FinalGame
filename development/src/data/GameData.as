@@ -18,6 +18,9 @@ package data
 		protected var _currentShape:String = "";
 		
 		protected var _goal:String = "";
+		protected var _enemiesKilled:int;
+		protected var _totalEnemiesInState:int;
+		
 		
 		protected var _levelColor : uint;
 		
@@ -31,6 +34,28 @@ package data
 		
 		public function GameData() {
 			super();
+		}
+
+		public function get totalEnemies():int
+		{
+			return _totalEnemiesInState;
+		}
+
+		public function set totalEnemies(value:int):void
+		{
+			_totalEnemiesInState = value;
+			dataChanged.dispatch("totalEnemiesInState", _totalEnemiesInState);
+		}
+
+		public function get enemiesKilled():int
+		{
+			return _enemiesKilled;
+		}
+
+		public function set enemiesKilled(value:int):void
+		{
+			_enemiesKilled = value;
+			dataChanged.dispatch("totalEnemiesKilled", _enemiesKilled);	
 		}
 
 		public function get goal():String

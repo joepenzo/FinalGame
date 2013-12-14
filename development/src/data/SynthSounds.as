@@ -5,8 +5,8 @@ package data
 	import citrus.utils.AGameData;
 	import flash.utils.*;
 	import flash.utils.Dictionary;
-	import data.consts.Actions;
-	import data.consts.Sounds;
+	import data.types.Actions;
+	import data.types.Sounds;
 	
 	public class SynthSounds extends CitrusObject
 	{

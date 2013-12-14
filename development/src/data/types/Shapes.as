@@ -1,4 +1,4 @@
-package data.consts
+package data.types
 {
 	public class Shapes
 	{

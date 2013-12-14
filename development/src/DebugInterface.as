@@ -5,8 +5,8 @@ package
 	import com.bit101.components.ComboBox;
 	import com.bit101.components.List;
 	
-	import data.consts.Actions;
-	import data.consts.ValueRange;
+	import data.types.Actions;
+	import data.types.ValueRange;
 	
 	import flash.display.Sprite;
 	

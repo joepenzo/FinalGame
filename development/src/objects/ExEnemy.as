@@ -14,6 +14,10 @@ package objects
 	import citrus.physics.box2d.Box2DShapeMaker;
 	import citrus.physics.box2d.Box2DUtils;
 	import citrus.physics.box2d.IBox2DPhysicsObject;
+	import citrus.utils.AGameData;
+	
+	import data.GameData;
+	import data.types.Goals;
 	
 	import flash.geom.Point;
 	import flash.utils.clearTimeout;
@@ -64,6 +68,8 @@ package objects
 		protected var _hurt:Boolean = false;
 		protected var _enemyClass:* = ExHero;
 		
+		private var _gameData:GameData;
+
 		protected var _leftSensorShape:b2PolygonShape;
 		protected var _rightSensorShape:b2PolygonShape;
 		protected var _leftSensorFixture:b2Fixture;
@@ -73,6 +79,7 @@ package objects
 		public function ExEnemy(name:String, params:Object=null)
 		{
 			super(name, params);
+			_gameData = _ce.gameData as GameData;
 			
 			updateCallEnabled = true;
 			_beginContactCallEnabled = true;
@@ -221,6 +228,10 @@ package objects
 		{
 			_hurt = false;
 			kill = true;
+			if (_gameData.goal = Goals.KILL_ENEMIES) {
+				_gameData.enemiesKilled++;
+				fatal("Kill " + 				_gameData.enemiesKilled);
+			}
 		}
 	}
 }

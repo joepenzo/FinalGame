@@ -7,7 +7,7 @@ package objects  {
 	import citrus.objects.platformer.box2d.Platform;
 	
 	import data.GameData;
-	import data.consts.Tile;
+	import data.types.Tile;
 	
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;
@@ -54,8 +54,6 @@ package objects  {
 		public static const BIT_ANIMATED:int = 1 << 7;
 		private static const FILE_HEADER:int = 0x271c4178;
 		
-		private var _gameData:GameData;
-		
 		private var _tileSize:int;
 		
 		public var width:int;
@@ -93,6 +91,11 @@ package objects  {
 		
 		// @throws IOException
 
+
+		public function get getTotalEnemiesAmount():int
+		{
+			return _currentEnemyTilesArray.length;
+		}
 
 		public static function loadBehaviors(behaviors:ByteArray):void {
 			//dis.readFully(Level.TILE_BEHAVIORS);

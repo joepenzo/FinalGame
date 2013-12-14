@@ -15,8 +15,9 @@ package
 	import citrus.view.starlingview.StarlingCamera;
 	
 	import data.GameData;
-	import data.consts.Actions;
-	import data.consts.Shapes;
+	import data.types.Actions;
+	import data.types.Goals;
+	import data.types.Shapes;
 	
 	import flash.display.Sprite;
 	import flash.geom.Point;
@@ -69,7 +70,6 @@ package
 		override public function initialize():void {
 			super.initialize();
 			_gameData = _ce.gameData as GameData;
-
 			
 			_box2D = new Box2D("box2D");
 			_box2D.visible = false;
@@ -131,7 +131,29 @@ package
 			_debugSprite.x = stage.stageWidth - _debugSprite.width - 10;
 			_debugSprite.y = 10;
 			
-			_gameInterface = new GameInterface(this);
+			_gameInterface = new GameInterface(this, _debugSprite.x , _debugSprite.y + _debugSprite.height);
+			
+			_gameData.dataChanged.add(onDataChanged);
+
+		}
+		
+		private function onDataChanged(data:String, value:Object):void {
+			//error(data + "  " + value); 
+			
+			if (_gameData.goal == Goals.KILL_ENEMIES) {
+				if (data == "totalEnemiesInState" || data == "totalEnemiesKilled") {
+					_gameInterface.updateGoalStatus( (_gameData.enemiesKilled.toString() + " / " + _gameData.totalEnemies.toString()) );	
+					
+					if (_gameData.enemiesKilled == _gameData.totalEnemies) { // MADE YOUR GOAL, RESET THE MOTHERFUCKER
+						_gameInterface.updateGoalStatus("DONE - RESETTING");
+						setTimeout(function () {
+							_gameData.enemiesKilled = _gameData.totalEnemies = 0;
+							_gameInterface.updateGoalStatus( (_gameData.enemiesKilled.toString() + " / " + _gameData.totalEnemies.toString()) );
+						}, 2000);
+					}
+				}
+			}
+			
 		}
 		
 		override public function update(timeDelta:Number):void {
@@ -141,20 +163,26 @@ package
 			_camera.renderDebug(_debugSprite as flash.display.Sprite)
 			drawPlatformsToMiniMap();
 			drawEnemiesToMiniMap();
-
+			// ENDOFF MINIMAP DEBUG RENDERING
+			
 			
 			// GAME GOAL
 			if (_ce.input.justDid(Actions.GOAL_KILL)) {
-				_gameData.goal = "KILL";
+				_gameData.goal = Goals.KILL_ENEMIES;
+				
 				_gameInterface.updateGoalType(_gameData);
-			} if(_ce.input.justDid(Actions.GOAL_COLLECT)) {
-				_gameData.goal = "COLLECT";
+				_gameInterface.updateGoalStatus( (_gameData.enemiesKilled.toString() + " / " + _gameData.totalEnemies.toString()) );
+			}
+			if(_ce.input.justDid(Actions.GOAL_COLLECT)) {
+				_gameData.goal = Goals.COLLECT_COINS;
 				_gameInterface.updateGoalType(_gameData);
-			} if(_ce.input.justDid(Actions.GOAL_A_TO_B)) {
-				_gameData.goal = "ATOB";
+			}
+			if(_ce.input.justDid(Actions.GOAL_A_TO_B)) {
+				_gameData.goal = Goals.A_TO_B;
 				_gameInterface.updateGoalType(_gameData);
-			} if(_ce.input.justDid(Actions.GOAL_NO_GOAL)) {
-				_gameData.goal = "NOGOAL";
+			} 
+			if(_ce.input.justDid(Actions.GOAL_NO_GOAL)) {
+				_gameData.goal = Goals.NO_GOAL;
 				_gameInterface.updateGoalType(_gameData);
 			}
 			
@@ -213,8 +241,9 @@ package
 				
 				clearTimeout(ENEMY_AMOUNT_INTERVAL);
 				ENEMY_AMOUNT_INTERVAL = setTimeout(myDelayedFunction, 100, this, action);
-				function myDelayedFunction(state : StarlingState, action : InputAction):void { // Kills the input after no change
+				function myDelayedFunction(state : StarlingState, action : InputAction):void { 
 					_lvl.placeEnemies(state, _gameData.enemyPercentage);
+					_gameData.totalEnemies = _lvl.getTotalEnemiesAmount; // save total enemies for the enemy kill counter
 				}
 				
 			
@@ -313,11 +342,12 @@ package
 			
 			var heroContactList : b2ContactEdge = _hero.body.GetContactList(); // Force begin contact, with new platform.. otherwise is doesn't and then.. you can't jump
 			if (heroContactList) for (var contact: b2Contact = _hero.body.GetContactList().contact ; contact ; contact = contact.GetNext())  _hero.handleBeginContact(contact);
-//			_hero.y = _hero.y - 5; // set hero some pixels above platform so he can jump.. FIX JUMP BUG - ?
 			
 			// DO PLACE ENEMIES FUNCTIES IF THERE ARE ANY IN THE STATE
-			if (getObjectsByType(EdgeDetectorEnemy).length > 0) _lvl.placeEnemies(this, _gameData.enemyPercentage);
-			
+			if (getObjectsByType(EdgeDetectorEnemy).length > 0) {
+				_lvl.placeEnemies(this, _gameData.enemyPercentage);
+				_gameData.totalEnemies = _lvl.getTotalEnemiesAmount; // save total enemies for the enemy kill counter
+			}
 			
 		}	
 		

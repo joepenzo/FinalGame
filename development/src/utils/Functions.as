@@ -8,7 +8,7 @@ package utils
 	import citrus.objects.Box2DPhysicsObject;
 	import citrus.physics.box2d.Box2DShapeMaker;
 	
-	import data.consts.Shapes;
+	import data.types.Shapes;
 	
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
@@ -20,7 +20,7 @@ package utils
 	
 	import starling.display.Image;
 	import starling.textures.Texture;
-	import data.consts.Tile;
+	import data.types.Tile;
 
 	public class Functions
 	{
