@@ -233,7 +233,6 @@ package objects  {
 			
 			fixHeroPosIfStuck(heroPos, gameState.getObjectByName("hero") as ExHero);
 			
-			Functions.trace2DArray(map);
 		}
 		
 		private function fixHeroPosIfStuck(heroPos : Point, hero : ExHero):void {
@@ -264,12 +263,13 @@ package objects  {
 				for each (var currentTrap:StaticTrap in currentTrapsInState) state.remove(currentTrap);
 			}
 			for each (var currentTrapPos:Point in _currentStaticTrapTilesArray) { // ADD ALL TO STATE
-				state.add(new StaticTrap('staticTrap', 0x6E6E6E, { 
+				state.add(new StaticTrap('staticTrap', 0x3D3D3D, { 
+					group:1,
 					width : _tileSize, 
 					height : _tileSize/2, 
 					x: (currentTrapPos.x*_tileSize) + _tileSize/2,
 					y: (currentTrapPos.y*_tileSize) + _tileSize*.75,
-					view : StarlingShape.CombinedShape("Triangle", _tileSize, _tileSize/2, 0x6E6E6E)
+					view : StarlingShape.CombinedShape("Triangle", _tileSize, _tileSize/2, 0x3D3D3D)
 				}));
 			}
 		}
@@ -317,6 +317,7 @@ package objects  {
 				boundDistance =  Functions.randomIntRange(32, 32*5);
 				state.add(new EdgeDetectorEnemy('enemy', 0xAB1A1A, { 
 					speed : 0.8,
+					group:2,
 					width : 20, 
 					height : 20, 
 					x: (currentEnemyPos.x*_tileSize) +10 + 5, // +5 for bug fixx that enemy fall of platform  //	x: currentEnemyPos.x*32 +10,

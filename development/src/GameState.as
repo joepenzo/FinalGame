@@ -89,6 +89,7 @@ package
 			
 			var heroStartPos : Point = _lvl.randomPosition();
 			_hero = new ExHero("hero", {
+				group:3,
 				x:heroStartPos.x * _tileSize, 
 				y:heroStartPos.y* _tileSize, 
 				width:_tileSize/2, 
