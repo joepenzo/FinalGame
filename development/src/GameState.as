@@ -220,15 +220,16 @@ package
 			// HERO JUMPS
 			if(_ce.input.justDid(Actions.CHANGE_JUMP_SINGLE)) {
 				_hero.jumpType = "Single";
-			}
-			if(_ce.input.justDid(Actions.CHANGE_JUMP_DOUBLE)) {
+				fatal(_hero.jumpType);
+			} else if(_ce.input.justDid(Actions.CHANGE_JUMP_DOUBLE)) {
 				_hero.jumpType = "Double";
-			}
-			if(_ce.input.justDid(Actions.CHANGE_JUMP_UNLIMETID)) {
+				fatal(_hero.jumpType);
+			} else if(_ce.input.justDid(Actions.CHANGE_JUMP_UNLIMETID)) {
 				_hero.jumpType = "Unlimited";
-			}
-			if(_ce.input.justDid(Actions.CHANGE_JUMP_JETPACK)) {
+				fatal(_hero.jumpType);
+			} else if(_ce.input.justDid(Actions.CHANGE_JUMP_JETPACK)) {
 				_hero.jumpType = "Jetpack";
+				fatal(_hero.jumpType);
 			}
 
 			

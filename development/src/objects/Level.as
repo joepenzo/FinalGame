@@ -255,7 +255,6 @@ package objects  {
 			_staticTrapsToPlaceAmount = _freeStaticTrapTilesArray.length*(percentage/100);		
 			
 			placeStaticTrapsInMap(heroPos);
-			Functions.trace2DArray(map);
 			
 			// CODE TO PLACE AND DELETE THE TRAPS IN THE GAMESTATE// write this more epic, that some TRAPS can stay!!
 			var currentTrapsInState : Vector.<CitrusObject> = state.getObjectsByName("staticTrap") as Vector.<CitrusObject>;

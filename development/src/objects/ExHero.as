@@ -311,6 +311,7 @@ package objects {
 				
 				switch (jumpType){
 					case "Single":
+						error("Single");
 						if (_onGround && _ce.input.justDid("jump", inputChannel) && !_ducking) {
 							velocity.y = -jumpHeight;
 							onJump.dispatch();
@@ -320,6 +321,7 @@ package objects {
 						if (_ce.input.isDoing("jump", inputChannel) && !_onGround && velocity.y < 0) velocity.y -= jumpAcceleration;
 						break;
 					case "Double":
+						error("Double");
 						if (_onGround && _ce.input.justDid("jump", inputChannel) && !_ducking) {
 							velocity.y = -jumpHeight;
 							onJump.dispatch();
@@ -334,6 +336,7 @@ package objects {
 						
 						break;
 					case "Unlimited":
+						error("Unlimited");
 						if (_onGround && _ce.input.justDid("jump", inputChannel) && !_ducking) {
 							velocity.y = -jumpHeight;
 							onJump.dispatch();
@@ -347,6 +350,7 @@ package objects {
 						}
 						break;
 					case "Jetpack":
+						error("Jetpack");
 						if (_ce.input.isDoing("jump", inputChannel)) {
 							velocity.y -= 1;
 						}

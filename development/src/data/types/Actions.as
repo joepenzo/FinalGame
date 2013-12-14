@@ -31,7 +31,7 @@ package data.types
 		public static const CHANGE_JUMP_SINGLE:String = "CHANGE_JUMP_SINGLE";
 		public static const CHANGE_JUMP_DOUBLE:String = "CHANGE_JUMP_DOUBLE";
 		public static const CHANGE_JUMP_UNLIMETID:String = "CHANGE_JUMP_UNLIMETID";
-		public static const CHANGE_JUMP_JETPACK:String = "CHANGE_JUMP_UNLIMETID";
+		public static const CHANGE_JUMP_JETPACK:String = "CHANGE_JUMP_JETPACK";
 		
 		public static const SELECTED_COLOROBJ_BG:String = "SELECTED_COLOROBJ_BG";
 		public static const SELECTED_COLOROBJ_HERO:String = "SELECTED_COLOROBJ_HERO";
