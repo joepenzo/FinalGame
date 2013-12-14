@@ -6,7 +6,7 @@ package data.types
 		public static const PERCENTAGE : Point = new Point(0, 100);
 
 		public static const GRAVITY : Point = new Point(20, -8);
-		public static const ZOOM : Point = new Point(1, 10);
+		public static const ZOOM : Point = new Point(1, 8);
 
 		public static const RED : Point = new Point(0, 255);
 		public static const GREEN : Point = new Point(0, 255);

@@ -75,7 +75,7 @@ package
 			_box2D.visible = false;
 			add(_box2D);
 			
-			_mapW = 50;//_mapW = 150;
+			_mapW = 100;//_mapW = 150;
 			_mapH = 25;
 			_lvl = MarioGenerator.createlevel(_mapW, _mapH, 533, 0, 1);
 
@@ -84,7 +84,7 @@ package
 //			_lvl = CaveGenerator.createlevel(_mapW, _mapH);
 			
 			_lvl.drawMapPlaftormsToGameState(this, _tileSize);
-			
+			_lvl.drawDebugGrid(this);
 			
 			var heroStartPos : Point = _lvl.randomPosition();
 			_hero = new ExHero("hero", {

@@ -11,7 +11,6 @@ package objects  {
 	
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;
-	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.geom.ColorTransform;
 	import flash.geom.Matrix;
@@ -21,6 +20,7 @@ package objects  {
 	import starling.display.BlendMode;
 	import starling.display.Image;
 	import starling.display.QuadBatch;
+	import starling.display.Shape;
 	import starling.textures.Texture;
 	
 	import utils.Functions;
@@ -339,8 +339,7 @@ package objects  {
 			
 			quadBatch.blendMode = BlendMode.NONE;
 			
-			if (!
-				gameState.getObjectByName("citrusMapSprite"))  {
+			if (!gameState.getObjectByName("citrusMapSprite"))  {
 				gameState.add(new CitrusSprite("citrusMapSprite", {view:quadBatch}));	
 			} else {
 				var mapSprite:CitrusSprite = gameState.getObjectByName("citrusMapSprite") as CitrusSprite;
@@ -350,6 +349,36 @@ package objects  {
 		}
 		
 		
+		
+		
+		
+		public function drawDebugGrid(gameState : StarlingState):void {
+			var grid : starling.display.Shape = new Shape();
+		
+			grid.graphics.clear();
+			grid.graphics.lineStyle(1, 0x00ff00);
+			
+			// we drop in the " + 1 " so that it will cap the right and bottom sides.
+			for (var col:Number = 0; col < width + 1; col++)
+			{
+				for (var row:Number = 0; row < height + 1; row++)
+				{
+					trace(col, row);
+					grid.graphics.moveTo(col * _tileSize, 0);
+					grid.graphics.lineTo(col * _tileSize, _tileSize * height);
+					grid.graphics.moveTo(0, row * _tileSize);
+					grid.graphics.lineTo(_tileSize * width, row * _tileSize);
+				}
+			}
+			
+			if (!gameState.getObjectByName("citrusMapDebugGrid"))  {
+				gameState.add(new CitrusSprite("citrusMapDebugGrid", {view:grid}));	
+			} else {
+				var mapSprite:CitrusSprite = gameState.getObjectByName("citrusMapDebugGrid") as CitrusSprite;
+				mapSprite.view = grid;
+			}
+
+		}
 		
 		
 		
