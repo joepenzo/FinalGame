@@ -29,11 +29,22 @@ package data
 		protected var _blue : int = 0;
 		
 		protected var _enemyPercentage : int = 0;
+		protected var _trapPercantage : int = 0;
 		
 		
 		
 		public function GameData() {
 			super();
+		}
+
+		public function get trapPercantage():int
+		{
+			return _trapPercantage;
+		}
+
+		public function set trapPercantage(value:int):void
+		{
+			_trapPercantage = value;
 		}
 
 		public function get totalEnemies():int

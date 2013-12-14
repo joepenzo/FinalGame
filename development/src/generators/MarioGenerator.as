@@ -266,7 +266,7 @@ public class MarioGenerator
     }
 
     private function addEnemyLine(x0:int, x1:int, y:int):void {
-		error('addEnemyLine');
+		
         for (var x:int = x0; x < x1; x++)
         {
             if (random.nextInt(35) < difficulty + 1)

@@ -228,9 +228,8 @@ package objects
 		{
 			_hurt = false;
 			kill = true;
-			if (_gameData.goal = Goals.KILL_ENEMIES) {
+			if (_gameData.goal == Goals.KILL_ENEMIES) {
 				_gameData.enemiesKilled++;
-				fatal("Kill " + 				_gameData.enemiesKilled);
 			}
 		}
 	}

@@ -1,5 +1,13 @@
+
+	Create movement aids
+
+	Add finish + goal logic
+
 	Make level more logic
-		- platform sizes compared to objects like enemies and avatar, and open stops
+		- platform sizes compared to objects like enemies and hero, and open stops
+
+
+- BUGS
 
 	Remove all enemies when percentage is 0 - some enemies stay in the level is % = 0
 

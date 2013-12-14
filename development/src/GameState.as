@@ -33,6 +33,7 @@ package
 	import objects.ExHero;
 	import objects.GameInterface;
 	import objects.Level;
+	import objects.StaticTrap;
 	
 	import starling.display.Image;
 	import starling.display.QuadBatch;
@@ -75,7 +76,7 @@ package
 			_box2D.visible = false;
 			add(_box2D);
 			
-			_mapW = 100;//_mapW = 150;
+			_mapW = 40;//_mapW = 150;
 			_mapH = 25;
 			_lvl = MarioGenerator.createlevel(_mapW, _mapH, 533, 0, 1);
 
@@ -84,7 +85,7 @@ package
 //			_lvl = CaveGenerator.createlevel(_mapW, _mapH);
 			
 			_lvl.drawMapPlaftormsToGameState(this, _tileSize, 0x000000);
-			_lvl.drawDebugGrid(this);
+			//_lvl.drawDebugGrid(this);
 			
 			var heroStartPos : Point = _lvl.randomPosition();
 			_hero = new ExHero("hero", {
@@ -99,7 +100,6 @@ package
 			_hero.jumpType = "Unlimited";
 			add(_hero);
 			
-		
 			
 //			var enemyX : int = _hero.x + 50;
 //			var enemyY : int = _hero.y;
@@ -139,13 +139,13 @@ package
 		
 		private function onDataChanged(data:String, value:Object):void {
 			//error(data + "  " + value); 
-			
+
 			if (_gameData.goal == Goals.KILL_ENEMIES) {
 				if (data == "totalEnemiesInState" || data == "totalEnemiesKilled") {
 					_gameInterface.updateGoalStatus( (_gameData.enemiesKilled.toString() + " / " + _gameData.totalEnemies.toString()) );	
 					if (_gameData.enemiesKilled == _gameData.totalEnemies) { // MADE YOUR GOAL, RESET THE MOTHERFUCKER
 						_gameInterface.updateGoalStatus("DONE - RESETTING");
-						setTimeout(function () {
+						setTimeout(function():void {
 							_gameData.enemiesKilled = _gameData.totalEnemies = 0;
 							_gameInterface.updateGoalStatus( (_gameData.enemiesKilled.toString() + " / " + _gameData.totalEnemies.toString()) );
 						}, 2000);
@@ -163,7 +163,6 @@ package
 			drawPlatformsToMiniMap();
 			drawEnemiesToMiniMap();
 			// ENDOFF MINIMAP DEBUG RENDERING
-			
 			
 			// GAME GOAL
 			if (_ce.input.justDid(Actions.GOAL_KILL)) {
@@ -232,7 +231,7 @@ package
 			}
 
 			
-			// ENEMY AMOUND - CHANGE
+			// ENEMY AMOUNT - CHANGE
 			if(_ce.input.hasDone(Actions.ENEMY_PERCANTAGE)) {
 				action = _ce.input.getAction(Actions.ENEMY_PERCANTAGE) as InputAction;
 				_gameData.enemyPercentage = action.value;			
@@ -243,8 +242,18 @@ package
 					_lvl.placeEnemies(state, _gameData.enemyPercentage);
 					_gameData.totalEnemies = _lvl.getTotalEnemiesAmount; // save total enemies for the enemy kill counter
 				}
-				
+			}
 			
+			// TRAP AMOUNT
+			if(_ce.input.hasDone(Actions.TRAP_PERCANTAGE)) {
+				action = _ce.input.getAction(Actions.TRAP_PERCANTAGE) as InputAction;
+				_gameData.trapPercantage = action.value;			
+				
+				clearTimeout(ENEMY_AMOUNT_INTERVAL);
+				ENEMY_AMOUNT_INTERVAL = setTimeout(function (state : StarlingState):void { 
+					_lvl.placeStaticTraps(state, _gameData.trapPercantage);
+				}, 100, this);
+				
 			}
 			
 			

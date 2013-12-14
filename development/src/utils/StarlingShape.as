@@ -83,5 +83,23 @@ package utils
 			return shape;
 		}
 		
+		public static function CombinedShape(type:String, w:int, h:int, color:uint):Shape {
+			var shape : Shape = new Shape(); 
+		
+			if (type == "Triangle") {
+				var triangle: Shape = Triangle(w, h, color);
+				triangle.x = 0;
+				shape.addChild(triangle);
+				
+				triangle = Triangle(w, h, color);			
+				triangle.x = w/2;
+				shape.addChild(triangle);
+			}
+			
+			return shape;
+		}
+		
+		
+		
 	}
 }

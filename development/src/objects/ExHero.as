@@ -364,7 +364,7 @@ package objects {
 				
 				//The Shooting ability - IF SHOOTING IS ENABLED
  				if (shootingEnabled && _ce.input.justDid(Actions.SHOOT)) {
-					error(  _inverted + "   " +  invertMovement);
+					// can be done on size update, means less call! So much better
 					var bodyWidth : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
 					var bullet:Missile;
 					if (_inverted) {

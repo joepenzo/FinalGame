@@ -34,6 +34,7 @@ package
 		public var jump : String = "Single";
 		
 		public var enemyPercentage : int;	
+		public var trapPercentage : int;	
 			
 			
 		public function DebugInterface() {
@@ -96,6 +97,10 @@ package
 			
 			_gui.addGroup("Enemies");
 			_gui.addSlider("enemyPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.ENEMY_PERCANTAGE, enemyPercentage); }});
+			
+			_gui.addGroup("Traps");
+			_gui.addSlider("trapPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.TRAP_PERCANTAGE, trapPercentage); }});
+			
 			
 			_gui.show();
 		}

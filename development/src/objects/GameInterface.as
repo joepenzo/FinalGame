@@ -21,7 +21,7 @@ package objects
 		public function GameInterface(state : StarlingState, x : int, y : int) {
 		
 			_goal = new TextField(200, 30, "", "PixelUniCode", 25, 0x0000ff);
-			_goal.border = true;
+//			_goal.border = true;
 			_goal.vAlign = VAlign.TOP;
 			_goal.hAlign = HAlign.LEFT;
 			_goal.x = x;
@@ -29,7 +29,7 @@ package objects
 			state.addChild(_goal);
 			
 			_goalTarget = new TextField(200, 30, "", "PixelUniCode", 25, 0x0000ff);
-			_goalTarget.border = true;
+//			_goalTarget.border = true;
 			_goalTarget.vAlign = VAlign.TOP;
 			_goalTarget.hAlign = HAlign.LEFT;
 			_goalTarget.x = _goal.x;

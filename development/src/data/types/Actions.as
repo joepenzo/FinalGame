@@ -44,6 +44,7 @@ package data.types
 		public static const CHANGE_SHAPE_HEXAGON:String = "CHANGE_SHAPE_HEXAGON";
 
 		public static const ENEMY_PERCANTAGE:String = "ENEMY_PERCANTAGE";
+		public static const TRAP_PERCANTAGE:String = "TRAP_PERCANTAGE";
 		
 		public static const GOAL_NO_GOAL:String = "GOAL_NO_GOAL";
 		public static const GOAL_A_TO_B:String = "GOAL_A_TO_B";

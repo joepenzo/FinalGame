@@ -64,12 +64,19 @@ package objects  {
 		public var yExit:int;
 		
 		private var _mapView: flash.display.Sprite;
-		private var _enemiesToPlaceAmount: int;
-		private var _freeTilesArray:Array;
-		private var _oldEnemyAmount:int;
 		private var _possibleTileForEnemies:uint;
+
 		private var _newEnemiesAmount:uint;
+		private var _oldEnemyAmount:int;
+		private var _enemiesToPlaceAmount: int;
+		private var _freeEnemiesTilesArray:Array;
 		private var _currentEnemyTilesArray:Array = [];
+		
+		private var _newStaticTrapAmount:uint;
+		private var _oldStaticTrapAmount:uint;
+		private var _staticTrapsToPlaceAmount:uint;
+		private var _freeStaticTrapTilesArray:Array;
+		private var _currentStaticTrapTilesArray:Array = [];
 		
 		public function Level(width:int, height:int, defaultTile : int = 0) {
 			
@@ -224,8 +231,9 @@ package objects  {
 			drawQuadMap(gameState, _tileSize, color);
 			_possibleTileForEnemies = getTilePointsArrayAbovePlatformTiles().length as int;
 			
-			
 			fixHeroPosIfStuck(heroPos, gameState.getObjectByName("hero") as ExHero);
+			
+			Functions.trace2DArray(map);
 		}
 		
 		private function fixHeroPosIfStuck(heroPos : Point, hero : ExHero):void {
@@ -240,19 +248,66 @@ package objects  {
 				}
 			}
 		}	
-
+		
+		
+		public function placeStaticTraps(state: StarlingState, percentage : int):void {
+			_newStaticTrapAmount = _possibleTileForEnemies*(percentage/100);
+			_freeStaticTrapTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
+			_staticTrapsToPlaceAmount = _freeStaticTrapTilesArray.length*(percentage/100);		
+			
+			placeStaticTrapsInMap();
+			
+			// CODE TO PLACE AND DELETE THE TRAPS IN THE GAMESTATE// write this more epic, that some TRAPS can stay!!
+			var currentTrapsInState : Vector.<CitrusObject> = state.getObjectsByName("staticTrap") as Vector.<CitrusObject>;
+			var currentTrapsInStatelength:int = currentTrapsInState.length;
+			if (currentTrapsInStatelength != 0) { // REMOVE ALL  IN STATE IF THERE ARE 
+				for each (var currentTrap:StaticTrap in currentTrapsInState) state.remove(currentTrap);
+			}
+			for each (var currentTrapPos:Point in _currentStaticTrapTilesArray) { // ADD ALL TO STATE
+				state.add(new StaticTrap('staticTrap', 0x6E6E6E, { 
+					width : _tileSize, 
+					height : _tileSize/2, 
+					x: (currentTrapPos.x*_tileSize) + _tileSize/2,
+					y: (currentTrapPos.y*_tileSize) + _tileSize*.75,
+					view : StarlingShape.CombinedShape("Triangle", _tileSize, _tileSize/2, 0x6E6E6E)
+				}));
+			}
+		}
+		
+		private function placeStaticTrapsInMap():void {
+			if (_newStaticTrapAmount > _oldStaticTrapAmount) { 
+				for (var i:int=0; i < _staticTrapsToPlaceAmount-1; i++) {
+					var randomIdx:int = Math.floor(Math.random() * _freeStaticTrapTilesArray.length);
+					var coord : Point = _freeStaticTrapTilesArray[randomIdx] as Point;
+					_freeStaticTrapTilesArray.splice(randomIdx, 1);
+					_currentStaticTrapTilesArray.push(coord);
+					map[coord.y][coord.x] = Tile.TRAP;
+				}
+			} else if (_newStaticTrapAmount < _oldStaticTrapAmount) { 
+				var trapsToRemove : int = _oldStaticTrapAmount - _newStaticTrapAmount;
+				for (i = 0; i < trapsToRemove-1; i++) {
+					randomIdx = Math.floor(Math.random() * _currentStaticTrapTilesArray.length);
+					coord = _currentStaticTrapTilesArray[randomIdx] as Point;
+					_currentStaticTrapTilesArray.splice(randomIdx, 1);
+					_freeStaticTrapTilesArray.push(coord);
+					map[coord.y][coord.x] = 0;
+				}
+			}
+			_oldStaticTrapAmount = _newStaticTrapAmount;
+		}
+		
+		//add(new StaticTrap("trap" , {x:_hero.x, y:_hero.y}));
 		
 		public function placeEnemies(state: StarlingState, percentage : int):void {
-
 			_newEnemiesAmount = _possibleTileForEnemies*(percentage/100);
-			_freeTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
-			_enemiesToPlaceAmount = _freeTilesArray.length*(percentage/100);			
+			_freeEnemiesTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
+			_enemiesToPlaceAmount = _freeEnemiesTilesArray.length*(percentage/100);			
 			
 			placeEnemiesInMap(); // EDIT MAP ARRAY SO ENEMIES ARE SHOWN IN THERE
 			
+			// CODE TO PLACE AND DELETE THE ENEMIES IN THE GAMESTATE
 			var currentEnemiesInState : Vector.<CitrusObject> = state.getObjectsByName("enemy") as Vector.<CitrusObject>;
 			var currentEnemiesStatelength:int = currentEnemiesInState.length;
-			
 			// write this more epic, that some enemies can stay!!
 			if (currentEnemiesStatelength != 0) { // REMOVE ALL ENEMiES IN STATE IF THERE ARE
 				for each (var currentEnemy:ExBox2DPhysicsObject in currentEnemiesInState) state.remove(currentEnemy);
@@ -280,9 +335,9 @@ package objects  {
 			//fatal(_newEnemiesAmount + "  " + _oldEnemyAmount);
 			if (_newEnemiesAmount > _oldEnemyAmount) { // ADD THE MOFO ENEMIES
 				for (var i:int=0; i<_enemiesToPlaceAmount-1; i++) {
-					var randomIdx:int = Math.floor(Math.random() * _freeTilesArray.length);
-					var coord : Point = _freeTilesArray[randomIdx] as Point;
-					_freeTilesArray.splice(randomIdx, 1);
+					var randomIdx:int = Math.floor(Math.random() * _freeEnemiesTilesArray.length);
+					var coord : Point = _freeEnemiesTilesArray[randomIdx] as Point;
+					_freeEnemiesTilesArray.splice(randomIdx, 1);
 					_currentEnemyTilesArray.push(coord);
 					map[coord.y][coord.x] = Tile.ENEMY;
 				}
@@ -292,7 +347,7 @@ package objects  {
 					var randomIdx:int = Math.floor(Math.random() * _currentEnemyTilesArray.length);
 					var coord : Point = _currentEnemyTilesArray[randomIdx] as Point;
 					_currentEnemyTilesArray.splice(randomIdx, 1);
-					_freeTilesArray.push(coord);
+					_freeEnemiesTilesArray.push(coord);
 					map[coord.y][coord.x] = 0;
 				}
 			}

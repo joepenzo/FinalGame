@@ -54,7 +54,9 @@
   <buildTargets>
     <buildTarget buildTargetName="default">
       <airSettings airCertificatePath="/Users/joepenzo/School/Afstuderen/Project/FinalGame/development/release/certificate-password.p12" airTimestamp="true" anePathSet="true" version="1">
-        <airExcludes/>
+        <airExcludes>
+          <pathEntry path="todo"/>
+        </airExcludes>
         <anePaths/>
       </airSettings>
       <actionScriptSettings version="1"/>
