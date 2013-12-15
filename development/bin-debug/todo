@@ -8,8 +8,7 @@
 
 	Lives
 	
-	Traps cannot spawn at hero's position
-	
+	When platform level regenerates and the hero was stuck, he is placed back to top, and then there can be a spike	
 
 - BUGS
 

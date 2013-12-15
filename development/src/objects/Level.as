@@ -252,14 +252,26 @@ package objects  {
 		public function placeStaticTraps(state: StarlingState, percentage : int, heroPos : Point):void {
 			_newStaticTrapAmount = _possibleTileForEnemies*(percentage/100);
 			_freeStaticTrapTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
-			_staticTrapsToPlaceAmount = _freeStaticTrapTilesArray.length*(percentage/100);		
 			
+			// removes coord if hero is if on or above it!
+			for each( var coord : Point in _freeStaticTrapTilesArray ) {
+				if( coord.x == heroPos.x ){
+					if (coord.y == heroPos.y || heroPos.y <= coord.y ) { // also for block under the hero
+						_freeStaticTrapTilesArray.splice(_freeStaticTrapTilesArray.indexOf(coord),1);
+						if (_newStaticTrapAmount > 0) _newStaticTrapAmount--;
+						break;//stops the loop;
+					}
+				}
+			}
+			
+			_staticTrapsToPlaceAmount = _freeStaticTrapTilesArray.length*(percentage/100);		
+
 			placeStaticTrapsInMap(heroPos);
 			
 			// CODE TO PLACE AND DELETE THE TRAPS IN THE GAMESTATE// write this more epic, that some TRAPS can stay!!
 			var currentTrapsInState : Vector.<CitrusObject> = state.getObjectsByName("staticTrap") as Vector.<CitrusObject>;
 			var currentTrapsInStatelength:int = currentTrapsInState.length;
-			if (currentTrapsInStatelength != 0) { // REMOVE ALL  IN STATE IF THERE ARE 
+			if (currentTrapsInStatelength != 0) { // REMOVE ALL TRAP IN STATE IF THERE ARE 
 				for each (var currentTrap:StaticTrap in currentTrapsInState) state.remove(currentTrap);
 			}
 			for each (var currentTrapPos:Point in _currentStaticTrapTilesArray) { // ADD ALL TO STATE
@@ -272,8 +284,12 @@ package objects  {
 					view : StarlingShape.CombinedShape("Triangle", _tileSize, _tileSize/2, 0x3D3D3D)
 				}));
 			}
+			
 		}
 		
+//		TypeError: Error #1009: Cannot access a property or method of a null object reference.
+//		at objects::Level/placeStaticTrapsInMap()[/Users/joepenzo/School/Afstuderen/Project/FinalGame/development/src/objects/Level.as:307]
+//		at objects::Level/placeStaticTraps()[/Users/joepenzo/School/Afstuderen/Project/FinalGame/development/src/objects/Level.as:269]
 		
 		private function placeStaticTrapsInMap(heroPos:Point):void {
 			if (_newStaticTrapAmount > _oldStaticTrapAmount) { 
@@ -291,13 +307,12 @@ package objects  {
 					coord = _currentStaticTrapTilesArray[randomIdx] as Point;
 					_currentStaticTrapTilesArray.splice(randomIdx, 1);
 					_freeStaticTrapTilesArray.push(coord);
-					map[coord.y][coord.x] = 0;
+					map[coord.y][coord.x] = Tile.AIR;
 				}
 			}
 			_oldStaticTrapAmount = _newStaticTrapAmount;
 		}
 		
-		//add(new StaticTrap("trap" , {x:_hero.x, y:_hero.y}));
 		
 		public function placeEnemies(state: StarlingState, percentage : int):void {
 			_newEnemiesAmount = _possibleTileForEnemies*(percentage/100);

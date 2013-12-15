@@ -359,7 +359,7 @@ package
 			}
 			
 			if (getObjectsByType(StaticTrap).length > 0) {
-				_lvl.placeStaticTraps(this, _gameData.trapPercantage,heroPos);
+				_lvl.placeStaticTraps(this, _gameData.trapPercantage, heroPos);
 			}
 			
 		}	
