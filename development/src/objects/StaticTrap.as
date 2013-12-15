@@ -1,5 +1,7 @@
 package objects
 {
+	import citrus.physics.PhysicsCollisionCategories;
+	
 	import flash.geom.Point;
 	
 	public class StaticTrap extends ExPlatform
@@ -9,5 +11,13 @@ package objects
 			currentColor = trapColor;
 			
 		}
+		
+		override protected function defineFixture():void {
+			super.defineFixture();
+			_fixtureDef.filter.categoryBits = PhysicsCollisionCategories.Get("BadGuys");
+			_fixtureDef.filter.maskBits = PhysicsCollisionCategories.GetAll();
+		}
+		
 	}
+	
 }
