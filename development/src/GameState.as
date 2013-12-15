@@ -434,7 +434,6 @@ package
 			}
 			
 			
-			
 			if (name == "hero") { 
 				var object : ExBox2DPhysicsObject = getObjectByName(name) as ExBox2DPhysicsObject;
 				object.currentColor = hex;
@@ -484,6 +483,7 @@ package
 					}
 				}
 			}
+			
 			
 		}
 

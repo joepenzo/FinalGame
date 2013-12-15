@@ -198,7 +198,7 @@ package objects  {
 					
 					if (type != 0) {
 						if (!Functions.isLinkedRight(map, xt, yt, type) && !Functions.isLinkedLeft(map, xt, yt, type)) { // no left or right neighboor - DRAW THE SINGLE TILES
-							gameState.add(new Platform((xt +","+ yt +","+ type) , {
+							gameState.add(new ExPlatform((xt +","+ yt +","+ type) , {
 								x:(xt * _tileSize) + _tileSize/2, 
 								y:(yt * _tileSize) + _tileSize/2 + yOffset, 
 								width:_tileSize, 
@@ -214,7 +214,7 @@ package objects  {
 							linkedHorizontalTiles.push(new Point(xt, yt));
 							totalLinkedTilesWidth  = linkedHorizontalTiles.length * _tileSize;
 							
-							gameState.add(new Platform((xt +","+ yt +","+ type), {
+							gameState.add(new ExPlatform((xt +","+ yt +","+ type), {
 								x:(linkedHorizontalTiles[0].x * _tileSize) + totalLinkedTilesWidth/2, 
 								y:(linkedHorizontalTiles[0].y * _tileSize) + _tileSize/2 + yOffset,
 								width:totalLinkedTilesWidth, 
@@ -416,7 +416,7 @@ package objects  {
 			
 			for (var y:int=0; y<mH; y++) {
 				for (var x:int=0; x<mW; x++) {
-					if (map[y][x] != 0) {
+					if (map[y][x] == Tile.LAND) {
 						image.x = x*tileSize;
 						image.y = y*tileSize;
 						quadBatch.addImage(image);
