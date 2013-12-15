@@ -5,7 +5,7 @@ package data.types
 		public static const AIR : uint = 0;
 		public static const LAND : uint = 1;
 		
-		public static const ENEMY : String = "_";		
-		public static const TRAP : String = "^";
+		public static const ENEMY : uint = 2;		
+		public static const TRAP : uint = 3;
 	}
 }

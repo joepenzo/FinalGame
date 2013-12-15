@@ -31,6 +31,7 @@ package
 	import objects.ExBox2DPhysicsObject;
 	import objects.ExEnemy;
 	import objects.ExHero;
+	import objects.ExPlatform;
 	import objects.GameInterface;
 	import objects.Level;
 	import objects.StaticTrap;
@@ -310,9 +311,9 @@ package
 			_debugSprite.graphics.lineStyle();
 			_debugSprite.graphics.beginFill(0x000000, 0.2);
 			var platforms:Vector.<CitrusObject> = getObjectsByType(Platform);
-			var platfrm:CitrusObject;
-			for each (platfrm in platforms) {
-				_debugSprite.graphics.drawRect((platfrm as Platform).x - (platfrm as Platform).width / 2, (platfrm as Platform).y - (platfrm as Platform).height / 2, (platfrm as Platform).width, (platfrm as Platform).height);
+			var platfromm:CitrusObject;
+			for each (platfromm in platforms) {
+				_debugSprite.graphics.drawRect((platfromm as Platform).x - (platfromm as Platform).width / 2, (platfromm as Platform).y - (platfromm as Platform).height / 2, (platfromm as Platform).width, (platfromm as Platform).height);
 			}
 		}
 		private function drawEnemiesToMiniMap():void{

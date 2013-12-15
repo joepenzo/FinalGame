@@ -77,6 +77,7 @@ package objects  {
 		private var _staticTrapsToPlaceAmount:uint;
 		private var _freeStaticTrapTilesArray:Array;
 		private var _currentStaticTrapTilesArray:Array = [];
+		private var _possibleTileForTraps:uint;
 		
 		public function Level(width:int, height:int, defaultTile : int = 0) {
 			
@@ -198,7 +199,7 @@ package objects  {
 					
 					if (type != 0) {
 						if (!Functions.isLinkedRight(map, xt, yt, type) && !Functions.isLinkedLeft(map, xt, yt, type)) { // no left or right neighboor - DRAW THE SINGLE TILES
-							gameState.add(new ExPlatform((xt +","+ yt +","+ type) , {
+							gameState.add(new Platform((xt +","+ yt +","+ type) , {
 								x:(xt * _tileSize) + _tileSize/2, 
 								y:(yt * _tileSize) + _tileSize/2 + yOffset, 
 								width:_tileSize, 
@@ -214,7 +215,7 @@ package objects  {
 							linkedHorizontalTiles.push(new Point(xt, yt));
 							totalLinkedTilesWidth  = linkedHorizontalTiles.length * _tileSize;
 							
-							gameState.add(new ExPlatform((xt +","+ yt +","+ type), {
+							gameState.add(new Platform((xt +","+ yt +","+ type), {
 								x:(linkedHorizontalTiles[0].x * _tileSize) + totalLinkedTilesWidth/2, 
 								y:(linkedHorizontalTiles[0].y * _tileSize) + _tileSize/2 + yOffset,
 								width:totalLinkedTilesWidth, 
@@ -230,6 +231,7 @@ package objects  {
 			
 			drawQuadMap(gameState, _tileSize, color);
 			_possibleTileForEnemies = getTilePointsArrayAbovePlatformTiles().length as int;
+			_possibleTileForTraps = getTilePointsArrayAbovePlatformTiles().length as int;
 			
 			fixHeroPosIfStuck(heroPos, gameState.getObjectByName("hero") as ExHero);
 			
@@ -250,7 +252,7 @@ package objects  {
 		
 		
 		public function placeStaticTraps(state: StarlingState, percentage : int, heroPos : Point):void {
-			_newStaticTrapAmount = _possibleTileForEnemies*(percentage/100);
+			_newStaticTrapAmount = _possibleTileForTraps*(percentage/100);
 			_freeStaticTrapTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
 			
 			// removes coord if hero is if on or above it!
@@ -287,9 +289,7 @@ package objects  {
 			
 		}
 		
-//		TypeError: Error #1009: Cannot access a property or method of a null object reference.
-//		at objects::Level/placeStaticTrapsInMap()[/Users/joepenzo/School/Afstuderen/Project/FinalGame/development/src/objects/Level.as:307]
-//		at objects::Level/placeStaticTraps()[/Users/joepenzo/School/Afstuderen/Project/FinalGame/development/src/objects/Level.as:269]
+
 		
 		private function placeStaticTrapsInMap(heroPos:Point):void {
 			if (_newStaticTrapAmount > _oldStaticTrapAmount) { 
@@ -298,16 +298,17 @@ package objects  {
 					var coord : Point = _freeStaticTrapTilesArray[randomIdx] as Point;
 					_freeStaticTrapTilesArray.splice(randomIdx, 1);
 					_currentStaticTrapTilesArray.push(coord);
-					map[coord.y][coord.x] = Tile.TRAP;
+				//	map[coord.y][coord.x] = Tile.TRAP;// do not place in map gives bug together with traps en shit
 				}
 			} else if (_newStaticTrapAmount < _oldStaticTrapAmount) { 
 				var trapsToRemove : int = _oldStaticTrapAmount - _newStaticTrapAmount;
 				for (i = 0; i < trapsToRemove-1; i++) {
 					randomIdx = Math.floor(Math.random() * _currentStaticTrapTilesArray.length);
 					coord = _currentStaticTrapTilesArray[randomIdx] as Point;
+					notice(coord);
 					_currentStaticTrapTilesArray.splice(randomIdx, 1);
 					_freeStaticTrapTilesArray.push(coord);
-					map[coord.y][coord.x] = Tile.AIR;
+				//	map[coord.y][coord.x] = Tile.AIR; // ERROR WHY?// do not place in map gives bug together with traps en shit
 				}
 			}
 			_oldStaticTrapAmount = _newStaticTrapAmount;
@@ -349,14 +350,13 @@ package objects  {
 		
 	
 		private function placeEnemiesInMap():void {
-			//fatal(_newEnemiesAmount + "  " + _oldEnemyAmount);
 			if (_newEnemiesAmount > _oldEnemyAmount) { // ADD THE MOFO ENEMIES
 				for (var i:int=0; i<_enemiesToPlaceAmount-1; i++) {
 					var randomIdx:int = Math.floor(Math.random() * _freeEnemiesTilesArray.length);
 					var coord : Point = _freeEnemiesTilesArray[randomIdx] as Point;
 					_freeEnemiesTilesArray.splice(randomIdx, 1);
 					_currentEnemyTilesArray.push(coord);
-					map[coord.y][coord.x] = Tile.ENEMY;
+//					map[coord.y][coord.x] = Tile.ENEMY; // do not place in map gives bug together with traps en shit
 				}
 			} else if (_newEnemiesAmount < _oldEnemyAmount) { // REMOVE THE MOFO ENEMIES
 				var enemiesToRemove = _oldEnemyAmount - _newEnemiesAmount;
@@ -365,7 +365,7 @@ package objects  {
 					var coord : Point = _currentEnemyTilesArray[randomIdx] as Point;
 					_currentEnemyTilesArray.splice(randomIdx, 1);
 					_freeEnemiesTilesArray.push(coord);
-					map[coord.y][coord.x] = 0;
+//					map[coord.y][coord.x] = Tile.AIR;// do not place in map gives bug together with traps en shit
 				}
 			}
 			
