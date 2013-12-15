@@ -19,6 +19,7 @@ package objects {
 	import citrus.physics.box2d.IBox2DPhysicsObject;
 	import citrus.utils.AGameData;
 	
+	import data.GameData;
 	import data.types.Actions;
 	
 	import flash.geom.Point;
@@ -32,7 +33,6 @@ package objects {
 	
 	import utils.ObjSize;
 	import utils.StarlingShape;
-	import data.GameData;
 
 	//import data.Sounds;
 	
@@ -484,6 +484,7 @@ package objects {
 				if (_body.GetLinearVelocity().y < killVelocity && !_hurt)
 				{
 					hurt();
+					_gameData.lives--;
 					
 					//fling the hero
 					var hurtVelocity:b2Vec2 = _body.GetLinearVelocity();
@@ -506,11 +507,10 @@ package objects {
 				if(contact.normal == null) return; // BUG FIX? // ON LEVEL RELOAD WHEN TOUCHED OR TOUCHING ENEMY
 				var collisionAngle:Number = Math.atan2(contact.normal.y, contact.normal.x);
 				
-				
-				
 				if (collisionAngle >= Math.PI*.25 && collisionAngle <= 3*Math.PI*.25 ) // normal angle between pi/4 and 3pi/4
 				{
-					if(collider is StaticTrap) _gameData.lives--;
+					if(collider is StaticTrap) _gameData.lives--; // DAMAGE ON STATIC TRAPS
+					
 					_groundContacts.push(collider.body.GetFixtureList());
 					_onGround = true;
 					updateCombinedGroundAngle();

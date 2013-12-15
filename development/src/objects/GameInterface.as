@@ -14,6 +14,7 @@ package objects
 		
 		private var _goal:TextField;
 		private var _goalTarget:TextField;
+		private var _lives:TextField;
 		
 		public var x : int;
 		public var y : int;
@@ -35,6 +36,13 @@ package objects
 			_goalTarget.x = _goal.x;
 			_goalTarget.y = _goal.y + _goal.height;
 			state.addChild(_goalTarget);
+			
+			_lives = new TextField(200, 30, "Lives x", "PixelUniCode", 30, 0x0000ff);
+			_lives.vAlign = VAlign.TOP;
+			_lives.hAlign = HAlign.LEFT;
+			_lives.x = _goalTarget.x;
+			_lives.y = _goalTarget.y + _goalTarget.height + 25;
+			state.addChild(_lives);
 			
 		}
 
@@ -73,6 +81,9 @@ package objects
 			_goalTarget.text = txt;
 		}
 		
+		public function changesLives(lives : int) : void {
+			_lives.text = "Lives x" + lives;
+		}
 		
 		
 	}

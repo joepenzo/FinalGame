@@ -96,6 +96,9 @@ package
 				width:_tileSize/2, 
 				height: _tileSize/2
 			});
+			_hero.enemyClass = EdgeDetectorEnemy;
+			_hero.hurtVelocityX = _tileSize*.03;
+			_hero.hurtVelocityX = _tileSize*.06;
 			_hero.currentColor = 0x000050;
 			_hero.currentShape = Shapes.RECTANGLE;
 			_hero.view = StarlingShape.Rectangle(_hero.width, _hero.height, _hero.currentColor);
@@ -103,13 +106,6 @@ package
 			add(_hero);
 			
 			
-//			var enemyX : int = _hero.x + 50;
-//			var enemyY : int = _hero.y;
-//			add(new EdgeDetectorEnemy("enemy-test", {speed: .8, x : enemyX , y : enemyY, width: 15, height: 20,
-//				//view : StarlingShape.Rectangle(20,20, 0x00ff00),
-//				leftBound: enemyX - 5, // TILESIZE INSTEAD 
-//				rightBound: enemyX + 5 
-//			}));
 			
 			_bounds = new Rectangle(0, 0, _mapW*_tileSize, _mapH*_tileSize);
 			_camera = view.camera as StarlingCamera;
@@ -154,6 +150,11 @@ package
 					}
 				}
 			} 
+			
+			
+			if (data == "lives") {
+				_gameInterface.changesLives(int(value));
+			}
 			
 		}
 		
@@ -208,10 +209,16 @@ package
 				_camera.setZoom(action.value);
 			}
 
+			
 			// HERO SIZE - CHANGE
 			if(_ce.input.isDoing(Actions.HERO_SIZE)) {
 				action = _ce.input.getAction(Actions.HERO_SIZE) as InputAction;
 				Functions.ResizeObjectValue(this, action.value/30/2, action.value/30/2, "hero");
+			}
+			// HERO LIVES - CHANGE
+			if(_ce.input.isDoing(Actions.HERO_LIVES)) {
+				action = _ce.input.getAction(Actions.HERO_LIVES) as InputAction;
+				_gameData.lives = action.value;
 			}
 			// HERO SHOOTING _ONOFF
 			if(_ce.input.justDid(Actions.HERO_SHOOT)) {

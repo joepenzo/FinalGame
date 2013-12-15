@@ -30,6 +30,7 @@ package
 		
 		
 		public var heroSize : int;	
+		public var heroLives : int = 10;	
 		public var shootEnabled : Boolean = true;	
 		public var jump : String = "Single";
 		
@@ -86,6 +87,7 @@ package
 			_gui.addColumn("Level components");
 
 			_gui.addGroup("Avatar");
+			_gui.addSlider("heroLives", ValueRange.HERO_LIVES.x, ValueRange.HERO_LIVES.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.HERO_LIVES, heroLives); }});
 			_gui.addSlider("heroSize", ValueRange.HERO_SIZE.x, ValueRange.HERO_SIZE.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.HERO_SIZE, heroSize); }});
 			_gui.addToggle("shootEnabled", { callback: function ():void{  _guiInput.triggerOnce(Actions.HERO_SHOOT, int(shootEnabled)); }});
 			_gui.addComboBox("jump", [

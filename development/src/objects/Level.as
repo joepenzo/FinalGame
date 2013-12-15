@@ -338,7 +338,7 @@ package objects  {
 					width : 20, 
 					height : 20, 
 					x: (currentEnemyPos.x*_tileSize) +10 + 5, // +5 for bug fixx that enemy fall of platform  //	x: currentEnemyPos.x*32 +10,
-					y: (currentEnemyPos.y*_tileSize) +10,
+					y: (currentEnemyPos.y*_tileSize) +10 + 20,
 					leftBound: (currentEnemyPos.x*_tileSize) - boundDistance, // TILESIZE INSTEAD
 					rightBound: (currentEnemyPos.x*_tileSize) + boundDistance,
 					view : StarlingShape.polygon(20,6, 0xAB1A1A)

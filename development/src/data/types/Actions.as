@@ -26,6 +26,7 @@ package data.types
 		public static const CHANGE_LVL_FLAT:String = "CHANGE_LVL_FLAT";
 		
 		public static const HERO_SIZE:String = "HERO_SIZE";
+		public static const HERO_LIVES:String = "HERO_LIVES";
 		public static const HERO_SHOOT:String = "HERO_SHOOT";
 		
 		public static const CHANGE_JUMP_SINGLE:String = "CHANGE_JUMP_SINGLE";
