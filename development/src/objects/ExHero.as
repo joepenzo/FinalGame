@@ -485,7 +485,7 @@ package objects {
 				{
 					hurt();
 					_gameData.lives--;
-					
+
 					//fling the hero
 					var hurtVelocity:b2Vec2 = _body.GetLinearVelocity();
 					hurtVelocity.y = -hurtVelocityY;

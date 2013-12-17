@@ -315,9 +315,26 @@ package objects  {
 		}
 		
 		
-		public function placeEnemies(state: StarlingState, percentage : int):void {
+		
+		
+		public function placeEnemies(state: StarlingState, percentage : int, heroPos : Point):void {
 			_newEnemiesAmount = _possibleTileForEnemies*(percentage/100);
 			_freeEnemiesTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
+			
+			
+			// removes coord if hero is if on or above it! // not that clean, but this will do for now
+			for each( var coord : Point in _freeEnemiesTilesArray ) {
+				if( coord.x == heroPos.x ){
+					if (coord.y == heroPos.y || heroPos.y <= coord.y ) { // also for block under the hero
+						_freeEnemiesTilesArray.splice(_freeEnemiesTilesArray.indexOf(coord),1);
+						if (_newEnemiesAmount > 0) _newEnemiesAmount--;
+						break;//stops the loop;
+					}
+				}
+			}
+			
+			
+			
 			_enemiesToPlaceAmount = _freeEnemiesTilesArray.length*(percentage/100);			
 			
 			placeEnemiesInMap(); // EDIT MAP ARRAY SO ENEMIES ARE SHOWN IN THERE
@@ -407,7 +424,7 @@ package objects  {
 		public function drawQuadMap(gameState : StarlingState, tileSize : int, color : uint):void {
 			var quadBatch:QuadBatch = new QuadBatch();
 			
-			var tex:Texture = Texture.fromBitmapData(new BitmapData(tileSize, tileSize, true));
+			var tex:Texture = Texture.fromBitmapData(new BitmapData(tileSize, tileSize, false, color));
 			var image:Image = new Image(tex);
 			image.color = color;
 			

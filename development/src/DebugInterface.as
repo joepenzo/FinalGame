@@ -30,7 +30,7 @@ package
 		
 		
 		public var heroSize : int;	
-		public var heroLives : int = 10;	
+		public var heroLives : int;	
 		public var shootEnabled : Boolean = true;	
 		public var jump : String = "Single";
 		
@@ -39,8 +39,6 @@ package
 			
 			
 		public function DebugInterface() {
-			
-			
 			_guiInput = new GuiInputController("guiInput");
 			addInterface();
 		}

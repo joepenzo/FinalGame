@@ -21,28 +21,30 @@ package objects
 		
 		public function GameInterface(state : StarlingState, x : int, y : int) {
 		
-			_goal = new TextField(200, 30, "", "PixelUniCode", 25, 0x0000ff);
+			_lives = new TextField(200, 30, "Lives x", "PixelUniCode", 30, 0x0000ff);
+			_lives.vAlign = VAlign.TOP;
+			_lives.hAlign = HAlign.LEFT;
+			_lives.x = x;
+			_lives.y = y;
+			state.addChild(_lives);
+			
+			_goal = new TextField(200, 25, "", "PixelUniCode", 25, 0x0000ff);
 //			_goal.border = true;
 			_goal.vAlign = VAlign.TOP;
 			_goal.hAlign = HAlign.LEFT;
 			_goal.x = x;
-			_goal.y = y + 5;
+			_goal.y = _lives.y + _lives.height + 10;
 			state.addChild(_goal);
 			
-			_goalTarget = new TextField(200, 30, "", "PixelUniCode", 25, 0x0000ff);
+			_goalTarget = new TextField(200, 25, "", "PixelUniCode", 25, 0x0000ff);
 //			_goalTarget.border = true;
 			_goalTarget.vAlign = VAlign.TOP;
 			_goalTarget.hAlign = HAlign.LEFT;
-			_goalTarget.x = _goal.x;
+			_goalTarget.x = x;
 			_goalTarget.y = _goal.y + _goal.height;
 			state.addChild(_goalTarget);
 			
-			_lives = new TextField(200, 30, "Lives x", "PixelUniCode", 30, 0x0000ff);
-			_lives.vAlign = VAlign.TOP;
-			_lives.hAlign = HAlign.LEFT;
-			_lives.x = _goalTarget.x;
-			_lives.y = _goalTarget.y + _goalTarget.height + 25;
-			state.addChild(_lives);
+			
 			
 		}
 

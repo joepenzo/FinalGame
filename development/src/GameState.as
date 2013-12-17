@@ -86,7 +86,7 @@ package
 //			_lvl = CaveGenerator.createlevel(_mapW, _mapH);
 			
 			_lvl.drawMapPlaftormsToGameState(this, _tileSize, 0x000000);
-			_lvl.drawDebugGrid(this);
+//			_lvl.drawDebugGrid(this);
 			
 			var heroStartPos : Point = _lvl.randomPosition();
 			_hero = new ExHero("hero", {
@@ -97,8 +97,8 @@ package
 				height: _tileSize/2
 			});
 			_hero.enemyClass = EdgeDetectorEnemy;
-			_hero.hurtVelocityX = _tileSize*.03;
-			_hero.hurtVelocityX = _tileSize*.06;
+			_hero.hurtVelocityX = _tileSize*.07;
+			_hero.hurtVelocityY = _tileSize*.09;
 			_hero.currentColor = 0x000050;
 			_hero.currentShape = Shapes.RECTANGLE;
 			_hero.view = StarlingShape.Rectangle(_hero.width, _hero.height, _hero.currentColor);
@@ -249,7 +249,7 @@ package
 				clearTimeout(ENEMY_AMOUNT_INTERVAL);
 				ENEMY_AMOUNT_INTERVAL = setTimeout(myDelayedFunction, 100, this, action);
 				function myDelayedFunction(state : StarlingState, action : InputAction):void { 
-					_lvl.placeEnemies(state, _gameData.enemyPercentage);
+					_lvl.placeEnemies(state, _gameData.enemyPercentage, new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize)) );
 					_gameData.totalEnemies = _lvl.getTotalEnemiesAmount; // save total enemies for the enemy kill counter
 				}
 			}
@@ -362,7 +362,7 @@ package
 			
 			// DO PLACE ENEMIES BACK IF THERE ARE ANY IN THE STATE
 			if (getObjectsByType(EdgeDetectorEnemy).length > 0) {
-				_lvl.placeEnemies(this, _gameData.enemyPercentage);// replace enemies
+				_lvl.placeEnemies(this, _gameData.enemyPercentage, heroPos);// replace enemies
 				_gameData.totalEnemies = _lvl.getTotalEnemiesAmount; // save total enemies for the enemy kill counter
 			}
 			
