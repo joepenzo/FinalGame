@@ -36,6 +36,15 @@ package data
 		public function GameData() {
 			super();
 		}
+		
+		override public function set lives(lives:int):void {
+			_lives = lives;
+			if (_lives < 0) {
+				_lives = 0;
+				return;
+			}
+			dataChanged.dispatch("lives", _lives);
+		}
 
 		public function get trapPercantage():int
 		{

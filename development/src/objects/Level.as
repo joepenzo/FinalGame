@@ -230,8 +230,8 @@ package objects  {
 			}
 			
 			drawQuadMap(gameState, _tileSize, color);
-			_possibleTileForEnemies = getTilePointsArrayAbovePlatformTiles().length as int;
-			_possibleTileForTraps = getTilePointsArrayAbovePlatformTiles().length as int;
+			_possibleTileForEnemies = getTilePointsArrayAbovePlatformTiles(Tile.TRAP).length as int;
+			_possibleTileForTraps = getTilePointsArrayAbovePlatformTiles(Tile.ENEMY).length as int;
 			
 			fixHeroPosIfStuck(heroPos, gameState.getObjectByName("hero") as ExHero);
 			
@@ -253,7 +253,7 @@ package objects  {
 		
 		public function placeStaticTraps(state: StarlingState, percentage : int, heroPos : Point):void {
 			_newStaticTrapAmount = _possibleTileForTraps*(percentage/100);
-			_freeStaticTrapTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
+			_freeStaticTrapTilesArray = getTilePointsArrayAbovePlatformTiles(Tile.ENEMY) as Array;
 			
 			// removes coord if hero is if on or above it!
 			for each( var coord : Point in _freeStaticTrapTilesArray ) {
@@ -288,9 +288,7 @@ package objects  {
 			}
 			
 		}
-		
-
-		
+			
 		private function placeStaticTrapsInMap(heroPos:Point):void {
 			if (_newStaticTrapAmount > _oldStaticTrapAmount) { 
 				for (var i:int=0; i < _staticTrapsToPlaceAmount-1; i++) {
@@ -298,7 +296,7 @@ package objects  {
 					var coord : Point = _freeStaticTrapTilesArray[randomIdx] as Point;
 					_freeStaticTrapTilesArray.splice(randomIdx, 1);
 					_currentStaticTrapTilesArray.push(coord);
-				//	map[coord.y][coord.x] = Tile.TRAP;// do not place in map gives bug together with traps en shit
+					map[coord.y][coord.x] = Tile.TRAP;// do not place in map gives bug together with traps en shit
 				}
 			} else if (_newStaticTrapAmount < _oldStaticTrapAmount) { 
 				var trapsToRemove : int = _oldStaticTrapAmount - _newStaticTrapAmount;
@@ -308,7 +306,7 @@ package objects  {
 					notice(coord);
 					_currentStaticTrapTilesArray.splice(randomIdx, 1);
 					_freeStaticTrapTilesArray.push(coord);
-				//	map[coord.y][coord.x] = Tile.AIR; // ERROR WHY?// do not place in map gives bug together with traps en shit
+					map[coord.y][coord.x] = Tile.AIR; // ERROR WHY?// do not place in map gives bug together with traps en shit
 				}
 			}
 			_oldStaticTrapAmount = _newStaticTrapAmount;
@@ -317,10 +315,10 @@ package objects  {
 		
 		
 		
+		
 		public function placeEnemies(state: StarlingState, percentage : int, heroPos : Point):void {
 			_newEnemiesAmount = _possibleTileForEnemies*(percentage/100);
-			_freeEnemiesTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
-			
+			_freeEnemiesTilesArray = getTilePointsArrayAbovePlatformTiles(Tile.TRAP) as Array;
 			
 			// removes coord if hero is if on or above it! // not that clean, but this will do for now
 			for each( var coord : Point in _freeEnemiesTilesArray ) {
@@ -337,25 +335,30 @@ package objects  {
 			
 			_enemiesToPlaceAmount = _freeEnemiesTilesArray.length*(percentage/100);			
 			
+			error("newEnemiesAmnt : " + _newEnemiesAmount +  "      enemiesToPlaceAmount : " + _enemiesToPlaceAmount);
+			
 			placeEnemiesInMap(); // EDIT MAP ARRAY SO ENEMIES ARE SHOWN IN THERE
 			
 			// CODE TO PLACE AND DELETE THE ENEMIES IN THE GAMESTATE
 			var currentEnemiesInState : Vector.<CitrusObject> = state.getObjectsByName("enemy") as Vector.<CitrusObject>;
 			var currentEnemiesStatelength:int = currentEnemiesInState.length;
 			// write this more epic, that some enemies can stay!!
+			debug("currentEnemiesStatelength : " + currentEnemiesStatelength);
 			if (currentEnemiesStatelength != 0) { // REMOVE ALL ENEMiES IN STATE IF THERE ARE
 				for each (var currentEnemy:ExBox2DPhysicsObject in currentEnemiesInState) state.remove(currentEnemy);
 			}
 			var boundDistance : int;
+			var enemyW : int = 20;
+			var enemyH : int = 20;
 			for each (var currentEnemyPos:Point in _currentEnemyTilesArray) { // ADD ALL ENEMIES TO STATE
 				boundDistance =  Functions.randomIntRange(32, 32*5);
 				state.add(new EdgeDetectorEnemy('enemy', 0xAB1A1A, { 
-					speed : 0.8,
+					speed : 0.5,
 					group:2,
-					width : 20, 
-					height : 20, 
-					x: (currentEnemyPos.x*_tileSize) +10 + 5, // +5 for bug fixx that enemy fall of platform  //	x: currentEnemyPos.x*32 +10,
-					y: (currentEnemyPos.y*_tileSize) +10 + 20,
+					width : enemyW, 
+					height : enemyH, 
+					x: (currentEnemyPos.x*_tileSize) + (enemyW*.75), // +5 for bug fixx that enemy fall of platform  //	x: currentEnemyPos.x*32 +10,
+					y: (currentEnemyPos.y*_tileSize) + enemyH,
 					leftBound: (currentEnemyPos.x*_tileSize) - boundDistance, // TILESIZE INSTEAD
 					rightBound: (currentEnemyPos.x*_tileSize) + boundDistance,
 					view : StarlingShape.polygon(20,6, 0xAB1A1A)
@@ -373,7 +376,7 @@ package objects  {
 					var coord : Point = _freeEnemiesTilesArray[randomIdx] as Point;
 					_freeEnemiesTilesArray.splice(randomIdx, 1);
 					_currentEnemyTilesArray.push(coord);
-//					map[coord.y][coord.x] = Tile.ENEMY; // do not place in map gives bug together with traps en shit
+					map[coord.y][coord.x] = Tile.ENEMY; // do not place in map, it gives bug together with traps en shit
 				}
 			} else if (_newEnemiesAmount < _oldEnemyAmount) { // REMOVE THE MOFO ENEMIES
 				var enemiesToRemove = _oldEnemyAmount - _newEnemiesAmount;
@@ -382,39 +385,40 @@ package objects  {
 					var coord : Point = _currentEnemyTilesArray[randomIdx] as Point;
 					_currentEnemyTilesArray.splice(randomIdx, 1);
 					_freeEnemiesTilesArray.push(coord);
-//					map[coord.y][coord.x] = Tile.AIR;// do not place in map gives bug together with traps en shit
+					map[coord.y][coord.x] = Tile.AIR;// do not place in map, it gives bug together with traps en shit
 				}
 			}
 			
 			_oldEnemyAmount = _newEnemiesAmount;
 		}
 		
-		private function getFreeTilesAmountAbovePlatformTiles(): int{
-			var tiles : int;
-			
-			var mW:int = map[0].length;
-			var mH:int = map.length;
-			for (var y:int=0; y<mH; y++) {
-				for (var x:int=0; x<mW; x++) {
-					if (map[y][x] == 0 && Functions.isLinkedBottom(map,x,y,1) ) { // ALL TILES ABOVE A PLATFORM TILE
-						tiles++;	
-					}
-				}
-			}
-			return tiles;
-		}
+//		private function getFreeTilesAmountAbovePlatformTiles(): int{
+//			var tiles : int;
+//			
+//			var mW:int = map[0].length;
+//			var mH:int = map.length;
+//			for (var y:int=0; y<mH; y++) {
+//				for (var x:int=0; x<mW; x++) {
+//					if (map[y][x] == 0 && Functions.isLinkedBottom(map,x,y,1) ) { // ALL TILES ABOVE A PLATFORM TILE
+//						tiles++;	
+//					}
+//				}
+//			}
+//			return tiles;
+//		}
 		
-		private function getTilePointsArrayAbovePlatformTiles(): Array{
+
+		private function getTilePointsArrayAbovePlatformTiles(extraTile : int): Array{
 			var tiles : Array = [];
 			
 			var mW:int = map[0].length;
 			var mH:int = map.length;
 			for (var y:int=0; y<mH; y++) {
 				for (var x:int=0; x<mW; x++) {
-					if (map[y][x] == 0 && Functions.isLinkedBottom(map,x,y,1) ) { // ALL TILES ABOVE A PLATFORM TILE
-						//map[y][x] = newIndex;
-					//	debug(x + "  -  " + y);
-						tiles.push(new Point(x,y));	
+					if (Functions.isLinkedBottom(map,x,y,1) ){ 
+						if (map[y][x] == 0 || map[y][x] == extraTile) { // ALL TILES ABOVE A PLATFORM TILE
+							tiles.push(new Point(x,y));
+						}
 					}
 				}
 			}
