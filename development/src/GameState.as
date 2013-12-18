@@ -135,8 +135,8 @@ package
 			_gameInterface = new GameInterface(this, _debugSprite.x , _debugSprite.y + _debugSprite.height);
 			
 			_gameData.dataChanged.add(onDataChanged);
-			
-			_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
+	
+//			_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
 
 		}
 		
@@ -270,6 +270,20 @@ package
 				}, 100, this);
 				
 			}
+		
+			// LIVE AMOUNT
+			if(_ce.input.hasDone(Actions.LIVES_PERCANTAGE)) {
+				action = _ce.input.getAction(Actions.LIVES_PERCANTAGE) as InputAction;
+				_gameData.livesPercantage = action.value;			
+				
+				clearTimeout(ENEMY_AMOUNT_INTERVAL);
+				ENEMY_AMOUNT_INTERVAL = setTimeout(function (state : StarlingState):void { 
+					_lvl.placeLiveCollectables(state, _gameData.livesPercantage, new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize) ));
+				}, 100, this);
+				
+			}
+			
+			
 			
 			
 			

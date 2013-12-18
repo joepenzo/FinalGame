@@ -8,6 +8,7 @@ package data.types
 		public static const ENEMY : uint = 2;		
 		public static const TRAP : uint = 3;
 
-		public static const TRAP_ENEMY : uint = 4;
+		public static const LIVE : uint = 4;
+
 	}
 }

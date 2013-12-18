@@ -64,8 +64,8 @@ package objects  {
 		public var yExit:int;
 		
 		private var _mapView: flash.display.Sprite;
+	
 		private var _possibleTileForEnemies:uint;
-
 		private var _newEnemiesAmount:uint;
 		private var _oldEnemyAmount:int;
 		private var _enemiesToPlaceAmount: int;
@@ -78,6 +78,14 @@ package objects  {
 		private var _freeStaticTrapTilesArray:Array;
 		private var _currentStaticTrapTilesArray:Array = [];
 		private var _possibleTileForTraps:uint;
+	
+		private var _possibleTilesForLives:int;
+		private var _newLivesAmount:int;
+		private var _freeLivesTilesArray:Array;
+		private var _livesToPlaceAmount:uint;
+		private var _oldLivesAmount:int;
+		private var _currentLivesArray:Array = [];
+	
 		
 		public function Level(width:int, height:int, defaultTile : int = 0) {
 			
@@ -230,8 +238,10 @@ package objects  {
 			}
 			
 			drawQuadMap(gameState, _tileSize, color);
+		
 			_possibleTileForEnemies = getTilePointsArrayAbovePlatformTiles(Tile.TRAP).length as int;
 			_possibleTileForTraps = getTilePointsArrayAbovePlatformTiles(Tile.ENEMY).length as int;
+			_possibleTilesForLives = getTilePointsArrayForCollectables().length as int;
 			
 			fixHeroPosIfStuck(heroPos, gameState.getObjectByName("hero") as ExHero);
 			
@@ -249,6 +259,58 @@ package objects  {
 				}
 			}
 		}	
+		
+		
+		
+		
+		public function placeLiveCollectables(state: StarlingState, percentage : int, heroPos : Point) :void {
+			_newLivesAmount = _possibleTilesForLives*(percentage/100);
+			_freeLivesTilesArray = getTilePointsArrayForCollectables() as Array;
+			_livesToPlaceAmount = _freeLivesTilesArray.length*(percentage/100);		
+			
+			if (_newLivesAmount > _oldLivesAmount) { 
+				for (var i:int=0; i < _livesToPlaceAmount-1; i++) {
+					var randomIdx:int = Math.floor(Math.random() * _freeLivesTilesArray.length);
+					var coord : Point = _freeLivesTilesArray[randomIdx] as Point;
+					_freeLivesTilesArray.splice(randomIdx, 1);
+					_currentLivesArray.push(coord);
+					map[coord.y][coord.x] = Tile.LIVE;// do not place in map gives bug together with traps en shit
+				}
+			} else if (_newLivesAmount < _oldLivesAmount) { 
+				var livesToRemove : int = _oldLivesAmount - _newLivesAmount;
+				for (i = 0; i < livesToRemove-1; i++) {
+					randomIdx = Math.floor(Math.random() * _currentLivesArray.length);
+					coord = _currentLivesArray[randomIdx] as Point;
+					_currentLivesArray.splice(randomIdx, 1);
+					_freeLivesTilesArray.push(coord);
+					map[coord.y][coord.x] = Tile.AIR; // ERROR WHY?// do not place in map gives bug together with traps en shit
+				}
+			}
+			_oldLivesAmount = _newLivesAmount;
+		
+			// CODE TO PLACE AND DELETE THE TRAPS IN THE GAMESTATE// write this more epic, that some TRAPS can stay!!
+			var currentLivesInState : Vector.<CitrusObject> = state.getObjectsByName("liveCollectable") as Vector.<CitrusObject>;
+			var currentLivesInStatelength:int = currentLivesInState.length;
+			if (currentLivesInStatelength != 0) { // REMOVE ALL TRAP IN STATE IF THERE ARE 
+				for each (var currentLive:ExSensor in currentLivesInState) state.remove(currentLive);
+			}
+			for each (var currentLivePos:Point in _currentLivesArray) { // ADD ALL TO STATE
+				//state.add(new ExSensor('liveCollectable', 0xFFDD03, { 
+				state.add(new ExSensor('liveCollectable', { 
+					group:1,
+					width : _tileSize/2, 
+					height : _tileSize/2, 
+					x: (currentLivePos.x*_tileSize) + _tileSize/2,
+					y: (currentLivePos.y*_tileSize) + _tileSize*.75,
+					view : StarlingShape.Circle(_tileSize/2, 0xFFDD09)
+				}));
+			}
+			
+		}
+		
+		
+		
+		
 		
 		
 		public function placeStaticTraps(state: StarlingState, percentage : int, heroPos : Point):void {
@@ -303,7 +365,6 @@ package objects  {
 				for (i = 0; i < trapsToRemove-1; i++) {
 					randomIdx = Math.floor(Math.random() * _currentStaticTrapTilesArray.length);
 					coord = _currentStaticTrapTilesArray[randomIdx] as Point;
-					notice(coord);
 					_currentStaticTrapTilesArray.splice(randomIdx, 1);
 					_freeStaticTrapTilesArray.push(coord);
 					map[coord.y][coord.x] = Tile.AIR; // ERROR WHY?// do not place in map gives bug together with traps en shit
@@ -331,11 +392,7 @@ package objects  {
 				}
 			}
 			
-			
-			
 			_enemiesToPlaceAmount = _freeEnemiesTilesArray.length*(percentage/100);			
-			
-			error("newEnemiesAmnt : " + _newEnemiesAmount +  "      enemiesToPlaceAmount : " + _enemiesToPlaceAmount);
 			
 			placeEnemiesInMap(); // EDIT MAP ARRAY SO ENEMIES ARE SHOWN IN THERE
 			
@@ -343,7 +400,6 @@ package objects  {
 			var currentEnemiesInState : Vector.<CitrusObject> = state.getObjectsByName("enemy") as Vector.<CitrusObject>;
 			var currentEnemiesStatelength:int = currentEnemiesInState.length;
 			// write this more epic, that some enemies can stay!!
-			debug("currentEnemiesStatelength : " + currentEnemiesStatelength);
 			if (currentEnemiesStatelength != 0) { // REMOVE ALL ENEMiES IN STATE IF THERE ARE
 				for each (var currentEnemy:ExBox2DPhysicsObject in currentEnemiesInState) state.remove(currentEnemy);
 			}
@@ -408,6 +464,23 @@ package objects  {
 //		}
 		
 
+		
+		private function getTilePointsArrayForCollectables(): Array{
+			var tiles : Array = [];
+			
+			var mW:int = map[0].length;
+			var mH:int = map.length;
+			for (var y:int=0; y<mH; y++) {
+				for (var x:int=0; x<mW; x++) {
+					if (map[y][x] == 0 && map[y+1][x] == 0 && Functions.isLinkedBottom(map,x,y+1,1) ) {
+						tiles.push(new Point(x,y));
+					}
+				}
+			}
+			return tiles;
+		}
+		
+		
 		private function getTilePointsArrayAbovePlatformTiles(extraTile : int): Array{
 			var tiles : Array = [];
 			

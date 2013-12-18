@@ -30,6 +30,7 @@ package data
 		
 		protected var _enemyPercentage : int = 0;
 		protected var _trapPercantage : int = 0;
+		protected var _livesPercantage : int = 0;
 		
 		
 		
@@ -37,6 +38,16 @@ package data
 			super();
 		}
 		
+		public function get livesPercantage():int
+		{
+			return _livesPercantage;
+		}
+
+		public function set livesPercantage(value:int):void
+		{
+			_livesPercantage = value;
+		}
+
 		override public function set lives(lives:int):void {
 			_lives = lives;
 			if (_lives < 0) {
