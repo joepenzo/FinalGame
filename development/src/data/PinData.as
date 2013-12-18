@@ -1,9 +1,10 @@
-package
+package data
 {
-	import data.Actions;
-	import data.Pin;
-	import data.SoundParams;
-	import data.ValueParams;
+	
+	import data.types.Actions;
+	import data.types.Pin;
+	import data.types.SoundRange;
+	import data.types.ValueRange;
 	
 	import flash.utils.Dictionary;
 
@@ -73,15 +74,15 @@ package
 			_actionPins[Pin.A_HERO_SIZE] = Actions.HERO_SIZE;
 			_actionPins[Pin.A_ZOOM] = Actions.VALUE_ZOOM;
 			
-			_analogMinMaxMapVals[Pin.A_AUDIO_SQUAREDUTY] = SoundParams.JUMP_SQUAREDUTY;
-			_analogMinMaxMapVals[Pin.A_AUDIO_STARTFREQUENCY] = SoundParams.JUMP_STARTFREQUENCY;
-			_analogMinMaxMapVals[Pin.A_AUDIO_SLIDE] = SoundParams.JUMP_SLIDE;
-			_analogMinMaxMapVals[Pin.A_GRAVITY] = ValueParams.GRAVITY;
-			_analogMinMaxMapVals[Pin.A_RED] = ValueParams.RED;
-			_analogMinMaxMapVals[Pin.A_GREEN] = ValueParams.GREEN;
-			_analogMinMaxMapVals[Pin.A_BLUE] = ValueParams.BLUE;
-			_analogMinMaxMapVals[Pin.A_HERO_SIZE] = ValueParams.HERO_SIZE;
-			_analogMinMaxMapVals[Pin.A_ZOOM] = ValueParams.ZOOM;
+			_analogMinMaxMapVals[Pin.A_AUDIO_SQUAREDUTY] = SoundRange.JUMP_SQUAREDUTY;
+			_analogMinMaxMapVals[Pin.A_AUDIO_STARTFREQUENCY] = SoundRange.JUMP_STARTFREQUENCY;
+			_analogMinMaxMapVals[Pin.A_AUDIO_SLIDE] = SoundRange.JUMP_SLIDE;
+			_analogMinMaxMapVals[Pin.A_GRAVITY] = ValueRange.GRAVITY;
+			_analogMinMaxMapVals[Pin.A_RED] = ValueRange.RED;
+			_analogMinMaxMapVals[Pin.A_GREEN] = ValueRange.GREEN;
+			_analogMinMaxMapVals[Pin.A_BLUE] = ValueRange.BLUE;
+			_analogMinMaxMapVals[Pin.A_HERO_SIZE] = ValueRange.HERO_SIZE;
+			_analogMinMaxMapVals[Pin.A_ZOOM] = ValueRange.ZOOM;
 			
 			
 			// DIGITAL STUFFINGS GOING ON DOWN HERE

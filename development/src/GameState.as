@@ -65,6 +65,9 @@ package
 		private var ENEMY_AMOUNT_INTERVAL:Number = new Number();
 		private var _gameInterface:GameInterface;
 		
+		private var _arduinoConnector:ArduinoSerialComAnalogAndDigital;
+
+		
 		public function GameState() {
 			super();	
 		}
@@ -132,6 +135,8 @@ package
 			_gameInterface = new GameInterface(this, _debugSprite.x , _debugSprite.y + _debugSprite.height);
 			
 			_gameData.dataChanged.add(onDataChanged);
+			
+			_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
 
 		}
 		

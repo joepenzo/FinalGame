@@ -257,4 +257,7 @@
 	<!-- End of the schema for adding the android specific tags in AndroidManifest.xml file -->
 
 
+<extensions>
+        <extensionID>com.quetwo.Arduino.ArduinoConnector</extensionID>
+    </extensions>
 </application>
