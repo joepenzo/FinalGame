@@ -154,7 +154,9 @@ package
 						}, 2000);
 					}
 				}
-			} 
+			} else if (_gameData.goal == Goals.COLLECT_COINS && data == "score") {
+				_gameInterface.updateGoalStatus( ("Coins / " + value.toString()) );
+			}
 			
 			
 			if (data == "lives") {
