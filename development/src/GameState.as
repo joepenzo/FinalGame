@@ -136,7 +136,7 @@ package
 			
 			_gameData.dataChanged.add(onDataChanged);
 	
-//			_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
+			_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
 
 		}
 		
@@ -227,6 +227,7 @@ package
 				action = _ce.input.getAction(Actions.HERO_LIVES) as InputAction;
 				_gameData.lives = action.value;
 			}
+	
 			// HERO SHOOTING _ONOFF
 			if(_ce.input.justDid(Actions.HERO_SHOOT)) {
 				action = _ce.input.getAction(Actions.HERO_SHOOT) as InputAction;
@@ -247,6 +248,8 @@ package
 				fatal(_hero.jumpType);
 			}
 
+			
+			
 			
 			// ENEMY AMOUNT - CHANGE
 			if(_ce.input.hasDone(Actions.ENEMY_PERCANTAGE)) {

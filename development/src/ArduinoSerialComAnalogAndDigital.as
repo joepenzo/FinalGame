@@ -25,7 +25,6 @@ package
 		
 		private var _arduinoConnector:ArduinoConnector;
 		private var pinData:PinData;
-		//		private var actionOffTimer:Timer;
 		
 		public function ArduinoSerialComAnalogAndDigital(name:String, params:Object=null) {
 			super(name, params);
@@ -52,8 +51,6 @@ package
 		
 		protected function onSocketData(event:ArduinoConnectorEvent):void{
 			var recievedData : String = _arduinoConnector.readBytesAsString();
-			
-			//	debug(recievedData);
 			
 			var item:Array = recievedData.split(" ");
 			for(var i in item) {

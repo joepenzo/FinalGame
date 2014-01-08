@@ -1,26 +1,37 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-    <dict>
-        <key>CFBundleAllowMixedLocalizations</key>
-        <true/>
-        <key>CFBundlePackageType</key>
-        <string>APPL</string>
-        <key>CFBundleInfoDictionaryVersion</key>
-        <string>6.0</string>
-        <key>LSMinimumSystemVersion</key>
-        <string>10.6</string>
-        <key>LSRequiresCarbon</key>
-        <true/>
-        <key>CFBundleIdentifier</key>
-        <string>com.suijkerbuijk.AfstudeerGame</string>
-        <key>CFBundleGetInfoString</key>
-        <string>0.0.0,</string>
-        <key>CFBundleShortVersionString</key>
-        <string>0.0.0</string>
-        <key>NSHumanReadableCopyright</key>
-        <string/>
-        <key>CFBundleExecutable</key>
-        <string>AfstudeerGame</string>
-    </dict>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0" xmlns="http://ns.adobe.com/air/application/3.1">
+  <dict>
+    <key>CFBundleAllowMixedLocalizations</key>
+    <true/>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>10.6</string>
+    <key>LSRequiresCarbon</key>
+    <true/>
+    <key>CFBundleIdentifier</key>
+    <string>com.suijkerbuijk.AfstudeerGame</string>
+    <key>CFBundleGetInfoString</key>
+    <string>0.0.0,</string>
+    <key>CFBundleShortVersionString</key>
+    <string>0.0.0</string>
+    <key>NSHumanReadableCopyright</key>
+    <string/>
+    <key>CFBundleExecutable</key>
+    <string>AfstudeerGame</string>
+    <key>CFBundleDocumentTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleTypeExtensions</key>
+        <array>
+          <string>airapplication</string>
+        </array>
+        <key>CFBundleTypeRole</key>
+        <string>None</string>
+      </dict>
+    </array>
+  </dict>
 </plist>

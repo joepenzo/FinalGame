@@ -38,6 +38,7 @@ package data.types
 		public static const SELECTED_COLOROBJ_HERO:String = "SELECTED_COLOROBJ_HERO";
 		public static const SELECTED_COLOROBJ_PLAT:String = "SELECTED_COLOROBJ_PLAT";
 		public static const SELECTED_COLOROBJ_ENEMIES:String = "SELECTED_COLOROBJ_ENEMIES";
+		public static const SELECTED_COLOROBJ_TRAPS:String = "SELECTED_COLOROBJ_TRAPS";
 
 		public static const CHANGE_SHAPE_RECT:String = "CHANGE_SHAPE_RECT";
 		public static const CHANGE_SHAPE_TRIANGLE:String = "CHANGE_SHAPE_TRIANGLE";

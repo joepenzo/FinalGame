@@ -56,10 +56,7 @@
       <airSettings airCertificatePath="/Users/joepenzo/School/Afstuderen/Project/FinalGame/development/release/certificate-password.p12" airTimestamp="true" anePathSet="true" version="1">
         <airExcludes>
           <pathEntry path="todo"/>
-          <pathEntry path="README.md"/>
-          <pathEntry path="doc"/>
           <pathEntry path="assets"/>
-          <pathEntry path="pf_ronda_seven.swf"/>
         </airExcludes>
         <anePaths>
           <anePathEntry path="/Users/joepenzo/School/Afstuderen/Project/FinalGame/development/ane/ArduinoConnector.ane"/>
