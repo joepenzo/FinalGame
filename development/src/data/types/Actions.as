@@ -28,6 +28,7 @@ package data.types
 		public static const HERO_SIZE:String = "HERO_SIZE";
 		public static const HERO_LIVES:String = "HERO_LIVES";
 		public static const HERO_SHOOT:String = "HERO_SHOOT";
+		public static const HERO_SPEED:String = "HERO_SPEED";
 		
 		public static const CHANGE_JUMP_SINGLE:String = "CHANGE_JUMP_SINGLE";
 		public static const CHANGE_JUMP_DOUBLE:String = "CHANGE_JUMP_DOUBLE";
@@ -55,6 +56,7 @@ package data.types
 		public static const GOAL_KILL:String = "GOAL_KILL";
 
 		public static const ENEMY_SPEED:String = "ENEMY_SPEED";
+		public static const TRAP_HEIGHT:String = "TRAP_HEIGHT";
 		
 		
 	}

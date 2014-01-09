@@ -50,6 +50,8 @@ package
 	
 	public class GameState extends StarlingState
 	{
+		private var INTERVAL:Number = new Number();
+
 		private var _gameData:GameData;
 
 		private var _tileSize:int = 32; // 32 
@@ -62,7 +64,6 @@ package
 		private var _hero:ExHero;
 		private var _bounds:Rectangle;
 		private var _debugSprite:flash.display.Sprite;
-		private var ENEMY_AMOUNT_INTERVAL:Number = new Number();
 		private var _gameInterface:GameInterface;
 		
 		private var _arduinoConnector:ArduinoSerialComAnalogAndDigital;
@@ -220,13 +221,20 @@ package
 			// HERO SIZE - CHANGE
 			if(_ce.input.isDoing(Actions.HERO_SIZE)) {
 				action = _ce.input.getAction(Actions.HERO_SIZE) as InputAction;
-				Functions.ResizeObjectValue(this, action.value/30/2, action.value/30/2, "hero");
+				Functions.ResizeObjectValue(this, action.value/30/2, action.value/30/2, _hero);
 			}
 			// HERO LIVES - CHANGE
 			if(_ce.input.isDoing(Actions.HERO_LIVES)) {
 				action = _ce.input.getAction(Actions.HERO_LIVES) as InputAction;
 				_gameData.lives = action.value;
 			}
+			// HERO SPEED - CHANGE
+			if(_ce.input.isDoing(Actions.HERO_SPEED)) {
+				action = _ce.input.getAction(Actions.HERO_SPEED) as InputAction;
+				_hero.maxVelocity = action.value;
+				_hero.acceleration = action.value/8;
+			}
+			
 	
 			// HERO SHOOTING _ONOFF
 			if(_ce.input.justDid(Actions.HERO_SHOOT)) {
@@ -256,8 +264,8 @@ package
 				action = _ce.input.getAction(Actions.ENEMY_PERCANTAGE) as InputAction;
 				_gameData.enemyPercentage = action.value;			
 				
-				clearTimeout(ENEMY_AMOUNT_INTERVAL);
-				ENEMY_AMOUNT_INTERVAL = setTimeout(myDelayedFunction, 100, this, action);
+				clearTimeout(INTERVAL);
+				INTERVAL = setTimeout(myDelayedFunction, 100, this, action);
 				function myDelayedFunction(state : StarlingState, action : InputAction):void { 
 					_lvl.placeEnemies(state, _gameData.enemyPercentage, new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize)) );
 					_gameData.totalEnemies = _lvl.getTotalEnemiesAmount; // save total enemies for the enemy kill counter
@@ -269,8 +277,8 @@ package
 				action = _ce.input.getAction(Actions.TRAP_PERCANTAGE) as InputAction;
 				_gameData.trapPercantage = action.value;			
 				
-				clearTimeout(ENEMY_AMOUNT_INTERVAL);
-				ENEMY_AMOUNT_INTERVAL = setTimeout(function (state : StarlingState):void { 
+				clearTimeout(INTERVAL);
+				INTERVAL = setTimeout(function (state : StarlingState):void { 
 					_lvl.placeStaticTraps(state, _gameData.trapPercantage, new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize) ));
 				}, 100, this);
 				
@@ -281,13 +289,31 @@ package
 				action = _ce.input.getAction(Actions.LIVES_PERCANTAGE) as InputAction;
 				_gameData.livesPercantage = action.value;			
 				
-				clearTimeout(ENEMY_AMOUNT_INTERVAL);
-				ENEMY_AMOUNT_INTERVAL = setTimeout(function (state : StarlingState):void { 
+				clearTimeout(INTERVAL);
+				INTERVAL = setTimeout(function (state : StarlingState):void { 
 					_lvl.placeLiveCollectables(state, _gameData.livesPercantage, new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize) ));
 				}, 100, this);
 				
 			}
 			
+			// TrapHeight - CHANGE
+			if(_ce.input.hasDone(Actions.TRAP_HEIGHT)) {
+				var action:InputAction = _ce.input.getAction(Actions.TRAP_HEIGHT) as InputAction;
+				
+				clearTimeout(INTERVAL);
+				INTERVAL = setTimeout(
+				function (state : StarlingState):void { 
+						
+					var traps:Vector.<CitrusObject> = getObjectsByType(StaticTrap);
+					var trap:StaticTrap;
+					for each (trap in traps) {
+						if(!trap.body.GetContactList()) { // if colliding something (like hero) dont grow. otherwise shit DIES -- temp bugfix
+							Functions.ResizeTrap(state, (_tileSize/30)*action.value, trap, _tileSize);
+						}
+					}
+					
+				}, 100, this);
+			}
 			
 			
 			
@@ -301,6 +327,8 @@ package
 					enemy.speed =  action.value;
 				}
 			}
+			
+		
 			
 			
 			

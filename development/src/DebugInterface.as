@@ -31,6 +31,7 @@ package
 		
 		public var heroSize : int;	
 		public var heroLives : int;	
+		public var heroSpeed : Number;	
 		public var shootEnabled : Boolean = true;	
 		public var jump : String = "Single";
 		
@@ -38,7 +39,8 @@ package
 		public var trapPercentage : int;	
 		public var livesPercentage : int;	
 
-		public var enemySpeed : Number = 0;	
+		public var enemySpeed : Number;	
+		public var trapHeight : Number;	
 			
 			
 		public function DebugInterface() {
@@ -90,6 +92,7 @@ package
 			_gui.addGroup("Avatar");
 			_gui.addSlider("heroLives", ValueRange.HERO_LIVES.x, ValueRange.HERO_LIVES.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.HERO_LIVES, heroLives); }});
 			_gui.addSlider("heroSize", ValueRange.HERO_SIZE.x, ValueRange.HERO_SIZE.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.HERO_SIZE, heroSize); }});
+			_gui.addSlider("heroSpeed", ValueRange.HERO_SPEED.x, ValueRange.HERO_SPEED.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.HERO_SPEED, heroSpeed); }});
 			_gui.addToggle("shootEnabled", { callback: function ():void{  _guiInput.triggerOnce(Actions.HERO_SHOOT, int(shootEnabled)); }});
 			_gui.addComboBox("jump", [
 				{label:"Single", data: Actions.CHANGE_JUMP_SINGLE},
@@ -104,6 +107,7 @@ package
 			
 			_gui.addGroup("Traps");
 			_gui.addSlider("trapPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.TRAP_PERCANTAGE, trapPercentage); }});
+			_gui.addSlider("trapHeight", ValueRange.TRAP_HEIGHT.x, ValueRange.TRAP_HEIGHT.y, { callback: function ():void{  _guiInput.triggerOnce(Actions.TRAP_HEIGHT, trapHeight); }});
 			
 			_gui.addGroup("Lives");
 			_gui.addSlider("livesPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.LIVES_PERCANTAGE, livesPercentage); }});

@@ -9,24 +9,25 @@ package utils
 	import citrus.physics.box2d.Box2DShapeMaker;
 	
 	import data.types.Shapes;
+	import data.types.Tile;
 	
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
-	import flash.display.Shape;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
 	import objects.ExBox2DPhysicsObject;
+	import objects.StaticTrap;
 	
 	import starling.display.Image;
+	import starling.display.Shape;
 	import starling.textures.Texture;
-	import data.types.Tile;
 
 	public class Functions
 	{
 		
 		
-		public static function shapeToImage(shape : Shape) : Image {
+		public static function shapeToImage(shape : flash.display.Shape) : Image {
 			var bmd:BitmapData = new BitmapData(shape.width, shape.height, true, 0x000000);
 			bmd.draw(shape);
 			var img:Image = new Image(Texture.fromBitmapData(bmd));
@@ -77,8 +78,8 @@ package utils
 		}
 		
 		
-		public static function ResizeObjectValue(state : StarlingState, newW:Number, newH: Number, objectName : String, reDrawView : Boolean = true) : void { // Works for rectangle shape now
-			var object : ExBox2DPhysicsObject = state.getObjectByName(objectName) as ExBox2DPhysicsObject;
+		public static function ResizeObjectValue(state : StarlingState, newW:Number, newH: Number, object : ExBox2DPhysicsObject, reDrawView : Boolean = true) : void { // Works for rectangle shape now
+			var object : ExBox2DPhysicsObject = object as ExBox2DPhysicsObject;
 			var body : b2Body = object.getBody() as b2Body;
 			var newShape:b2PolygonShape = Box2DShapeMaker.BeveledRect(newW, newH, 0.1);
 			
@@ -109,6 +110,23 @@ package utils
 			
 		}
 		
+		
+		public static function ResizeTrap(state : StarlingState, newH: Number, object : StaticTrap, tileSize : int) : void { // Works for rectangle shape now
+			var trap : StaticTrap = object as StaticTrap;
+			var body : b2Body = trap.getBody() as b2Body;
+			var oldhHeight : int = (body.GetFixtureList().GetAABB().upperBound.y - body.GetFixtureList().GetAABB().lowerBound.y) * 30;			
+		
+			var newShape:b2PolygonShape = Box2DShapeMaker.Rect(tileSize/30, newH);
+			body.DestroyFixture(body.GetFixtureList());
+			body.CreateFixture2(newShape); // TODO: Add density?
+			var newHeight : int = (body.GetFixtureList().GetAABB().upperBound.y - body.GetFixtureList().GetAABB().lowerBound.y) * 30;
+			trap.y += (oldhHeight - newHeight)/2;
+			
+			var shape :Shape = trap.view as starling.display.Shape;
+			shape.height = newHeight;
+			shape.y = -newHeight/2;
+
+		}
 		
 		
 		public static function findClosetObjectToPoint(position : Point, objectsArray : *):* {

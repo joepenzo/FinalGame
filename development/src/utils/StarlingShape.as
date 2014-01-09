@@ -95,7 +95,6 @@ package utils
 				triangle.x = w/2;
 				shape.addChild(triangle);
 			}
-			
 			return shape;
 		}
 		
