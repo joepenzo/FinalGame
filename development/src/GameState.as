@@ -8,6 +8,7 @@ package
 	import citrus.core.starling.StarlingState;
 	import citrus.input.InputAction;
 	import citrus.objects.Box2DPhysicsObject;
+	import citrus.objects.platformer.box2d.MovingPlatform;
 	import citrus.objects.platformer.box2d.Platform;
 	import citrus.physics.box2d.Box2D;
 	import citrus.utils.AGameData;
@@ -78,7 +79,7 @@ package
 			_gameData = _ce.gameData as GameData;
 			
 			_box2D = new Box2D("box2D");
-			_box2D.visible = false;
+			_box2D.visible = true;
 			add(_box2D);
 			
 			_mapW = 40;//_mapW = 150;
@@ -108,8 +109,8 @@ package
 			_hero.view = StarlingShape.Rectangle(_hero.width, _hero.height, _hero.currentColor);
 			_hero.jumpType = "Unlimited";
 			add(_hero);
-			
-			
+
+		//	add(new MovingPlatform("test" , {x:500, y:200, width: 300}));
 			
 			_bounds = new Rectangle(0, 0, _mapW*_tileSize, _mapH*_tileSize);
 			_camera = view.camera as StarlingCamera;
@@ -402,7 +403,7 @@ package
 			
 			var heroPos:Point = new Point(Math.floor(_hero.x/_tileSize), Math.floor(_hero.y/_tileSize));
 			for each (var object:CitrusObject in objects) { // remove old platforms
-				if (object is Platform) {
+				if (object is Platform) { // this removes also the moving platforms
 					object.kill = true; 
 					remove(object);
 				}

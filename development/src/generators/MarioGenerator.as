@@ -326,7 +326,7 @@ public class MarioGenerator
         if (safe) length = 10 + random.nextInt(5);
         if (length > maxLength) length = maxLength;
 
-        var floor:int = height - 1 - random.nextInt(4);
+        var floor:int = height - 1 - random.nextInt(4); 
         for (var x:int = xo; x < xo + length; x++) {
             for (var y:int = 0; y < height; y++) {
                 if (y >= floor) lvl.setBlock(x, y, 1);//lvl.setBlock(x, y, uint((1 + 9 * 16)));
@@ -343,7 +343,7 @@ public class MarioGenerator
     private function decorate(x0:int, x1:int, floor:int):void {
         if (floor < 1) return;
 
-        // Boolean coins = random.nextInt(3) == 0;
+		// Boolean coins = random.nextInt(3) == 0;
         var rocks:Boolean = true;
 
         addEnemyLine(x0 + 1, x1 - 1, floor - 1);
@@ -351,10 +351,14 @@ public class MarioGenerator
         var s:int = random.nextInt(4);
         var e:int = random.nextInt(4);
 
+		var extraFirstFlootingPlatfromHeight : int = Functions.randomIntRange(0,3);
+		var extraFlootingPlatfromHeight : int = Functions.randomIntRange(2,3);
+		
         if (floor - 2 > 0) {
             if ((x1 - 1 - e) - (x0 + 1 + s) > 1) {
                 for (var x:int = x0 + 1 + s; x < x1 - 1 - e; x++) {
-					lvl.setBlock(x, floor - 2, 1);//lvl.setBlock(x, floor - 2, uint((2 + 2 * 16)));
+//					lvl.setBlock(x, floor - 2, 1);			//lvl.setBlock(x, floor - 2, uint((2 + 2 * 16)));
+					lvl.setBlock(x, floor - 2 - extraFirstFlootingPlatfromHeight, 1);			//lvl.setBlock(x, floor - 2, uint((2 + 2 * 16)));
                 }
             }
         }
@@ -368,18 +372,23 @@ public class MarioGenerator
                     if (rocks) {
                         if (x != x0 + 1 && x != x1 - 2 && random.nextInt(3) == 0) {
                             if (random.nextInt(4) == 0) {
-								lvl.setBlock(x, floor - 4, 1);//lvl.setBlock(x, floor - 4, uint((4 + 2 + 1 * 16)));
+//								lvl.setBlock(x, floor - 4, 1);	//lvl.setBlock(x, floor - 4, uint((4 + 2 + 1 * 16)));
+								lvl.setBlock(x, floor - 4-extraFlootingPlatfromHeight, 1);	//lvl.setBlock(x, floor - 4, uint((4 + 2 + 1 * 16)));
                             } else {
-								lvl.setBlock(x, floor - 4, 1);//lvl.setBlock(x, floor - 4, uint((4 + 1 + 1 * 16)));
+//								lvl.setBlock(x, floor - 4, 1);	//lvl.setBlock(x, floor - 4, uint((4 + 1 + 1 * 16)));
+								lvl.setBlock(x, floor - 4-extraFlootingPlatfromHeight, 1);	//lvl.setBlock(x, floor - 4, uint((4 + 1 + 1 * 16)));
                             }
                         } else if (random.nextInt(4) == 0) {
                             if (random.nextInt(4) == 0) {
-								lvl.setBlock(x, floor - 4, 1);//lvl.setBlock(x, floor - 4, uint((2 + 1 * 16)));
+//								lvl.setBlock(x, floor - 4, 1);	//lvl.setBlock(x, floor - 4, uint((2 + 1 * 16)));
+								lvl.setBlock(x, floor - 4-extraFlootingPlatfromHeight, 1);	//lvl.setBlock(x, floor - 4, uint((2 + 1 * 16)));
                             } else {
-								lvl.setBlock(x, floor - 4, 1);//lvl.setBlock(x, floor - 4, uint((1 + 1 * 16)));
+//								lvl.setBlock(x, floor - 4, 1);	//lvl.setBlock(x, floor - 4, uint((1 + 1 * 16)));
+								lvl.setBlock(x, floor - 4-extraFlootingPlatfromHeight, 1);	//lvl.setBlock(x, floor - 4, uint((1 + 1 * 16)));
                             }
                         } else {
-							lvl.setBlock(x, floor - 4, 1);//lvl.setBlock(x, floor - 4, uint((0 + 1 * 16)));
+//							lvl.setBlock(x, floor - 4, 1);		//lvl.setBlock(x, floor - 4, uint((0 + 1 * 16)));
+							lvl.setBlock(x, floor - 4-extraFlootingPlatfromHeight, 1);		//lvl.setBlock(x, floor - 4, uint((0 + 1 * 16)));
                         }
                     }
                 }
