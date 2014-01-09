@@ -91,7 +91,7 @@ package objects {
 		 * How long the hero is in hurt mode for. 
 		 */
 		[Inspectable(defaultValue="1000")]
-		public var hurtDuration:Number = 1000;
+		public var hurtDuration:Number = 0;
 		
 		/**
 		 * The amount of kick-back that the hero jumps when he gets hurt. 
