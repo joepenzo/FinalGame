@@ -21,11 +21,15 @@ package objects
 		
 		private var _tile:Point;
 
+		private var _updatedBounds : Boolean = false;
+		
 		protected var _leftEdgeSensorShape:b2PolygonShape;
 		protected var _rightEdgeSensorShape:b2PolygonShape;
 		
 		protected var _leftEdgeSensorFixture:b2Fixture;
 		protected var _rightEdgeSensorFixture:b2Fixture;
+		
+		
 		
 		public function EdgeDetectorEnemy(name:String, enemyColor : uint, params:Object=null, tile : Point = null)
 		{
@@ -45,27 +49,14 @@ package objects
 			}
 
 		}
-		
-		override protected function createShape():void {
-			super.createShape();
 
-			var sensorWidth:Number = wallSensorWidth / _box2D.scale;
-			var sensorHeight:Number = wallSensorHeight / _box2D.scale;
-			var sensorOffset:b2Vec2 = new b2Vec2((sensorWidth / 2) - _width/2 + sensorWidth, _height - (wallSensorOffset / _box2D.scale));
-			
-			_leftEdgeSensorShape = new b2PolygonShape();
-			_leftEdgeSensorShape.SetAsOrientedBox(sensorWidth, sensorHeight, sensorOffset);
-			
-			sensorOffset.x = -sensorOffset.x;
-			_rightEdgeSensorShape = new b2PolygonShape();
-			_rightEdgeSensorShape.SetAsOrientedBox(sensorWidth, sensorHeight, sensorOffset);
-		}
 		
 		override protected function defineFixture():void
 		{
 			super.defineFixture();
 			_fixtureDef.restitution = 0;
 			_fixtureDef.friction = 0;
+			_fixtureDef.density = 10;
 			_fixtureDef.filter.categoryBits = PhysicsCollisionCategories.Get("BadGuys");
 			_fixtureDef.filter.maskBits = PhysicsCollisionCategories.GetAllExcept("Items","BadGuys");
 			
@@ -77,38 +68,33 @@ package objects
 			
 		}
 		
-		override protected function createFixture():void {
-			super.createFixture();
-
-			_sensorFixtureDef.shape = _leftEdgeSensorShape;
-			_leftEdgeSensorFixture = body.CreateFixture(_sensorFixtureDef);
-			
-			_sensorFixtureDef.shape = _rightEdgeSensorShape;
-			_rightEdgeSensorFixture = body.CreateFixture(_sensorFixtureDef);
-			
-			
-		}
 		
+		override public function update(timeDelta:Number):void {
+			super.update(timeDelta);
+			
+			var position:b2Vec2 = _body.GetPosition();
 		
-		override public function handleEndContact(contact:b2Contact):void {
-			var collider:IBox2DPhysicsObject = Box2DUtils.CollisionGetOther(this, contact);
-			if (contact.GetFixtureA() == _leftEdgeSensorFixture ||  contact.GetFixtureA() == _rightEdgeSensorFixture) {
-				if (contact.GetManifold().m_localPoint) {
-					var normalPoint:Point = new Point(contact.GetManifold().m_localPoint.x, contact.GetManifold().m_localPoint.y);
-					var collisionAngle:Number = new MathVector(normalPoint.x, normalPoint.y).angle * 180 / Math.PI;
-					if ((collider is Platform && collisionAngle != 90) || collider is ExEnemy) turnAround();
-				}
+			//Turn around when they pass their left/right bounds
+			if ((_inverted && position.x * _box2D.scale < leftBound) || (!_inverted && position.x * _box2D.scale > rightBound)) turnAround();
+			
+			var velocity:b2Vec2 = _body.GetLinearVelocity();
+			
+ 			if (!_hurt) {
+				velocity.x = _inverted ? -speed : speed;
+			} else {
+				velocity.x = 0;
 			}
 			
+			updateAnimation();
 		}
-		
+			
 		override public function handleBeginContact(contact:b2Contact):void {
+			
 			var collider:IBox2DPhysicsObject = Box2DUtils.CollisionGetOther(this, contact);
 			
-			if (contact.GetFixtureA() == _leftEdgeSensorFixture ||  contact.GetFixtureA() == _rightEdgeSensorFixture) return;
-		
 			if (collider is _enemyClass && collider.body.GetLinearVelocity().y > enemyKillVelocity)
 				hurt();
+			
 			if (_body.GetLinearVelocity().x < 0 && (contact.GetFixtureA() == _rightSensorFixture || contact.GetFixtureB() == _rightSensorFixture))
 				return;
 			
@@ -120,11 +106,21 @@ package objects
 				var normalPoint:Point = new Point(contact.GetManifold().m_localPoint.x, contact.GetManifold().m_localPoint.y);
 				var collisionAngle:Number = new MathVector(normalPoint.x, normalPoint.y).angle * 180 / Math.PI;
 				
-				if ((collider is Platform && collisionAngle != 90) || collider is ExEnemy)
+				if ((collider is Platform && collisionAngle != 90)) {
 					turnAround();
+				}
+				
+				if ((collider is Platform) && !_updatedBounds) {
+					_updatedBounds = true;
+					var platform : Platform = collider as Platform;
+					leftBound = (platform.x - platform.width/2) + width/2;
+					rightBound = (platform.x + platform.width/2) - width/2;
+				}
+				
 			}
 			
 		}
+		
 		
 	}
 }

@@ -11,8 +11,11 @@ package data.types
 		public static const RED : Point = new Point(0, 255);
 		public static const GREEN : Point = new Point(0, 255);
 		public static const BLUE : Point = new Point(0, 255);
+		
 		public static const HERO_SIZE : Point = new Point(15, 110);
 		public static const HERO_LIVES : Point = new Point(1, 10);
+		
+		public static const ENEMYSPEED : Point = new Point(0.1, 5);
 		
 	}
 }

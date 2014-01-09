@@ -53,6 +53,8 @@ package data.types
 		public static const GOAL_A_TO_B:String = "GOAL_A_TO_B";
 		public static const GOAL_COLLECT:String = "GOAL_COLlECT";
 		public static const GOAL_KILL:String = "GOAL_KILL";
+
+		public static const ENEMY_SPEED:String = "ENEMY_SPEED";
 		
 		
 	}

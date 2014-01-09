@@ -136,7 +136,7 @@ package
 			
 			_gameData.dataChanged.add(onDataChanged);
 	
-			_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
+			//_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
 
 		}
 		
@@ -289,6 +289,18 @@ package
 			}
 			
 			
+			
+			
+			// EnemySpeed - CHANGE
+			if(_ce.input.isDoing(Actions.ENEMY_SPEED)) {
+				var action:InputAction = _ce.input.getAction(Actions.ENEMY_SPEED) as InputAction;
+				
+				var enemies:Vector.<CitrusObject> = getObjectsByType(EdgeDetectorEnemy);
+				var enemy:ExEnemy;
+				for each (enemy in enemies) {
+					enemy.speed =  action.value;
+				}
+			}
 			
 			
 			

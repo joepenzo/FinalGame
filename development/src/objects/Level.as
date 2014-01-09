@@ -407,7 +407,8 @@ package objects  {
 			var enemyW : int = 20;
 			var enemyH : int = 20;
 			for each (var currentEnemyPos:Point in _currentEnemyTilesArray) { // ADD ALL ENEMIES TO STATE
-				boundDistance =  Functions.randomIntRange(32, 32*5);
+				//boundDistance =  Functions.randomIntRange(32, 32*5);
+				boundDistance = 2000;
 				state.add(new EdgeDetectorEnemy('enemy', 0xAB1A1A, { 
 					speed : 0.5,
 					group:2,
