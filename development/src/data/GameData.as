@@ -3,6 +3,7 @@ package data
 	import Box2D.Common.Math.b2Vec2;
 	
 	import citrus.utils.AGameData;
+	import audio.SynthSounds;
 	
 	public class GameData extends AGameData
 	{

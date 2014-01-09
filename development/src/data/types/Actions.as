@@ -8,11 +8,10 @@ package data.types
 		public static const SHOOT : String = "shoot";		
 		
 		
-		public static const AUDIO_SQUAREDUTY : String = "AUDIO_SQUAREDUTY";
 		public static const AUDIO_STARTFREQUENCY : String = "AUDIO_STARTFREQUENCY";
+		public static const AUDIO_ENDFREQUENCY : String = "AUDIO_ENDFREQUENCY";
 		public static const AUDIO_SLIDE : String = "AUDIO_SLIDE";
-		public static const AUDIO_SUSTAINTIME : String = "AUDIO_SUSTAINTIME";
-		public static const AUDIO_DECAYTIME : String = "AUDIO_DECAYTIME";
+		public static const AUDIO_DURATION : String = "AUDIO_DURATION";
 		
 		public static const VALUE_GRAVITY : String = "VALUE_GRAVITY";		
 		public static const VALUE_ZOOM : String = "VALUE_ZOOM";		

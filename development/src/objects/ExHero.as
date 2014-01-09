@@ -33,8 +33,9 @@ package objects {
 	
 	import utils.ObjSize;
 	import utils.StarlingShape;
+	import audio.SynthSounds;
+	import audio.Sounds;
 
-	//import data.Sounds;
 	
 	/**
 	 * @author joepsuijkerbuijk
@@ -154,6 +155,7 @@ package objects {
 		private var _mayDoubleJump:Boolean;
 		private var _bulletcounter:int=0;
 		private var _bulletGraphic:Shape;
+		private var _sounds:SynthSounds;
 
 		
 		public var shootingEnabled : Boolean = true;
@@ -183,7 +185,7 @@ package objects {
 			onTakeDamage = new Signal();
 			onAnimationChange = new Signal();
 
-			//_sounds = _gameData.synthSounds;
+			_sounds = _gameData.synthSounds;
 			_ce.input.keyboard.addKeyAction(Actions.JUMP,Keyboard.UP);
 			_ce.input.keyboard.addKeyAction(Actions.SHOOT,Keyboard.Z);
 		}
@@ -315,6 +317,8 @@ package objects {
 							velocity.y = -jumpHeight;
 							onJump.dispatch();
 							_onGround = false; // also removed in the handleEndContact. Useful here if permanent contact e.g. box on hero.
+							
+							_sounds.play(Sounds.JUMP);
 						}
 						
 						if (_ce.input.isDoing("jump", inputChannel) && !_onGround && velocity.y < 0) velocity.y -= jumpAcceleration;
@@ -325,10 +329,14 @@ package objects {
 							onJump.dispatch();
 							_onGround = false; // also removed in the handleEndContact. Useful here if permanent contact e.g. box on hero.
 							_mayDoubleJump = true;
+							
+							_sounds.play(Sounds.JUMP);
 						} else if (!_onGround && _mayDoubleJump && _ce.input.justDid("jump", inputChannel)) {
 							velocity.y = -jumpHeight;
 							onJump.dispatch();
 							_mayDoubleJump = false;
+							
+							_sounds.play(Sounds.JUMP);
 						}
 						if (_onGround) _mayDoubleJump = false;
 						
@@ -338,12 +346,16 @@ package objects {
 							velocity.y = -jumpHeight;
 							onJump.dispatch();
 							_onGround = false; // also removed in the handleEndContact. Useful here if permanent contact e.g. box on hero.
+							
+							_sounds.play(Sounds.JUMP);
 						}
 						// INAIR AND HOLDING JUMP
 						if (_ce.input.isDoing("jump", inputChannel) && !_onGround && velocity.y < 0) velocity.y -= jumpAcceleration;
 						if ( !_onGround && _ce.input.justDid("jump", inputChannel)) {
 							velocity.y = -jumpHeight;
 							onJump.dispatch();
+							
+							_sounds.play(Sounds.JUMP);
 						}
 						break;
 					case "Jetpack":

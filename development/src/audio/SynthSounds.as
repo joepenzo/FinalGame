@@ -1,12 +1,13 @@
-package data
+package audio
 {
 	import citrus.core.CitrusObject;
 	import citrus.input.InputAction;
 	import citrus.utils.AGameData;
+	
+	import data.types.Actions;
+	
 	import flash.utils.*;
 	import flash.utils.Dictionary;
-	import data.types.Actions;
-	import data.types.Sounds;
 	
 	public class SynthSounds extends CitrusObject
 	{
@@ -16,22 +17,41 @@ package data
 		private var sounds : Dictionary = new Dictionary();
 		
 		private var _jump : SfxrSynth = new SfxrSynth();
+		private var _shoot : SfxrSynth = new SfxrSynth();
+		private var _hit : SfxrSynth = new SfxrSynth();
+		private var _coin : SfxrSynth = new SfxrSynth();
+		private var _life : SfxrSynth = new SfxrSynth();
+		
 		private var audioInterval:Number =  0;
+		private var volume : Number = 1;
 		
 		public function SynthSounds(name : String, params : Object = null) {
 			updateCallEnabled = true;
 			super(name, params);
 			
-			_jump.params.setSettingsString("0,,0.271,,0.18,0.395,,0.201,,,,,,0.284,,,,,0.511,,,,,0.5");
+			_jump.params.setSettingsString("0,,0.271,,0.18,0.395,,0.201,,,,,,0.284,,,,,0.511,,,,," + volume);
 			_jump.cacheSound();
 			sounds[Sounds.JUMP] = _jump;
+
+			_shoot.params.setSettingsString("0,,0.2336,0.1885,0.1555,0.7963,0.0253,-0.4479,,,,,,0.1343,0.0064,,,,1,,,,," + volume);
+			_shoot.cacheSound();
+			sounds[Sounds.SHOOT] = _shoot;
 			
-			/*
-			if(_ce.input.isDoing("do-zoom")) {
-				var action :InputAction = _ce.input.getAction("do-zoom") as InputAction;
-				_log.text = action.value.toString()  + "  " +  Math.random().toString();
-			}
-			*/
+			_hit.params.setSettingsString("0,,0.0365,,0.1434,0.5223,,-0.5298,,,,,,,,,,,1,,,0.1867,," + volume);
+			_hit.cacheSound();
+			sounds[Sounds.HIT] = _hit;
+			
+			_coin.params.setSettingsString("0,,0.0434,0.5867,0.4062,0.5989,,,,,,0.5636,0.6765,,,,,,1,,,,," + volume);
+			_coin.cacheSound();
+			sounds[Sounds.COIN] = _coin;
+			
+			_life.params.setSettingsString("0,,0.1563,,0.4807,0.2028,,0.3691,,,,,,0.569,,0.4727,,,1,,,,," + volume);
+			_life.cacheSound();
+			sounds[Sounds.LIFE] = _life;
+			
+			
+			
+			
 		}
 		
 		private function playAudioFeedBack(soundName : String):void {
@@ -44,37 +64,38 @@ package data
 		override public function update(timeDelta:Number):void {
 			super.update(timeDelta);
 			
-			if(_ce.input.isDoing(Actions.AUDIO_SQUAREDUTY)) {
-				var action :InputAction = _ce.input.getAction(Actions.AUDIO_SQUAREDUTY) as InputAction;
-				SetSquareDuty(Sounds.JUMP, action.value);
-
-				clearTimeout(audioInterval);
-				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, Sounds.JUMP);
-						
-				//notice("AUDIO_SQUAREDUTY " + action.value);
-			}
 			if(_ce.input.isDoing(Actions.AUDIO_STARTFREQUENCY)) {
 				action = _ce.input.getAction(Actions.AUDIO_STARTFREQUENCY) as InputAction;
 				SetStartFrequency(Sounds.JUMP, action.value);
 				
 				clearTimeout(audioInterval);
 				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, Sounds.JUMP);
-				//notice("AUDIO_STARTFREQUENCY " + action.value);
 			}
+			
+			if(_ce.input.isDoing(Actions.AUDIO_ENDFREQUENCY)) {
+				var action :InputAction = _ce.input.getAction(Actions.AUDIO_ENDFREQUENCY) as InputAction;
+				SetEndFrequency(Sounds.JUMP, action.value);
+
+				clearTimeout(audioInterval);
+				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, Sounds.JUMP);
+			}
+			
 			if(_ce.input.isDoing(Actions.AUDIO_SLIDE)) {
 				action = _ce.input.getAction(Actions.AUDIO_SLIDE) as InputAction;
 				SetSlide(Sounds.JUMP, action.value);
 				
 				clearTimeout(audioInterval);
 				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, Sounds.JUMP);
-				//notice("AUDIO_SLIDE " + action.value);
 			}
-			if(_ce.input.isDoing(Actions.AUDIO_SUSTAINTIME)) {
-				action = _ce.input.getAction(Actions.AUDIO_SUSTAINTIME) as InputAction;
+		
+			if(_ce.input.isDoing(Actions.AUDIO_DURATION)) {
+				action = _ce.input.getAction(Actions.AUDIO_DURATION) as InputAction;
+				SetDuration(Sounds.JUMP, action.value);
+				
+				clearTimeout(audioInterval);
+				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, Sounds.JUMP);
 			}
-			if(_ce.input.isDoing(Actions.AUDIO_DECAYTIME)) {
-				action = _ce.input.getAction(Actions.AUDIO_DECAYTIME) as InputAction;
-			}
+			
 		}
 
 		public function getSound(soundName : String) : SfxrSynth {
@@ -87,21 +108,12 @@ package data
 			if (!sounds[soundName]) return;
 			var sound : SfxrSynth = sounds[soundName];
 			sound.play();
-			
-			/*
-			trace("\nwaveType " +  sound.params.waveType);
-			trace("squareDuty " + sound.params.squareDuty);
-			trace("startFrequency " + sound.params.startFrequency);
-			trace("slide " + sound.params.slide);
-			trace("sustainTime " + sound.params.sustainTime);
-			trace("decayTime " + sound.params.decayTime);
-			*/
 		}
 		
-		public function SetSquareDuty(soundName : String, val : Number) : void {
+		public function SetEndFrequency(soundName : String, val : Number) : void {
 			if (!sounds[soundName]) return;
 			var sound : SfxrSynth = sounds[soundName];
-			sound.params.squareDuty = val;
+			sound.params.squareDuty = val; // TODO CHECK
 		}
 		
 		public function SetStartFrequency(soundName : String, val : Number) : void {
@@ -116,29 +128,13 @@ package data
 			sound.params.slide = val;
 		}
 		
-		public function SetSustainTime(soundName : String, val : Number) : void {
+		public function SetDuration(soundName : String, val : Number) : void {
 			if (!sounds[soundName]) return;
 			var sound : SfxrSynth = sounds[soundName];
-			sound.params.sustainTime = val;
-		}
-
-		public function SetDecayTime(soundName : String, val : Number) : void {
-			if (!sounds[soundName]) return;
-			var sound : SfxrSynth = sounds[soundName];
-			sound.params.decayTime = val;
+			sound.params.decayTime = val; // TODO CHECK
 		}
 		
 		
-		
-		/* JUMP
-		_waveType = 0;
-		_squareDuty = Math.random() * 0.6;
-		_startFrequency = 0.3 + Math.random() * 0.3;
-		_slide = 0.1 + Math.random() * 0.2;
-		
-		_sustainTime = 0.1 + Math.random() * 0.3;
-		_decayTime = 0.1 + Math.random() * 0.2;
-		*/
 
 
 	}

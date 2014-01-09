@@ -15,6 +15,7 @@ package
 	import logmeister.connectors.TrazzleConnector;
 	import data.GameData;
 	import citrus.utils.AGameData;
+	import audio.SynthSounds;
 	
 	
 	public class AfstudeerGame extends StarlingCitrusEngine {
@@ -26,7 +27,7 @@ package
 		private static const PixelUniCode:Class;
 		
 		private var _gameData:GameData;
-//		private var _sounds:SynthSounds;
+		private var _sounds:SynthSounds;
 		
 		
 		public function AfstudeerGame() {
@@ -40,10 +41,8 @@ package
 			_gameData.currentStyling = "platform";
 			_gameData.lives = 1;
 			
-			
-
-//			_sounds = new SynthSounds("synthSounds");
-//			_gameData.synthSounds = _sounds;
+			_sounds = new SynthSounds("synthSounds");
+			_gameData.synthSounds = _sounds;
 			
 			state = new GameState();
 

@@ -80,7 +80,7 @@ package data
 			_analogVals[Pin.PERCANTAGE_TRAP] = TRAP_PER;
 			
 			
-			_actionPins[Pin.A_AUDIO_SQUAREDUTY] = Actions.AUDIO_SQUAREDUTY;
+//			_actionPins[Pin.A_AUDIO_SQUAREDUTY] = Actions.AUDIO_SQUAREDUTY;
 			_actionPins[Pin.A_AUDIO_STARTFREQUENCY] = Actions.AUDIO_STARTFREQUENCY;
 			_actionPins[Pin.A_AUDIO_SLIDE] = Actions.AUDIO_SLIDE;
 			_actionPins[Pin.A_GRAVITY] = Actions.VALUE_GRAVITY;
@@ -93,7 +93,7 @@ package data
 			_actionPins[Pin.PERCANTAGE_LIVE] = Actions.LIVES_PERCANTAGE;
 			_actionPins[Pin.PERCANTAGE_TRAP] = Actions.TRAP_PERCANTAGE;
 			
-			_analogMinMaxMapVals[Pin.A_AUDIO_SQUAREDUTY] = SoundRange.JUMP_SQUAREDUTY;
+//			_analogMinMaxMapVals[Pin.A_AUDIO_SQUAREDUTY] = SoundRange.JUMP_SQUAREDUTY;
 			_analogMinMaxMapVals[Pin.A_AUDIO_STARTFREQUENCY] = SoundRange.JUMP_STARTFREQUENCY;
 			_analogMinMaxMapVals[Pin.A_AUDIO_SLIDE] = SoundRange.JUMP_SLIDE;
 			_analogMinMaxMapVals[Pin.A_GRAVITY] = ValueRange.GRAVITY;
