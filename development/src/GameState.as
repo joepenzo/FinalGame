@@ -298,6 +298,20 @@ package
 				
 			}
 			
+			// COIN AMOUNT
+			if(_ce.input.hasDone(Actions.COINS_PERCANTAGE)) {
+				action = _ce.input.getAction(Actions.COINS_PERCANTAGE) as InputAction;
+				_gameData.coinsPercantage = action.value;			
+				
+				clearTimeout(INTERVAL);
+				INTERVAL = setTimeout(function (state : StarlingState):void { 
+					_lvl.placeCoinCollectables(state, _gameData.coinsPercantage, new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize) ));
+				}, 100, this);
+				
+			}
+			
+			
+			
 			// TrapHeight - CHANGE
 			if(_ce.input.hasDone(Actions.TRAP_HEIGHT)) {
 				var action:InputAction = _ce.input.getAction(Actions.TRAP_HEIGHT) as InputAction;

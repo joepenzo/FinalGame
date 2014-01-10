@@ -32,6 +32,7 @@ package data
 		protected var _enemyPercentage : int = 0;
 		protected var _trapPercantage : int = 0;
 		protected var _livesPercantage : int = 0;
+		protected var _coinsPercantage : int = 0;
 		
 		
 		
@@ -39,6 +40,16 @@ package data
 			super();
 		}
 		
+		public function get coinsPercantage():int
+		{
+			return _coinsPercantage;
+		}
+
+		public function set coinsPercantage(value:int):void
+		{
+			_coinsPercantage = value;
+		}
+
 		public function get livesPercantage():int
 		{
 			return _livesPercantage;

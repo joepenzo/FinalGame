@@ -9,6 +9,7 @@ package data.types
 		public static const TRAP : uint = 3;
 
 		public static const LIVE : uint = 4;
+		public static const COIN : uint = 5;
 
 	}
 }

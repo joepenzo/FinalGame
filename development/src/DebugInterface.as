@@ -38,6 +38,7 @@ package
 		public var enemyPercentage : int;	
 		public var trapPercentage : int;	
 		public var livesPercentage : int;	
+		public var coinsPercentage : int;	
 
 		public var enemySpeed : Number;	
 		public var trapHeight : Number;	
@@ -111,6 +112,8 @@ package
 			
 			_gui.addGroup("Lives");
 			_gui.addSlider("livesPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.LIVES_PERCANTAGE, livesPercentage); }});
+			_gui.addGroup("Coins");
+			_gui.addSlider("coinsPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.COINS_PERCANTAGE, coinsPercentage); }});
 			
 			
 			_gui.show();

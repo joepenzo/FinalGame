@@ -85,6 +85,14 @@ package objects  {
 		private var _livesToPlaceAmount:uint;
 		private var _oldLivesAmount:int;
 		private var _currentLivesArray:Array = [];
+		
+		private var _possibleTilesForCoins:int;
+		private var _newCoinsAmount:int;
+		private var _freeCoinsTilesArray:Array;
+		private var _coinsToPlaceAmount:uint;
+		private var _oldCoinsAmount:int;
+		private var _currentCoinsArray:Array = [];
+		
 	
 		
 		public function Level(width:int, height:int, defaultTile : int = 0) {
@@ -241,9 +249,72 @@ package objects  {
 		
 			_possibleTileForEnemies = getTilePointsArrayAbovePlatformTiles(Tile.TRAP).length as int;
 			_possibleTileForTraps = getTilePointsArrayAbovePlatformTiles(Tile.ENEMY).length as int;
-			_possibleTilesForLives = getTilePointsArrayForCollectables().length as int;
+			_possibleTilesForLives = getTilePointsArrayForFIRSTROWCollectables().length as int;
+			_possibleTilesForCoins = getTilePointsArrayForSECONDROWCollectables().length as int;
 			
 			fixHeroPosIfStuck(heroPos, gameState.getObjectByName("hero") as ExHero);
+			
+		}
+		
+		
+		public function drawQuadMap(gameState : StarlingState, tileSize : int, color : uint):void {
+			var quadBatch:QuadBatch = new QuadBatch();
+			
+			var tex:Texture = Texture.fromBitmapData(new BitmapData(tileSize, tileSize, false, color));
+			var image:Image = new Image(tex);
+			image.color = color;
+			
+			var mW:int = map[0].length;
+			var mH:int = map.length;
+			
+			for (var y:int=0; y<mH; y++) {
+				for (var x:int=0; x<mW; x++) {
+					if (map[y][x] == Tile.LAND) {
+						image.x = x*tileSize;
+						image.y = y*tileSize;
+						quadBatch.addImage(image);
+					}
+				}
+			}
+			
+			quadBatch.blendMode = BlendMode.NONE;
+			
+			if (!gameState.getObjectByName("citrusMapSprite"))  {
+				gameState.add(new CitrusSprite("citrusMapSprite", {view:quadBatch}));	
+			} else {
+				var mapSprite:CitrusSprite = gameState.getObjectByName("citrusMapSprite") as CitrusSprite;
+				mapSprite.view = quadBatch;
+			}
+			
+		}
+		
+		
+		
+		public function drawDebugGrid(gameState : StarlingState):void {
+			var grid : starling.display.Shape = new Shape();
+			
+			grid.graphics.clear();
+			grid.graphics.lineStyle(1, 0x00ff00);
+			
+			// we drop in the " + 1 " so that it will cap the right and bottom sides.
+			for (var col:Number = 0; col < width + 1; col++)
+			{
+				for (var row:Number = 0; row < height + 1; row++)
+				{
+					trace(col, row);
+					grid.graphics.moveTo(col * _tileSize, 0);
+					grid.graphics.lineTo(col * _tileSize, _tileSize * height);
+					grid.graphics.moveTo(0, row * _tileSize);
+					grid.graphics.lineTo(_tileSize * width, row * _tileSize);
+				}
+			}
+			
+			if (!gameState.getObjectByName("citrusMapDebugGrid"))  {
+				gameState.add(new CitrusSprite("citrusMapDebugGrid", {view:grid}));	
+			} else {
+				var mapSprite:CitrusSprite = gameState.getObjectByName("citrusMapDebugGrid") as CitrusSprite;
+				mapSprite.view = grid;
+			}
 			
 		}
 		
@@ -263,9 +334,56 @@ package objects  {
 		
 		
 		
+		public function placeCoinCollectables(state: StarlingState, percentage : int, heroPos : Point) :void {
+			_newCoinsAmount = _possibleTilesForCoins*(percentage/100);
+			_freeCoinsTilesArray = getTilePointsArrayForSECONDROWCollectables() as Array;
+			_coinsToPlaceAmount = _freeCoinsTilesArray.length*(percentage/100);		
+			
+			if (_newCoinsAmount > _oldCoinsAmount) { 
+				for (var i:int=0; i < _coinsToPlaceAmount-1; i++) {
+					var randomIdx:int = Math.floor(Math.random() * _freeCoinsTilesArray.length);
+					var coord : Point = _freeCoinsTilesArray[randomIdx] as Point;
+					_freeCoinsTilesArray.splice(randomIdx, 1);
+					_currentCoinsArray.push(coord);
+					map[coord.y][coord.x] = Tile.COIN;// do not place in map gives bug together with traps en shit
+				}
+			} else if (_newCoinsAmount < _oldCoinsAmount) { 
+				var coinsToRemove : int = _oldCoinsAmount - _newCoinsAmount;
+				for (i = 0; i < coinsToRemove-1; i++) {
+					randomIdx = Math.floor(Math.random() * _currentCoinsArray.length);
+					coord = _currentCoinsArray[randomIdx] as Point;
+					_currentCoinsArray.splice(randomIdx, 1);
+					_freeCoinsTilesArray.push(coord);
+					map[coord.y][coord.x] = Tile.AIR; // ERROR WHY?// do not place in map gives bug together with traps en shit
+				}
+			}
+			_oldCoinsAmount = _newCoinsAmount;
+			
+			// CODE TO PLACE AND DELETE THE coins IN THE GAMESTATE// write this more epic, that some COINS can stay!!
+			var currentCoinsInState : Vector.<CitrusObject> = state.getObjectsByName("coinCollectable") as Vector.<CitrusObject>;
+			var currentCoinsInStatelength:int = currentCoinsInState.length;
+			if (currentCoinsInStatelength != 0) { // REMOVE ALL TRAP IN STATE IF THERE ARE 
+				for each (var currentCoin:Coin in currentCoinsInState) state.remove(currentCoin);
+			}
+			for each (var currentCoinPos:Point in _currentCoinsArray) { // ADD ALL TO STATE
+				state.add(new Coin('coinCollectable', { 
+					group:1,
+					width : _tileSize/2, 
+					height : _tileSize/2, 
+					x: (currentCoinPos.x*_tileSize) + _tileSize/2,
+					y: (currentCoinPos.y*_tileSize) + _tileSize/2,
+					view : StarlingShape.Circle(_tileSize/2, 0xFFF700)
+				}));
+			}
+			
+		}
+		
+		
+		
+		
 		public function placeLiveCollectables(state: StarlingState, percentage : int, heroPos : Point) :void {
 			_newLivesAmount = _possibleTilesForLives*(percentage/100);
-			_freeLivesTilesArray = getTilePointsArrayForCollectables() as Array;
+			_freeLivesTilesArray = getTilePointsArrayForFIRSTROWCollectables() as Array;
 			_livesToPlaceAmount = _freeLivesTilesArray.length*(percentage/100);		
 			
 			if (_newLivesAmount > _oldLivesAmount) { 
@@ -424,8 +542,6 @@ package objects  {
 			
 		}
 		
-		
-	
 		private function placeEnemiesInMap():void {
 			if (_newEnemiesAmount > _oldEnemyAmount) { // ADD THE MOFO ENEMIES
 				for (var i:int=0; i<_enemiesToPlaceAmount-1; i++) {
@@ -449,6 +565,8 @@ package objects  {
 			_oldEnemyAmount = _newEnemiesAmount;
 		}
 		
+		
+		
 //		private function getFreeTilesAmountAbovePlatformTiles(): int{
 //			var tiles : int;
 //			
@@ -464,9 +582,27 @@ package objects  {
 //			return tiles;
 //		}
 		
+		
+		private function getTilePointsArrayForSECONDROWCollectables() : Array {
+			var tiles : Array = [];
+			
+			var mW:int = map[0].length;
+			var mH:int = map.length;
+			for (var y:int=0; y<mH; y++) {
+				for (var x:int=0; x<mW; x++) {
+					if (map[y][x] == Tile.AIR  &&  Functions.isLinkedBottom(map,x,y+2,Tile.LAND) && Functions.isLinkedBottom(map,x,y+1,Tile.AIR) ) {
+						if (map[y+1][x] == Tile.AIR || map[y+1][x] == Tile.LIVE ) { 
+							tiles.push(new Point(x,y));
+						}
+							
+					}
+				}
+			}
+			return tiles;
+		}
 
 		
-		private function getTilePointsArrayForCollectables(): Array{
+		private function getTilePointsArrayForFIRSTROWCollectables(): Array{
 			var tiles : Array = [];
 			
 			var mW:int = map[0].length;
@@ -499,68 +635,7 @@ package objects  {
 			return tiles;
 		}
 		
-		public function drawQuadMap(gameState : StarlingState, tileSize : int, color : uint):void {
-			var quadBatch:QuadBatch = new QuadBatch();
-			
-			var tex:Texture = Texture.fromBitmapData(new BitmapData(tileSize, tileSize, false, color));
-			var image:Image = new Image(tex);
-			image.color = color;
-			
-			var mW:int = map[0].length;
-			var mH:int = map.length;
-			
-			for (var y:int=0; y<mH; y++) {
-				for (var x:int=0; x<mW; x++) {
-					if (map[y][x] == Tile.LAND) {
-						image.x = x*tileSize;
-						image.y = y*tileSize;
-						quadBatch.addImage(image);
-					}
-				}
-			}
-			
-			quadBatch.blendMode = BlendMode.NONE;
-			
-			if (!gameState.getObjectByName("citrusMapSprite"))  {
-				gameState.add(new CitrusSprite("citrusMapSprite", {view:quadBatch}));	
-			} else {
-				var mapSprite:CitrusSprite = gameState.getObjectByName("citrusMapSprite") as CitrusSprite;
-				mapSprite.view = quadBatch;
-			}
-			
-		}
 		
-		
-		
-		
-		
-		public function drawDebugGrid(gameState : StarlingState):void {
-			var grid : starling.display.Shape = new Shape();
-		
-			grid.graphics.clear();
-			grid.graphics.lineStyle(1, 0x00ff00);
-			
-			// we drop in the " + 1 " so that it will cap the right and bottom sides.
-			for (var col:Number = 0; col < width + 1; col++)
-			{
-				for (var row:Number = 0; row < height + 1; row++)
-				{
-					trace(col, row);
-					grid.graphics.moveTo(col * _tileSize, 0);
-					grid.graphics.lineTo(col * _tileSize, _tileSize * height);
-					grid.graphics.moveTo(0, row * _tileSize);
-					grid.graphics.lineTo(_tileSize * width, row * _tileSize);
-				}
-			}
-			
-			if (!gameState.getObjectByName("citrusMapDebugGrid"))  {
-				gameState.add(new CitrusSprite("citrusMapDebugGrid", {view:grid}));	
-			} else {
-				var mapSprite:CitrusSprite = gameState.getObjectByName("citrusMapDebugGrid") as CitrusSprite;
-				mapSprite.view = grid;
-			}
-
-		}
 		
 		
 		

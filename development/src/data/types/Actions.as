@@ -48,6 +48,7 @@ package data.types
 		public static const ENEMY_PERCANTAGE:String = "ENEMY_PERCANTAGE";
 		public static const TRAP_PERCANTAGE:String = "TRAP_PERCANTAGE";
 		public static const LIVES_PERCANTAGE:String = "LIVES_PERCANTAGE";
+		public static const COINS_PERCANTAGE:String = "COINS_PERCANTAGE";
 		
 		public static const GOAL_NO_GOAL:String = "GOAL_NO_GOAL";
 		public static const GOAL_A_TO_B:String = "GOAL_A_TO_B";
