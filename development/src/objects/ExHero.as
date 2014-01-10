@@ -4,6 +4,9 @@ package objects {
 	import Box2D.Dynamics.Contacts.b2Contact;
 	import Box2D.Dynamics.b2Fixture;
 	
+	import audio.Sounds;
+	import audio.SynthSounds;
+	
 	import citrus.input.controllers.Keyboard;
 	import citrus.math.MathVector;
 	import citrus.objects.Box2DPhysicsObject;
@@ -33,8 +36,6 @@ package objects {
 	
 	import utils.ObjSize;
 	import utils.StarlingShape;
-	import audio.SynthSounds;
-	import audio.Sounds;
 
 	
 	/**
@@ -409,7 +410,7 @@ package objects {
 		
 		private function handleBulletExplode(bullet:Missile,collidedObject:Box2DPhysicsObject):void {
 			if (collidedObject.name == "enemy") {
-				var enemy :ExEnemy = collidedObject as ExEnemy;
+				var enemy :EdgeDetectorEnemy = collidedObject as EdgeDetectorEnemy;
 				enemy.hurt();
 			}
 			
