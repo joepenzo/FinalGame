@@ -106,6 +106,7 @@ package
 			_hero.hurtVelocityY = _tileSize*.09;
 			_hero.currentColor = 0x000050;
 			_hero.currentShape = Shapes.RECTANGLE;
+			_hero.jumpHeight = _tileSize*.225;
 			_hero.view = StarlingShape.Rectangle(_hero.width, _hero.height, _hero.currentColor);
 			_hero.jumpType = "Unlimited";
 			add(_hero);

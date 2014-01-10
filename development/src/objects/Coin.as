@@ -2,27 +2,34 @@ package objects
 {
 	import Box2D.Dynamics.Contacts.b2Contact;
 	
+	import audio.Sounds;
+	import audio.SynthSounds;
+	
 	import citrus.physics.box2d.Box2DShapeMaker;
 	import citrus.physics.box2d.Box2DUtils;
 	import citrus.physics.box2d.IBox2DPhysicsObject;
+	import citrus.utils.AGameData;
+	
+	import data.GameData;
 	
 	import flash.utils.getDefinitionByName;
-	import citrus.utils.AGameData;
-	import data.GameData;
 	
 	/**
 	 * Coin is basically a sensor that destroys itself when a particular class type touches it (often a Hero). 
 	 */
-	public class ExCoin extends ExSensor {
+	public class Coin extends ExSensor {
 		
 		
 		protected var _collectorClass:Class = ExHero;
 		
 		private var _gameData:GameData;
+		private var _sounds:SynthSounds;
 		
-		public function ExCoin(name:String, params:Object = null) {
+		public function Coin(name:String, params:Object = null) {
 			super(name, params);
 			_gameData = _ce.gameData as GameData;
+			_sounds = _gameData.synthSounds;
+
 		}
 		
 		/**
@@ -56,6 +63,7 @@ package objects
 			
 			if (_collectorClass && collider is _collectorClass) {
 				kill = true;
+				_sounds.play(Sounds.COIN);
 				_gameData.score++;
 			}
 		}

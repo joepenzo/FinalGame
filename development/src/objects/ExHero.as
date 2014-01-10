@@ -180,13 +180,13 @@ package objects {
 			super(name, params);
 
 			_gameData = _ce.gameData as GameData;
+			_sounds = _gameData.synthSounds;
 			
 			onJump = new Signal();
 			onGiveDamage = new Signal();
 			onTakeDamage = new Signal();
 			onAnimationChange = new Signal();
 
-			_sounds = _gameData.synthSounds;
 			_ce.input.keyboard.addKeyAction(Actions.JUMP,Keyboard.UP);
 			_ce.input.keyboard.addKeyAction(Actions.SHOOT,Keyboard.Z);
 		}
@@ -391,6 +391,8 @@ package objects {
 					bullet.view = StarlingShape.Rectangle(width/2,height/2,0x000000);
 					_bulletcounter++
 					_ce.state.add(bullet);
+					
+					_sounds.play(Sounds.SHOOT);
 				}
 				// END SHOOTING
 				
@@ -447,6 +449,8 @@ package objects {
 				_playerMovingHero = false;
 				_fixture.SetFriction(_friction);
 			}
+			
+			_sounds.play(Sounds.HIT);
 		}
 		
 		override protected function defineBody():void

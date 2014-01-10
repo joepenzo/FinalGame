@@ -6,6 +6,9 @@ package objects
 	import Box2D.Dynamics.b2Fixture;
 	import Box2D.Dynamics.b2FixtureDef;
 	
+	import audio.Sounds;
+	import audio.SynthSounds;
+	
 	import citrus.math.MathVector;
 	import citrus.objects.Box2DPhysicsObject;
 	import citrus.objects.platformer.box2d.Missile;
@@ -68,7 +71,6 @@ package objects
 		protected var _hurt:Boolean = false;
 		protected var _enemyClass:* = ExHero;
 		
-		private var _gameData:GameData;
 
 		protected var _leftSensorShape:b2PolygonShape;
 		protected var _rightSensorShape:b2PolygonShape;
@@ -76,11 +78,15 @@ package objects
 		protected var _rightSensorFixture:b2Fixture;
 		protected var _sensorFixtureDef:b2FixtureDef;
 		
+		private var _gameData:GameData;
+		private var _sounds:SynthSounds;
+		
 		public function ExEnemy(name:String, params:Object=null)
 		{
 			super(name, params);
 			_gameData = _ce.gameData as GameData;
-			
+			_sounds = _gameData.synthSounds;
+
 			updateCallEnabled = true;
 			_beginContactCallEnabled = true;
 
@@ -134,6 +140,7 @@ package objects
 		 */
 		public function hurt():void
 		{
+			_sounds.play(Sounds.HIT);
 			_hurt = true;
 			_hurtTimeoutID = setTimeout(endHurtState, hurtDuration);
 		}

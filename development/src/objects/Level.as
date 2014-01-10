@@ -292,17 +292,17 @@ package objects  {
 			var currentLivesInState : Vector.<CitrusObject> = state.getObjectsByName("liveCollectable") as Vector.<CitrusObject>;
 			var currentLivesInStatelength:int = currentLivesInState.length;
 			if (currentLivesInStatelength != 0) { // REMOVE ALL TRAP IN STATE IF THERE ARE 
-				for each (var currentLive:ExCoin in currentLivesInState) state.remove(currentLive);
+				for each (var currentLive:Life in currentLivesInState) state.remove(currentLive);
 			}
 			for each (var currentLivePos:Point in _currentLivesArray) { // ADD ALL TO STATE
 				//state.add(new ExSensor('liveCollectable', 0xFFDD03, { 
-				state.add(new ExCoin('liveCollectable', { 
+				state.add(new Life('liveCollectable', { 
 					group:1,
 					width : _tileSize/2, 
 					height : _tileSize/2, 
 					x: (currentLivePos.x*_tileSize) + _tileSize/2,
 					y: (currentLivePos.y*_tileSize) + _tileSize/2,
-					view : StarlingShape.Circle(_tileSize/2, 0xFFDD09)
+					view : StarlingShape.Triangle(_tileSize/2, _tileSize/2,0x1AFF00)
 				}));
 			}
 			

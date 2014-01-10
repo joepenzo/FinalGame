@@ -12,6 +12,7 @@ package audio
 	public class SynthSounds extends CitrusObject
 	{
 		
+		private const VOLUME : Number = .5;
 		private const AUDIO_FEEDBACK_DELAYTIME:int = 50;
 
 		private var sounds : Dictionary = new Dictionary();
@@ -23,29 +24,29 @@ package audio
 		private var _life : SfxrSynth = new SfxrSynth();
 		
 		private var audioInterval:Number =  0;
-		private var volume : Number = 1;
+		
 		
 		public function SynthSounds(name : String, params : Object = null) {
 			updateCallEnabled = true;
 			super(name, params);
 			
-			_jump.params.setSettingsString("0,,0.271,,0.18,0.395,,0.201,,,,,,0.284,,,,,0.511,,,,," + volume);
+			_jump.params.setSettingsString("0,,0.271,,0.18,0.395,,0.201,,,,,,0.284,,,,,0.511,,,,," + VOLUME);
 			_jump.cacheSound();
 			sounds[Sounds.JUMP] = _jump;
 
-			_shoot.params.setSettingsString("0,,0.2336,0.1885,0.1555,0.7963,0.0253,-0.4479,,,,,,0.1343,0.0064,,,,1,,,,," + volume);
+			_shoot.params.setSettingsString("0,,0.2336,0.1885,0.1555,0.7963,0.0253,-0.4479,,,,,,0.1343,0.0064,,,,1,,,,," + VOLUME);
 			_shoot.cacheSound();
 			sounds[Sounds.SHOOT] = _shoot;
 			
-			_hit.params.setSettingsString("0,,0.0365,,0.1434,0.5223,,-0.5298,,,,,,,,,,,1,,,0.1867,," + volume);
+			_hit.params.setSettingsString("0,,0.0365,,0.1434,0.5223,,-0.5298,,,,,,,,,,,1,,,0.1867,," + VOLUME);
 			_hit.cacheSound();
 			sounds[Sounds.HIT] = _hit;
 			
-			_coin.params.setSettingsString("0,,0.0434,0.5867,0.4062,0.5989,,,,,,0.5636,0.6765,,,,,,1,,,,," + volume);
+			_coin.params.setSettingsString("0,,0.0434,0.5867,0.4062,0.5989,,,,,,0.5636,0.6765,,,,,,1,,,,," + VOLUME);
 			_coin.cacheSound();
 			sounds[Sounds.COIN] = _coin;
 			
-			_life.params.setSettingsString("0,,0.1563,,0.4807,0.2028,,0.3691,,,,,,0.569,,0.4727,,,1,,,,," + volume);
+			_life.params.setSettingsString("0,,0.1563,,0.4807,0.2028,,0.3691,,,,,,0.569,,0.4727,,,1,,,,," + VOLUME);
 			_life.cacheSound();
 			sounds[Sounds.LIFE] = _life;
 			
