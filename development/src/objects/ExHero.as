@@ -338,7 +338,7 @@ package objects {
 							_mayDoubleJump = false;
 							
 							_sounds.play(Sounds.JUMP);
-						}
+						} else 	if (_ce.input.isDoing("jump", inputChannel) && !_onGround && velocity.y < 0) velocity.y -= jumpAcceleration;
 						if (_onGround) _mayDoubleJump = false;
 						
 						break;
