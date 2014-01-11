@@ -25,7 +25,7 @@ package
 		public var green : int = 0;
 		public var blue : int = 0;
 		
-		public var styledItem : String = "Platform";
+		public var styledItem : String = "Avatar";
 		public var shape : String = "Rectangle";
 		
 		
@@ -70,8 +70,8 @@ package
 			
 			_gui.addGroup("Style");
 			_gui.addComboBox("styledItem", [
-				{label:"Platform", data: Actions.SELECTED_COLOROBJ_PLAT},
 				{label:"Avatar", data: Actions.SELECTED_COLOROBJ_HERO},
+				{label:"Platform", data: Actions.SELECTED_COLOROBJ_PLAT},
 				{label:"Background", data: Actions.SELECTED_COLOROBJ_BG},
 				{label:"Enemies", data: Actions.SELECTED_COLOROBJ_ENEMIES}
 			], { callback: function ():void{  _guiInput.triggerOnce(styledItem,1); }});

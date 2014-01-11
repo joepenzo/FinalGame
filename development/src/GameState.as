@@ -1,5 +1,6 @@
 package
 {
+	import Box2D.Collision.Shapes.b2Shape;
 	import Box2D.Dynamics.Contacts.b2Contact;
 	import Box2D.Dynamics.Contacts.b2ContactEdge;
 	import Box2D.Dynamics.b2Body;
@@ -7,7 +8,10 @@ package
 	import citrus.core.CitrusObject;
 	import citrus.core.starling.StarlingState;
 	import citrus.input.InputAction;
+	import citrus.input.controllers.Keyboard;
+	import citrus.input.controllers.TimeShifter;
 	import citrus.objects.Box2DPhysicsObject;
+	import citrus.objects.CitrusSprite;
 	import citrus.objects.platformer.box2d.MovingPlatform;
 	import citrus.objects.platformer.box2d.Platform;
 	import citrus.physics.box2d.Box2D;
@@ -37,7 +41,9 @@ package
 	import objects.Level;
 	import objects.StaticTrap;
 	
+	import starling.display.BlendMode;
 	import starling.display.Image;
+	import starling.display.Quad;
 	import starling.display.QuadBatch;
 	import starling.display.Shape;
 	import starling.text.TextField;
@@ -68,6 +74,8 @@ package
 		private var _gameInterface:GameInterface;
 		
 		private var _arduinoConnector:ArduinoSerialComAnalogAndDigital;
+		private var _timeshifter:TimeShifter;
+		private var _deadOverlay:CitrusSprite;
 
 		
 		public function GameState() {
@@ -135,11 +143,31 @@ package
 			_debugSprite.x = stage.stageWidth - _debugSprite.width - 10;
 			_debugSprite.y = 10;
 			
+			
+			_timeshifter = new TimeShifter(5);
+			_timeshifter.addBufferSet( { object: _hero, continuous:["x","y"]});//			_timeshifter.addBufferSet( { object: _hero, continuous:["x","y"], discrete: ["rotation", "currentColor"]}); 
+			
+			_timeshifter.onActivated.add(function():void {
+				_hero.body.SetActive(false);
+				_deadOverlay = new CitrusSprite("overlay", {parallaxX:0,parallaxY:0, group:9});
+				var overlayQuad:Quad = new Quad(stage.stageWidth*2, stage.stageHeight*2, _hero.currentColor);
+				overlayQuad.blendMode = BlendMode.ADD;
+				_deadOverlay.view = overlayQuad;
+			 	add(_deadOverlay); 
+			});
+			_timeshifter.onDeactivated.add(function():void {
+				_hero.body.SetActive(true);
+				remove(_deadOverlay); 
+			});
+			
+			
 			_gameInterface = new GameInterface(this, _debugSprite.x , _debugSprite.y + _debugSprite.height);
 			
 			_gameData.dataChanged.add(onDataChanged);
 	
 			//_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
+			
+			_ce.input.keyboard.addKeyAction("heroDie",Keyboard.Q);
 
 		}
 		
@@ -176,6 +204,12 @@ package
 			drawPlatformsToMiniMap();
 			drawEnemiesToMiniMap();
 			// ENDOFF MINIMAP DEBUG RENDERING
+			
+			
+			if (_ce.input.justDid("heroDie")) {
+				_timeshifter.startRewind(0,.8);
+			}
+			
 			
 			// GAME GOAL
 			if (_ce.input.justDid(Actions.GOAL_KILL)) {
@@ -236,7 +270,6 @@ package
 				_hero.maxVelocity = action.value;
 				_hero.acceleration = action.value/8;
 			}
-			
 	
 			// HERO SHOOTING _ONOFF
 			if(_ce.input.justDid(Actions.HERO_SHOOT)) {
@@ -345,8 +378,6 @@ package
 			}
 			
 		
-			
-			
 			
 			//RED GREEN BLUE - CHANGE
 			if(_ce.input.isDoing(Actions.VALUE_RED)) {
@@ -458,10 +489,9 @@ package
 			if (_gameData.currentStyling == "hero") {
 				var object : ExBox2DPhysicsObject = getObjectByName("hero") as ExBox2DPhysicsObject;
 				object.currentShape = _gameData.currentShape;
-				
-				var body: b2Body = object.getBody() as b2Body;
-				var height : Number = (body.GetFixtureList().GetAABB().upperBound.y - body.GetFixtureList().GetAABB().lowerBound.y) * 30; // standard box2d scale 30
-				var width : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
+		
+				var height : Number = object.currentHeight;
+				var width : Number =  object.currentWidth;
 				
 				switch (object.currentShape){
 					case Shapes.CIRCLE:
@@ -510,8 +540,8 @@ package
 		
 		
 		private function changeObjectColor(name : String , red : int, green : int, blue : int):void{
-			var hex:uint = red << 16 | green << 8 | blue;
 			
+			var hex:uint = red << 16 | green << 8 | blue;
 			if (name == "platform") {
 				_gameData.levelColor = hex;
 				_lvl.drawQuadMap(this, _tileSize, hex);
@@ -525,9 +555,8 @@ package
 			if (name == "hero") { 
 				var object : ExBox2DPhysicsObject = getObjectByName(name) as ExBox2DPhysicsObject;
 				object.currentColor = hex;
-				var body: b2Body = object.getBody() as b2Body;
-				var height : Number = (body.GetFixtureList().GetAABB().upperBound.y - body.GetFixtureList().GetAABB().lowerBound.y) * 30; // standard box2d scale 30
-				var width : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
+				var height : Number = object.currentHeight;
+				var width : Number =  object.currentWidth;
 				
 				switch (object.currentShape){
 					case Shapes.CIRCLE:
@@ -547,10 +576,9 @@ package
 			
 			if (name == "enemies") {
 				for each (var enemyObj :CitrusObject in objects) {
-					if (enemyObj is ExEnemy) {
-						var enemy : ExEnemy = enemyObj as ExEnemy;
+					if (enemyObj is EdgeDetectorEnemy) {
+						var enemy : EdgeDetectorEnemy = enemyObj as EdgeDetectorEnemy;
 						enemy.currentColor = hex;
-						
 						var width = enemy.width;
 						var height = enemy.height;
 						

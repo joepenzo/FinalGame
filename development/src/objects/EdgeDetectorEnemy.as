@@ -75,7 +75,7 @@ package objects
 			hurtDuration = 0;
 			_tile = tile;
 			currentColor = enemyColor;
-
+			currentShape = params.currentShape;
 			updateCallEnabled = true;
 			_beginContactCallEnabled = true;
 			

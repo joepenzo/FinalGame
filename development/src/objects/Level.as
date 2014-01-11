@@ -7,6 +7,7 @@ package objects  {
 	import citrus.objects.platformer.box2d.Platform;
 	
 	import data.GameData;
+	import data.types.Shapes;
 	import data.types.Tile;
 	
 	import flash.display.BitmapData;
@@ -536,7 +537,8 @@ package objects  {
 					y: (currentEnemyPos.y*_tileSize) + enemyH,
 					leftBound: (currentEnemyPos.x*_tileSize) - boundDistance, // TILESIZE INSTEAD
 					rightBound: (currentEnemyPos.x*_tileSize) + boundDistance,
-					view : StarlingShape.polygon(20,6, 0xAB1A1A)
+					view : StarlingShape.polygon(20,6, 0xAB1A1A),
+					currentShape : Shapes.HEXAGON
 				}, currentEnemyPos));
 			}
 			

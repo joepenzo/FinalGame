@@ -1,18 +1,17 @@
 
 	Create movement aids
+		- platform
+		- trampoline
 
 	Add finish + goal logic
-
-	Make level more logic
-		- platform sizes compared to objects like enemies and hero, and open stops
-
-	Lives
+	
+	Editable Sounds 
 	
 	When platform level regenerates and the hero was stuck, he is placed back to top, and then there can be a spike	
+	
+	Timeshift, when dead
 
 - BUGS
 
 	Remove all enemies when percentage is 0 - some enemies stay in the level is % = 0
-
-	Sometimes enemies fall of the ledge..
 	

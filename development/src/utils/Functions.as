@@ -82,16 +82,16 @@ package utils
 			var object : ExBox2DPhysicsObject = object as ExBox2DPhysicsObject;
 			var body : b2Body = object.getBody() as b2Body;
 			var newShape:b2PolygonShape = Box2DShapeMaker.BeveledRect(newW, newH, 0.1);
-			
+					
 			body.DestroyFixture(body.GetFixtureList());
 			body.CreateFixture2(newShape); // TODO: Add density?
 			
+			var height : Number = (body.GetFixtureList().GetAABB().upperBound.y - body.GetFixtureList().GetAABB().lowerBound.y) * 30; // standard box2d scale 30
+			var width : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
+			object.currentWidth =  width;
+			object.currentHeight =  height;
+			
 			if (reDrawView) {
-				var height : Number = (body.GetFixtureList().GetAABB().upperBound.y - body.GetFixtureList().GetAABB().lowerBound.y) * 30; // standard box2d scale 30
-				var width : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
-//				object.view = StarlingDraw.RectangleShape(width,height, 0x2E2E2E);
-//				object.view = StarlingDraw.RectangleImage(width,height, object.currentColor);
-				
 				switch (object.currentShape){
 					case Shapes.CIRCLE:
 						object.view = StarlingShape.Circle(width, object.currentColor);

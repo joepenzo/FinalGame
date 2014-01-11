@@ -1,9 +1,14 @@
 package
 {
+	import audio.SynthSounds;
+	
 	import away3d.debug.Debug;
 	
 	import citrus.core.starling.StarlingCitrusEngine;
 	import citrus.sounds.CitrusSoundGroup;
+	import citrus.utils.AGameData;
+	
+	import data.GameData;
 	
 	import flash.display.BlendMode;
 	import flash.display.Sprite;
@@ -13,9 +18,6 @@ package
 	
 	import logmeister.LogMeister;
 	import logmeister.connectors.TrazzleConnector;
-	import data.GameData;
-	import citrus.utils.AGameData;
-	import audio.SynthSounds;
 	
 	
 	public class AfstudeerGame extends StarlingCitrusEngine {
@@ -38,12 +40,12 @@ package
 			_gameData = gameData as GameData;
 
 			
-			_gameData.currentStyling = "platform";
+			_gameData.currentStyling = "hero";
 			_gameData.lives = 1;
 			
 			_sounds = new SynthSounds("synthSounds");
 			_gameData.synthSounds = _sounds;
-			
+		
 			state = new GameState();
 
 			var debugInterface = new DebugInterface();

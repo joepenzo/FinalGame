@@ -34,7 +34,6 @@ package objects {
 	
 	import starling.display.Shape;
 	
-	import utils.ObjSize;
 	import utils.StarlingShape;
 
 	
