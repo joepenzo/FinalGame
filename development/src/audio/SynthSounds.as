@@ -22,6 +22,8 @@ package audio
 		private var _hit : SfxrSynth = new SfxrSynth();
 		private var _coin : SfxrSynth = new SfxrSynth();
 		private var _life : SfxrSynth = new SfxrSynth();
+		private var _rewind : SfxrSynth = new SfxrSynth();
+		
 		
 		private var audioInterval:Number =  0;
 		
@@ -50,8 +52,9 @@ package audio
 			_life.cacheSound();
 			sounds[Sounds.LIFE] = _life;
 			
-			
-			
+			_rewind.params.setSettingsString("3,0.2,1,0.98,1,0.1508,,0.3799,-0.6599,,,0.48,,,,,,,1,,,,," + VOLUME);
+			_rewind.cacheSound();
+			sounds[Sounds.REWIND] = _rewind;
 			
 		}
 		
@@ -111,25 +114,32 @@ package audio
 			sound.play();
 		}
 		
-		public function SetEndFrequency(soundName : String, val : Number) : void {
+		public function stop(soundName : String) : void {
+			if (!sounds[soundName]) return;
+			var sound : SfxrSynth = sounds[soundName];
+			sound.stop();
+		}
+		
+		
+		private function SetEndFrequency(soundName : String, val : Number) : void {
 			if (!sounds[soundName]) return;
 			var sound : SfxrSynth = sounds[soundName];
 			sound.params.squareDuty = val; // TODO CHECK
 		}
 		
-		public function SetStartFrequency(soundName : String, val : Number) : void {
+		private function SetStartFrequency(soundName : String, val : Number) : void {
 			if (!sounds[soundName]) return;
 			var sound : SfxrSynth = sounds[soundName];
 			sound.params.startFrequency = val;
 		}
 		
-		public function SetSlide(soundName : String, val : Number) : void {
+		private function SetSlide(soundName : String, val : Number) : void {
 			if (!sounds[soundName]) return;
 			var sound : SfxrSynth = sounds[soundName];
 			sound.params.slide = val;
 		}
 		
-		public function SetDuration(soundName : String, val : Number) : void {
+		private function SetDuration(soundName : String, val : Number) : void {
 			if (!sounds[soundName]) return;
 			var sound : SfxrSynth = sounds[soundName];
 			sound.params.decayTime = val; // TODO CHECK

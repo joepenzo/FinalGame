@@ -39,6 +39,7 @@
       </libraryPathEntry>
       <libraryPathEntry kind="3" linkType="1" path="/Developer/Resources/actionscript/LogMeister-master/bin/logmeister.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="1" linkType="1" path="/Developer/Resources/actionscript/CitrusEngine/Citrus-Engine-master/lib"/>
+      <libraryPathEntry kind="3" linkType="1" path="/Developer/Resources/actionscript/greensock-as3/greensock.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="5" linkType="2" path="ane/ArduinoConnector.ane"/>
     </libraryPath>
     <sourceAttachmentPath/>

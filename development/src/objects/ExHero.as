@@ -262,10 +262,7 @@ package objects {
 			}
 		}
 		
-		override public function update(timeDelta:Number):void
-		{
-			super.update(timeDelta);
-			
+		override public function update(timeDelta:Number):void {
 			var velocity:b2Vec2 = _body.GetLinearVelocity();
 			
 			if (_ce.input.justDid(Actions.RIGHT)) {

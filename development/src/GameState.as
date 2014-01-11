@@ -5,6 +5,9 @@ package
 	import Box2D.Dynamics.Contacts.b2ContactEdge;
 	import Box2D.Dynamics.b2Body;
 	
+	import audio.Sounds;
+	import audio.SynthSounds;
+	
 	import citrus.core.CitrusObject;
 	import citrus.core.starling.StarlingState;
 	import citrus.input.InputAction;
@@ -18,6 +21,8 @@ package
 	import citrus.utils.AGameData;
 	import citrus.view.ACitrusCamera;
 	import citrus.view.starlingview.StarlingCamera;
+	
+	import com.greensock.TweenLite;
 	
 	import data.GameData;
 	import data.types.Actions;
@@ -76,6 +81,8 @@ package
 		private var _arduinoConnector:ArduinoSerialComAnalogAndDigital;
 		private var _timeshifter:TimeShifter;
 		private var _deadOverlay:CitrusSprite;
+		private var _sounds:SynthSounds;
+		private var _shake:Boolean;
 
 		
 		public function GameState() {
@@ -85,6 +92,8 @@ package
 		override public function initialize():void {
 			super.initialize();
 			_gameData = _ce.gameData as GameData;
+			_gameData.dataChanged.add(onDataChanged);
+			_sounds = _gameData.synthSounds;
 			
 			_box2D = new Box2D("box2D");
 			_box2D.visible = true;
@@ -144,31 +153,43 @@ package
 			_debugSprite.y = 10;
 			
 			
-			_timeshifter = new TimeShifter(5);
-			_timeshifter.addBufferSet( { object: _hero, continuous:["x","y"]});//			_timeshifter.addBufferSet( { object: _hero, continuous:["x","y"], discrete: ["rotation", "currentColor"]}); 
+			_timeshifter = new TimeShifter(2,false, false);
+			_timeshifter.addBufferSet( { object: _hero, continuous:["x","y"]}); 
 			
-			_timeshifter.onActivated.add(function():void {
-				_hero.body.SetActive(false);
-				_deadOverlay = new CitrusSprite("overlay", {parallaxX:0,parallaxY:0, group:9});
-				var overlayQuad:Quad = new Quad(stage.stageWidth*2, stage.stageHeight*2, _hero.currentColor);
-				overlayQuad.blendMode = BlendMode.ADD;
-				_deadOverlay.view = overlayQuad;
-			 	add(_deadOverlay); 
-			});
-			_timeshifter.onDeactivated.add(function():void {
-				_hero.body.SetActive(true);
-				remove(_deadOverlay); 
-			});
-			
+			_timeshifter.onActivated.add(timeShiftStart);
+			_timeshifter.onDeactivated.add(timeShiftEnd);
 			
 			_gameInterface = new GameInterface(this, _debugSprite.x , _debugSprite.y + _debugSprite.height);
 			
-			_gameData.dataChanged.add(onDataChanged);
-	
 			//_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
 			
 			_ce.input.keyboard.addKeyAction("heroDie",Keyboard.Q);
-
+		}
+		
+		private function timeShiftStart():void {
+			_shake = true;
+			_sounds.play(Sounds.REWIND);
+			_hero.body.SetActive(false);
+			_deadOverlay = new CitrusSprite("overlay", {parallaxX:0,parallaxY:0, group:9});
+			var overlayQuad:Quad = new Quad(stage.stageWidth*2, stage.stageHeight*2, _hero.currentColor);
+			overlayQuad.blendMode = BlendMode.ADD;
+			_deadOverlay.view = overlayQuad;
+			add(_deadOverlay); 
+		}
+		
+		private function timeShiftEnd():void {
+			_shake = false;
+			TweenLite.to(this,0.1, {x:0, y:0});// tween state back to 0,0 after shaking it
+			
+			_sounds.stop(Sounds.REWIND);
+			_hero.body.SetActive(true);
+			remove(_deadOverlay);
+			
+		}
+		
+		private function shakeState():void {
+			x = Math.random() * 5 - 5;
+			y = Math.random() * 5 - 5;
 		}
 		
 		private function onDataChanged(data:String, value:Object):void {
@@ -205,9 +226,10 @@ package
 			drawEnemiesToMiniMap();
 			// ENDOFF MINIMAP DEBUG RENDERING
 			
+			if (_shake) shakeState();
 			
 			if (_ce.input.justDid("heroDie")) {
-				_timeshifter.startRewind(0,.8);
+				_timeshifter.startRewind(0, 1.3);
 			}
 			
 			
