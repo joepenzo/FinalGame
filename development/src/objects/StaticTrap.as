@@ -14,8 +14,9 @@ package objects
 		
 		override protected function defineFixture():void {
 			super.defineFixture();
-			_fixtureDef.filter.categoryBits = PhysicsCollisionCategories.Get("BadGuys");
-			_fixtureDef.filter.maskBits = PhysicsCollisionCategories.GetAll();
+			_fixtureDef.filter.categoryBits = PhysicsCollisionCategories.Get("Traps");
+			_fixtureDef.filter.maskBits = PhysicsCollisionCategories.GetAllExcept("BadGuys");
+
 		}
 		
 	}

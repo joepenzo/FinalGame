@@ -377,11 +377,11 @@ package objects {
  				if (shootingEnabled && _ce.input.justDid(Actions.SHOOT)) {
 					// can be done on size update, means less call! So much better
 					var bodyWidth : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
-					var bullet:Missile;
+					var bullet:Bullet;
 					if (_inverted) {
-						bullet = new Missile("bullet"+_bulletcounter, {x:x -(bodyWidth/2) - 5, y:y, width:5, height:5, speed:30, explodeDuration:10, fuseDuration: 5000, angle:180});
+						bullet = new Bullet("bullet"+_bulletcounter, {x:x -(bodyWidth/2) - 5, y:y, width:5, height:5, speed:30, explodeDuration:10, fuseDuration: 5000, angle:180});
 					} else {
-						bullet = new Missile("bullet"+_bulletcounter, {x:x +(bodyWidth/2) + 5, y:y, width:5, height:5, speed:30, explodeDuration:10, fuseDuration: 5000, angle:0});
+						bullet = new Bullet("bullet"+_bulletcounter, {x:x +(bodyWidth/2) + 5, y:y, width:5, height:5, speed:30, explodeDuration:10, fuseDuration: 5000, angle:0});
 					}
 					bullet.onExplode.add(handleBulletExplode);
 					bullet.view = StarlingShape.Rectangle(width/2,height/2,0x000000);

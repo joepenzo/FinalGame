@@ -17,6 +17,7 @@ package
 	import citrus.objects.CitrusSprite;
 	import citrus.objects.platformer.box2d.MovingPlatform;
 	import citrus.objects.platformer.box2d.Platform;
+	import citrus.physics.PhysicsCollisionCategories;
 	import citrus.physics.box2d.Box2D;
 	import citrus.utils.AGameData;
 	import citrus.view.ACitrusCamera;
@@ -94,6 +95,8 @@ package
 			_gameData = _ce.gameData as GameData;
 			_gameData.dataChanged.add(onDataChanged);
 			_sounds = _gameData.synthSounds;
+			
+			PhysicsCollisionCategories.Add("Traps");
 			
 			_box2D = new Box2D("box2D");
 			_box2D.visible = true;
@@ -179,7 +182,7 @@ package
 		
 		private function timeShiftEnd():void {
 			_shake = false;
-			TweenLite.to(this,0.1, {x:0, y:0});// tween state back to 0,0 after shaking it
+			TweenLite.to(this, 0.2, {x:0, y:0});// tween state back to 0,0 after shaking it
 			
 			_sounds.stop(Sounds.REWIND);
 			_hero.body.SetActive(true);
