@@ -45,6 +45,7 @@ package data.types
 		public static const CHANGE_SHAPE_CIRCLE:String = "CHANGE_SHAPE_CIRCLE";
 		public static const CHANGE_SHAPE_HEXAGON:String = "CHANGE_SHAPE_HEXAGON";
 
+		public static const MOVINGPLAT_PERCANTAGE:String = "MOVINGPLAT_PERCANTAGE";
 		public static const ENEMY_PERCANTAGE:String = "ENEMY_PERCANTAGE";
 		public static const TRAP_PERCANTAGE:String = "TRAP_PERCANTAGE";
 		public static const LIVES_PERCANTAGE:String = "LIVES_PERCANTAGE";

@@ -79,7 +79,7 @@ package objects  {
 		private var _freeStaticTrapTilesArray:Array;
 		private var _currentStaticTrapTilesArray:Array = [];
 		private var _possibleTileForTraps:uint;
-	
+		
 		private var _possibleTilesForLives:int;
 		private var _newLivesAmount:int;
 		private var _freeLivesTilesArray:Array;
@@ -93,6 +93,8 @@ package objects  {
 		private var _coinsToPlaceAmount:uint;
 		private var _oldCoinsAmount:int;
 		private var _currentCoinsArray:Array = [];
+	
+		private var _newMovingPlatformsAmount:int;
 		
 	
 		
@@ -333,6 +335,61 @@ package objects  {
 		}	
 		
 		
+		
+		
+		
+		/***
+		 * 
+		 * 
+		 * Functions that place objects in the map and state
+		 * 
+		 * 
+		 */
+		
+
+		// not placed in the TileMap - TODO: THIS WOULD BE NICE IF THEY WOULD BE PLACED
+		public function placeMovingPlatforms(state: StarlingState, percentage : int):void {
+			_newMovingPlatformsAmount = ((width - 2)*(percentage/100))/2;
+			var allPossbileTilePointsForMovingPlats : Array = [];
+
+	error("newMovingPlatformsAmount " + _newMovingPlatformsAmount);
+			var mW:int = map[0].length;
+			for (var x:int=0; x<mW; x++) {
+				if (x%2 != 0) {
+					allPossbileTilePointsForMovingPlats.push(new Point(x, Functions.randomIntRange(0,this.height)) );
+				}
+			}
+			// shuffle all the coordinates in the array
+			allPossbileTilePointsForMovingPlats.sort(Functions.randomSort);
+	debug("allPossbileTilePointsForMovingPlats.length " + allPossbileTilePointsForMovingPlats.length);
+			// copy all tiles and remove extra tiles that a not used into new array'
+			var usedTilePoints : Array = allPossbileTilePointsForMovingPlats.slice(-(_newMovingPlatformsAmount-allPossbileTilePointsForMovingPlats.length));
+	notice("usedTilePoints.length " + usedTilePoints.length);
+			
+			// CODE TO PLACE AND DELETE THE MOVINGTRAPS IN THE GAMESTATE// write this more epic, that objects can stay!!
+			var currentMovingPlatformsInState : Vector.<CitrusObject> = state.getObjectsByName("movingPlatform") as Vector.<CitrusObject>;
+			var currentMovingPlatformsInStatelength:int = currentMovingPlatformsInState.length;
+			// REMOVE ALL TRAP IN STATE IF THERE ARE
+			if (currentMovingPlatformsInStatelength != 0) for each (var currentMovingPlat:ExMovingPlatform in currentMovingPlatformsInState) state.remove(currentMovingPlat);
+			var w : int = _tileSize*2;
+			var h : int = _tileSize*.66;
+			for each (var currentMovingPlatPos:Point in usedTilePoints) { // ADD ALL TO STATE
+				state.add(new ExMovingPlatform("movingPlatform", { 
+					currentColor : 0x000000,
+					group:1,
+					width : w, 
+					height : h, 
+					x: (currentMovingPlatPos.x*_tileSize) + w/2,
+					y: (currentMovingPlatPos.y*_tileSize) + h/2,
+					startX: (currentMovingPlatPos.x*_tileSize) + w/2,
+					startY: 0,
+					endX: (currentMovingPlatPos.x*_tileSize) + w/2,
+					endY: (this.height*_tileSize) - 30,
+					view : StarlingShape.Rectangle(w,h,0x000000)
+				}));
+			}
+			
+		}
 		
 		
 		public function placeCoinCollectables(state: StarlingState, percentage : int, heroPos : Point) :void {

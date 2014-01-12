@@ -110,6 +110,11 @@ package utils
 			
 		}
 		
+		public static function randomSort(a:*, b:*):Number {
+			if (Math.random() < 0.5) return -1;
+			else return 1;
+		}
+		
 		
 		public static function ResizeTrap(state : StarlingState, newH: Number, object : StaticTrap, tileSize : int) : void { // Works for rectangle shape now
 			var trap : StaticTrap = object as StaticTrap;

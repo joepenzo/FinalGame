@@ -33,6 +33,7 @@ package data
 		protected var _trapPercantage : int = 0;
 		protected var _livesPercantage : int = 0;
 		protected var _coinsPercantage : int = 0;
+		protected var _movingPlatsPercantage : int = 0;
 		
 		
 		
@@ -40,6 +41,16 @@ package data
 			super();
 		}
 		
+		public function get movingPlatsPercantage():int
+		{
+			return _movingPlatsPercantage;
+		}
+
+		public function set movingPlatsPercantage(value:int):void
+		{
+			_movingPlatsPercantage = value;
+		}
+
 		public function get coinsPercantage():int
 		{
 			return _coinsPercantage;

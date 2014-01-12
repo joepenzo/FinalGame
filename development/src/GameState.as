@@ -42,6 +42,7 @@ package
 	import objects.ExBox2DPhysicsObject;
 	import objects.ExEnemy;
 	import objects.ExHero;
+	import objects.ExMovingPlatform;
 	import objects.ExPlatform;
 	import objects.GameInterface;
 	import objects.Level;
@@ -131,7 +132,7 @@ package
 			_hero.jumpType = "Unlimited";
 			add(_hero);
 
-		//	add(new MovingPlatform("test" , {x:500, y:200, width: 300}));
+			//add(new ExMovingPlatform("test" , {x:500, y:200, width: 300}));
 			
 			_bounds = new Rectangle(0, 0, _mapW*_tileSize, _mapH*_tileSize);
 			_camera = view.camera as StarlingCamera;
@@ -355,6 +356,17 @@ package
 					_lvl.placeStaticTraps(state, _gameData.trapPercantage, new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize) ));
 				}, 100, this);
 				
+			}
+			
+			// MOVING PLATFORMS AMOUNT - CHANGE
+			if(_ce.input.hasDone(Actions.MOVINGPLAT_PERCANTAGE)) {
+				action = _ce.input.getAction(Actions.MOVINGPLAT_PERCANTAGE) as InputAction;
+				_gameData.movingPlatsPercantage = action.value;			
+				
+				clearTimeout(INTERVAL);
+				INTERVAL = setTimeout(function (state : StarlingState):void {
+					_lvl.placeMovingPlatforms(state, _gameData.movingPlatsPercantage);
+				}, 100, this);
 			}
 		
 			// LIVE AMOUNT

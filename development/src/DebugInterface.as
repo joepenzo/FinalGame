@@ -35,6 +35,7 @@ package
 		public var shootEnabled : Boolean = true;	
 		public var jump : String = "Single";
 		
+		public var movingPlatPercentage : int;	
 		public var enemyPercentage : int;	
 		public var trapPercentage : int;	
 		public var livesPercentage : int;	
@@ -110,10 +111,12 @@ package
 			_gui.addSlider("trapPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.TRAP_PERCANTAGE, trapPercentage); }});
 			_gui.addSlider("trapHeight", ValueRange.TRAP_HEIGHT.x, ValueRange.TRAP_HEIGHT.y, { callback: function ():void{  _guiInput.triggerOnce(Actions.TRAP_HEIGHT, trapHeight); }});
 			
-			_gui.addGroup("Lives");
-			_gui.addSlider("livesPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.LIVES_PERCANTAGE, livesPercentage); }});
-			_gui.addGroup("Coins");
-			_gui.addSlider("coinsPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.COINS_PERCANTAGE, coinsPercentage); }});
+			_gui.addGroup("Collectables");
+			_gui.addSlider("livesPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"Lifes amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.LIVES_PERCANTAGE, livesPercentage); }});
+			_gui.addSlider("coinsPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"Coins amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.COINS_PERCANTAGE, coinsPercentage); }});
+			
+			_gui.addGroup("Movement Aids");
+			_gui.addSlider("movingPlatPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"platforms amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.MOVINGPLAT_PERCANTAGE, movingPlatPercentage); }});
 			
 			
 			_gui.show();

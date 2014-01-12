@@ -9,8 +9,6 @@
 	
 	When platform level regenerates and the hero was stuck, he is placed back to top, and then there can be a spike	
 	
-	Timeshift, when dead
-
 - BUGS
 
 	Remove all enemies when percentage is 0 - some enemies stay in the level is % = 0
