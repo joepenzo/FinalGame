@@ -36,7 +36,7 @@ package data
 		protected var _movingPlatsPercantage : int = 0;
 
 		protected var _movingPlatformSpeed : Number = 3;
-		
+		protected var _trampolineBoost : Number = 5;
 		
 		
 		
@@ -44,6 +44,16 @@ package data
 			super();
 		}
 		
+		public function get trampolineBoost():Number
+		{
+			return _trampolineBoost;
+		}
+
+		public function set trampolineBoost(value:Number):void
+		{
+			_trampolineBoost = value;
+		}
+
 		public function get movingPlatformSpeed():Number
 		{
 			return _movingPlatformSpeed;

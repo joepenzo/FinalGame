@@ -96,6 +96,8 @@ package objects  {
 	
 		private var _newMovingPlatformsAmount:int;
 		
+		private var _possibleTilesForTramps:Array = [];
+		
 	
 		
 		public function Level(width:int, height:int, defaultTile : int = 0) {
@@ -251,10 +253,11 @@ package objects  {
 			
 			drawQuadMap(gameState, _tileSize, color);
 		
-			_possibleTileForEnemies = getTilePointsArrayAbovePlatformTiles(Tile.TRAP).length as int;
-			_possibleTileForTraps = getTilePointsArrayAbovePlatformTiles(Tile.ENEMY).length as int;
+			_possibleTileForEnemies = getTilePointsArrayAbovePlatformTiles().length as int;
+			_possibleTileForTraps = getTilePointsArrayAbovePlatformTiles().length as int;
 			_possibleTilesForLives = getTilePointsArrayForFIRSTROWCollectables().length as int;
 			_possibleTilesForCoins = getTilePointsArrayForSECONDROWCollectables().length as int;
+			_possibleTilesForTramps = getTilePointsArrayAbovePlatformTiles();
 			
 			fixHeroPosIfStuck(heroPos, gameState.getObjectByName("hero") as ExHero);
 			
@@ -390,6 +393,46 @@ package objects  {
 			
 		}
 		
+		// WIHTOUT TILE MAP PLACEMENT - not placed in the TileMap - TODO: THIS WOULD BE NICE IF THEY WOULD BE PLACED
+		public function placeTrampolines(state: StarlingState, percentage : int, boostSpeed : Number = 3):void {
+			var newTrampolineAmount : int = Math.ceil(_possibleTilesForTramps.length*(percentage/100));
+			
+			// copy all tiles and remove extra tiles that a not used into new array'
+			// shuffle all the coordinates in the array
+			var sortArray : Array = _possibleTilesForTramps;
+			sortArray.sort(Functions.randomSort)
+			var usedTilePoints : Array = sortArray.slice(-(newTrampolineAmount-(_possibleTilesForTramps.length))); 
+			
+			// CODE TO PLACE AND DELETE THE MOVINGTRAPS IN THE GAMESTATE// write this more epic, that objects can stay!!
+			var currentTrampsInState : Vector.<CitrusObject> = state.getObjectsByName("trampoline") as Vector.<CitrusObject>;
+			var currentTrampsInStatelength:int = currentTrampsInState.length;
+			// REMOVE ALL TRAP IN STATE IF THERE ARE
+			if (currentTrampsInStatelength != 0) for each (var currentTramp:Trampoline in currentTrampsInState) state.remove(currentTramp);
+			
+			
+			var w : int = _tileSize;
+			var h : int = _tileSize/2;
+			
+			for each (var trampPos:Point in usedTilePoints) { // ADD ALL TO STATE
+				state.add(new Trampoline("trampoline", { 
+					currentColor : 0xc0ffee,
+					group:1,
+					width : w, 
+					height : h, 
+					x: (trampPos.x*_tileSize) + w/2,
+					y: (trampPos.y*_tileSize) + h*1.5,
+					view : StarlingShape.Rectangle(w,h,0xc0ffee)
+				}));
+			}
+			
+			
+		}
+		
+		
+		
+		
+		
+		
 		
 		public function placeCoinCollectables(state: StarlingState, percentage : int, heroPos : Point) :void {
 			_newCoinsAmount = _possibleTilesForCoins*(percentage/100);
@@ -490,7 +533,7 @@ package objects  {
 		
 		public function placeStaticTraps(state: StarlingState, percentage : int, heroPos : Point):void {
 			_newStaticTrapAmount = _possibleTileForTraps*(percentage/100);
-			_freeStaticTrapTilesArray = getTilePointsArrayAbovePlatformTiles(Tile.ENEMY) as Array;
+			_freeStaticTrapTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
 			
 			// removes coord if hero is if on or above it!
 			for each( var coord : Point in _freeStaticTrapTilesArray ) {
@@ -515,7 +558,7 @@ package objects  {
 			}
 			for each (var currentTrapPos:Point in _currentStaticTrapTilesArray) { // ADD ALL TO STATE
 				state.add(new StaticTrap('staticTrap', 0x3D3D3D, { 
-					group:1,
+					group:2,
 					width : _tileSize, 
 					height : _tileSize/2, 
 					x: (currentTrapPos.x*_tileSize) + _tileSize/2,
@@ -554,7 +597,7 @@ package objects  {
 		
 		public function placeEnemies(state: StarlingState, percentage : int, heroPos : Point):void {
 			_newEnemiesAmount = _possibleTileForEnemies*(percentage/100);
-			_freeEnemiesTilesArray = getTilePointsArrayAbovePlatformTiles(Tile.TRAP) as Array;
+			_freeEnemiesTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
 			
 			// removes coord if hero is if on or above it! // not that clean, but this will do for now
 			for each( var coord : Point in _freeEnemiesTilesArray ) {
@@ -586,7 +629,7 @@ package objects  {
 				boundDistance = 2000;
 				state.add(new EdgeDetectorEnemy('enemy', 0xAB1A1A, { 
 					speed : 0.5,
-					group:2,
+					group:3,
 					width : enemyW, 
 					height : enemyH, 
 					x: (currentEnemyPos.x*_tileSize) + (enemyW*.75), // +5 for bug fixx that enemy fall of platform  //	x: currentEnemyPos.x*32 +10,
@@ -676,7 +719,7 @@ package objects  {
 		}
 		
 		
-		private function getTilePointsArrayAbovePlatformTiles(extraTile : int): Array{
+		private function getTilePointsArrayAbovePlatformTiles(): Array{
 			var tiles : Array = [];
 			
 			var mW:int = map[0].length;
@@ -684,7 +727,7 @@ package objects  {
 			for (var y:int=0; y<mH; y++) {
 				for (var x:int=0; x<mW; x++) {
 					if (Functions.isLinkedBottom(map,x,y,1) ){ 
-						if (map[y][x] == 0 || map[y][x] == extraTile) { // ALL TILES ABOVE A PLATFORM TILE
+						if (map[y][x] != Tile.LAND ) {
 							tiles.push(new Point(x,y));
 						}
 					}

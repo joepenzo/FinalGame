@@ -47,6 +47,7 @@ package
 	import objects.GameInterface;
 	import objects.Level;
 	import objects.StaticTrap;
+	import objects.Trampoline;
 	
 	import starling.display.BlendMode;
 	import starling.display.Image;
@@ -368,6 +369,17 @@ package
 					_lvl.placeMovingPlatforms(state, _gameData.movingPlatsPercantage, _gameData.movingPlatformSpeed);
 				}, 100, this);
 			}
+			
+			// TRAMPOLINE AMOUNT - CHANGE
+			if(_ce.input.hasDone(Actions.TRAMPOLINE_PERCANTAGE)) {
+				action = _ce.input.getAction(Actions.TRAMPOLINE_PERCANTAGE) as InputAction;
+				
+				clearTimeout(INTERVAL);
+				INTERVAL = setTimeout(function (state : StarlingState):void {
+					trace(action.value);
+					_lvl.placeTrampolines(state, action.value);
+				}, 100, this);
+			}
 		
 			// LIVE AMOUNT
 			if(_ce.input.hasDone(Actions.LIVES_PERCANTAGE)) {
@@ -424,6 +436,12 @@ package
 				for each (movingPlat in movingPlatforms) {
 					movingPlat.speed = _gameData.movingPlatformSpeed;
 				}
+			}
+			
+			// TRAMPOLINE BOOST
+			if(_ce.input.isDoing(Actions.TRAMPOLINE_BOOST)) {
+				var action:InputAction = _ce.input.getAction(Actions.TRAMPOLINE_BOOST) as InputAction;
+				_gameData.trampolineBoost = action.value as Number;
 			}
 			
 			// EnemySpeed - CHANGE

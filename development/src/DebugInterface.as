@@ -36,6 +36,7 @@ package
 		public var jump : String = "Single";
 		
 		public var movingPlatPercentage : int;	
+		public var trampolinePercentage : int;	
 		public var enemyPercentage : int;	
 		public var trapPercentage : int;	
 		public var livesPercentage : int;	
@@ -44,6 +45,7 @@ package
 		public var enemySpeed : Number;	
 		public var trapHeight : Number;	
 		public var movingPlatSpeed : Number;	
+		public var trampolineBoost : Number;	
 			
 			
 		public function DebugInterface() {
@@ -119,6 +121,10 @@ package
 			_gui.addGroup("MovingPlatform");
 			_gui.addSlider("movingPlatPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.MOVINGPLAT_PERCANTAGE, movingPlatPercentage); }});
 			_gui.addSlider("movingPlatSpeed", ValueRange.MOVINGPLAT_SPEED.x, ValueRange.MOVINGPLAT_SPEED.y, {label:"speed",  callback: function ():void{  _guiInput.triggerUntilRelease(Actions.MOVINGPLATFORM_SPEED, movingPlatSpeed); }});
+			
+			_gui.addGroup("Trampoline");
+			_gui.addSlider("trampolinePercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.TRAMPOLINE_PERCANTAGE, trampolinePercentage); }});
+			_gui.addSlider("trampolineBoost", ValueRange.TRAMP_BOOST.x, ValueRange.TRAMP_BOOST.y, {label:"speed",  callback: function ():void{  _guiInput.triggerUntilRelease(Actions.TRAMPOLINE_BOOST, trampolineBoost); }});
 			
 			
 			_gui.show();

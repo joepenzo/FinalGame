@@ -46,6 +46,7 @@ package data.types
 		public static const CHANGE_SHAPE_HEXAGON:String = "CHANGE_SHAPE_HEXAGON";
 
 		public static const MOVINGPLAT_PERCANTAGE:String = "MOVINGPLAT_PERCANTAGE";
+		public static const TRAMPOLINE_PERCANTAGE:String = "RAMPOLINE_PERCAN";
 		public static const ENEMY_PERCANTAGE:String = "ENEMY_PERCANTAGE";
 		public static const TRAP_PERCANTAGE:String = "TRAP_PERCANTAGE";
 		public static const LIVES_PERCANTAGE:String = "LIVES_PERCANTAGE";
@@ -59,6 +60,7 @@ package data.types
 		public static const MOVINGPLATFORM_SPEED:String = "MOVINGPLATFORM_SPEED";
 		public static const ENEMY_SPEED:String = "ENEMY_SPEED";
 		public static const TRAP_HEIGHT:String = "TRAP_HEIGHT";
+		public static const TRAMPOLINE_BOOST:String = "TRAMPOLINE_BOOST";
 		
 		
 	}

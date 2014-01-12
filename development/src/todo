@@ -15,7 +15,7 @@
 - BUGS
 
 	Remove all enemies when percentage is 0 - some enemies stay in the level is % = 0
-	
+	When trap height is changed enemies bug as fuck
 	
 	
 	
