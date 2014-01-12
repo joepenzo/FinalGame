@@ -114,6 +114,7 @@ package objects  {
 					data[j][i] = defaultTile;
 				}
 			}
+			
 		}
 		
 		// @throws IOException
@@ -348,7 +349,7 @@ package objects  {
 		
 
 		// not placed in the TileMap - TODO: THIS WOULD BE NICE IF THEY WOULD BE PLACED
-		public function placeMovingPlatforms(state: StarlingState, percentage : int):void {
+		public function placeMovingPlatforms(state: StarlingState, percentage : int, platformSpeed : Number = 3):void {
 			_newMovingPlatformsAmount = ((width - 2)*(percentage/100))/2;
 			var allPossbileTilePointsForMovingPlats : Array = [];
 
@@ -373,6 +374,7 @@ package objects  {
 			for each (var currentMovingPlatPos:Point in usedTilePoints) { // ADD ALL TO STATE
 				state.add(new ExMovingPlatform("movingPlatform", { 
 					currentColor : 0x000000,
+					speed: platformSpeed,
 					group:1,
 					width : w, 
 					height : h, 

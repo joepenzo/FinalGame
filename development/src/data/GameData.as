@@ -34,6 +34,9 @@ package data
 		protected var _livesPercantage : int = 0;
 		protected var _coinsPercantage : int = 0;
 		protected var _movingPlatsPercantage : int = 0;
+
+		protected var _movingPlatformSpeed : Number = 3;
+		
 		
 		
 		
@@ -41,6 +44,16 @@ package data
 			super();
 		}
 		
+		public function get movingPlatformSpeed():Number
+		{
+			return _movingPlatformSpeed;
+		}
+
+		public function set movingPlatformSpeed(value:Number):void
+		{
+			_movingPlatformSpeed = value;
+		}
+
 		public function get movingPlatsPercantage():int
 		{
 			return _movingPlatsPercantage;

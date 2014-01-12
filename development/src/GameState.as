@@ -365,7 +365,7 @@ package
 				
 				clearTimeout(INTERVAL);
 				INTERVAL = setTimeout(function (state : StarlingState):void {
-					_lvl.placeMovingPlatforms(state, _gameData.movingPlatsPercantage);
+					_lvl.placeMovingPlatforms(state, _gameData.movingPlatsPercantage, _gameData.movingPlatformSpeed);
 				}, 100, this);
 			}
 		
@@ -415,15 +415,14 @@ package
 			}
 			
 			
-			
 			// MovingPlatform SPEED - CHANGE
 			if(_ce.input.isDoing(Actions.MOVINGPLATFORM_SPEED)) {
 				var action:InputAction = _ce.input.getAction(Actions.MOVINGPLATFORM_SPEED) as InputAction;
-				
+				_gameData.movingPlatformSpeed = action.value as Number;
 				var movingPlatforms:Vector.<CitrusObject> = getObjectsByType(ExMovingPlatform);
 				var movingPlat:ExMovingPlatform;
 				for each (movingPlat in movingPlatforms) {
-					movingPlat.speed =  action.value;
+					movingPlat.speed = _gameData.movingPlatformSpeed;
 				}
 			}
 			
