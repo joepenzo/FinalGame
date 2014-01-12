@@ -166,7 +166,15 @@ package
 			
 			//_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
 			
-			_ce.input.keyboard.addKeyAction("heroDie",Keyboard.Q);
+			_ce.input.keyboard.addKeyAction("debugAction",Keyboard.Q);
+			
+			
+			setGameDataStartValues();
+		}
+		
+		private function setGameDataStartValues():void {
+			_gameData.lives = 5;
+			
 		}
 		
 		private function timeShiftStart():void {
@@ -188,6 +196,8 @@ package
 			_hero.body.SetActive(true);
 			remove(_deadOverlay);
 			
+			_gameData.lives = 1; // give back one live!
+			
 		}
 		
 		private function shakeState():void {
@@ -196,8 +206,6 @@ package
 		}
 		
 		private function onDataChanged(data:String, value:Object):void {
-			//error(data + "  " + value); 
-
 			if (_gameData.goal == Goals.KILL_ENEMIES) {
 				if (data == "totalEnemiesInState" || data == "totalEnemiesKilled") {
 					_gameInterface.updateGoalStatus( (_gameData.enemiesKilled.toString() + " / " + _gameData.totalEnemies.toString()) );	
@@ -216,6 +224,11 @@ package
 			
 			if (data == "lives") {
 				_gameInterface.changesLives(int(value));
+				
+				if(value <= 0) { //  zero lives, hero's is dead by now!
+					_timeshifter.startRewind(0, 1);
+				}
+				
 			}
 			
 		}
@@ -231,7 +244,7 @@ package
 			
 			if (_shake) shakeState();
 			
-			if (_ce.input.justDid("heroDie")) {
+			if (_ce.input.justDid("debugAction")) {
 				_timeshifter.startRewind(0, 1.3);
 			}
 			

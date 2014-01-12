@@ -16,7 +16,6 @@ package objects
 			super.defineFixture();
 			_fixtureDef.filter.categoryBits = PhysicsCollisionCategories.Get("Traps");
 			_fixtureDef.filter.maskBits = PhysicsCollisionCategories.GetAllExcept("BadGuys");
-
 		}
 		
 	}

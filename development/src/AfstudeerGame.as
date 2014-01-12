@@ -41,7 +41,6 @@ package
 
 			
 			_gameData.currentStyling = "hero";
-			_gameData.lives = 1;
 			
 			_sounds = new SynthSounds("synthSounds");
 			_gameData.synthSounds = _sounds;
