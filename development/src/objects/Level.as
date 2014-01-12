@@ -352,7 +352,6 @@ package objects  {
 			_newMovingPlatformsAmount = ((width - 2)*(percentage/100))/2;
 			var allPossbileTilePointsForMovingPlats : Array = [];
 
-	error("newMovingPlatformsAmount " + _newMovingPlatformsAmount);
 			var mW:int = map[0].length;
 			for (var x:int=0; x<mW; x++) {
 				if (x%2 != 0) {
@@ -361,10 +360,8 @@ package objects  {
 			}
 			// shuffle all the coordinates in the array
 			allPossbileTilePointsForMovingPlats.sort(Functions.randomSort);
-	debug("allPossbileTilePointsForMovingPlats.length " + allPossbileTilePointsForMovingPlats.length);
 			// copy all tiles and remove extra tiles that a not used into new array'
 			var usedTilePoints : Array = allPossbileTilePointsForMovingPlats.slice(-(_newMovingPlatformsAmount-allPossbileTilePointsForMovingPlats.length));
-	notice("usedTilePoints.length " + usedTilePoints.length);
 			
 			// CODE TO PLACE AND DELETE THE MOVINGTRAPS IN THE GAMESTATE// write this more epic, that objects can stay!!
 			var currentMovingPlatformsInState : Vector.<CitrusObject> = state.getObjectsByName("movingPlatform") as Vector.<CitrusObject>;

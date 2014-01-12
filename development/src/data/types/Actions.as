@@ -56,6 +56,7 @@ package data.types
 		public static const GOAL_COLLECT:String = "GOAL_COLlECT";
 		public static const GOAL_KILL:String = "GOAL_KILL";
 
+		public static const MOVINGPLATFORM_SPEED:String = "MOVINGPLATFORM_SPEED";
 		public static const ENEMY_SPEED:String = "ENEMY_SPEED";
 		public static const TRAP_HEIGHT:String = "TRAP_HEIGHT";
 		

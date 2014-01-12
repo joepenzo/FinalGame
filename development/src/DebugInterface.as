@@ -43,6 +43,7 @@ package
 
 		public var enemySpeed : Number;	
 		public var trapHeight : Number;	
+		public var movingPlatSpeed : Number;	
 			
 			
 		public function DebugInterface() {
@@ -115,8 +116,9 @@ package
 			_gui.addSlider("livesPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"Lifes amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.LIVES_PERCANTAGE, livesPercentage); }});
 			_gui.addSlider("coinsPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"Coins amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.COINS_PERCANTAGE, coinsPercentage); }});
 			
-			_gui.addGroup("Movement Aids");
-			_gui.addSlider("movingPlatPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"platforms amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.MOVINGPLAT_PERCANTAGE, movingPlatPercentage); }});
+			_gui.addGroup("MovingPlatform");
+			_gui.addSlider("movingPlatPercentage", ValueRange.PERCENTAGE.x, ValueRange.PERCENTAGE.y, {label:"amount",  callback: function ():void{  _guiInput.triggerOnce(Actions.MOVINGPLAT_PERCANTAGE, movingPlatPercentage); }});
+			_gui.addSlider("movingPlatSpeed", ValueRange.MOVINGPLAT_SPEED.x, ValueRange.MOVINGPLAT_SPEED.y, {label:"speed",  callback: function ():void{  _guiInput.triggerUntilRelease(Actions.MOVINGPLATFORM_SPEED, movingPlatSpeed); }});
 			
 			
 			_gui.show();

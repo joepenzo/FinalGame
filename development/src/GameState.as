@@ -416,6 +416,17 @@ package
 			
 			
 			
+			// MovingPlatform SPEED - CHANGE
+			if(_ce.input.isDoing(Actions.MOVINGPLATFORM_SPEED)) {
+				var action:InputAction = _ce.input.getAction(Actions.MOVINGPLATFORM_SPEED) as InputAction;
+				
+				var movingPlatforms:Vector.<CitrusObject> = getObjectsByType(ExMovingPlatform);
+				var movingPlat:ExMovingPlatform;
+				for each (movingPlat in movingPlatforms) {
+					movingPlat.speed =  action.value;
+				}
+			}
+			
 			// EnemySpeed - CHANGE
 			if(_ce.input.isDoing(Actions.ENEMY_SPEED)) {
 				var action:InputAction = _ce.input.getAction(Actions.ENEMY_SPEED) as InputAction;

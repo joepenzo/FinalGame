@@ -17,7 +17,7 @@ package data.types
 		public static const HERO_SPEED : Point = new Point(1, 20);
 		
 		public static const ENEMYSPEED : Point = new Point(0.1, 5);
-		
+		public static const MOVINGPLAT_SPEED : Point = new Point(0, 10);
 		public static const TRAP_HEIGHT : Point = new Point(0.5, 3); //% of tileheight
 	}
 }
