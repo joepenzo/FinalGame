@@ -23,6 +23,7 @@ package objects {
 	import citrus.utils.AGameData;
 	
 	import data.GameData;
+	import data.consts.Shapes;
 	import data.types.Actions;
 	
 	import flash.geom.Point;
@@ -384,7 +385,22 @@ package objects {
 						bullet = new Bullet("bullet"+_bulletcounter, {x:x +(bodyWidth/2) + 5, y:y, width:5, height:5, speed:30, explodeDuration:10, fuseDuration: 5000, angle:0});
 					}
 					bullet.onExplode.add(handleBulletExplode);
-					bullet.view = StarlingShape.Rectangle(width/2,height/2,0x000000);
+					
+					switch (_gameData.bulletShape){
+						case Shapes.CIRCLE:
+							bullet.view = StarlingShape.Circle(width/2, _gameData.bulletColor);
+							break;
+						case Shapes.HEXAGON:
+							bullet.view = StarlingShape.polygon(width/2, 6, _gameData.bulletColor);
+							break;
+						case Shapes.RECTANGLE:
+							bullet.view = StarlingShape.Rectangle(width/2,height/2,	_gameData.bulletColor);
+							break;
+						case Shapes.TRIANGLE:
+							bullet.view = StarlingShape.Triangle(width/2,height/2,	_gameData.bulletColor);
+							break;
+					}	
+					
 					_bulletcounter++
 					_ce.state.add(bullet);
 					

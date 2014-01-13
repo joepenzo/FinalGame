@@ -18,6 +18,9 @@ package data
 		protected var _currentStyling : String = "";
 		protected var _currentShape:String = "";
 		
+		protected var _bulletColor:uint;
+		protected var _bulletShape:String = "";
+		
 		protected var _goal:String = "";
 		protected var _enemiesKilled:int;
 		protected var _totalEnemiesInState:int;
@@ -44,6 +47,26 @@ package data
 			super();
 		}
 		
+		public function get bulletShape():String
+		{
+			return _bulletShape;
+		}
+
+		public function set bulletShape(value:String):void
+		{
+			_bulletShape = value;
+		}
+
+		public function get bulletColor():uint
+		{
+			return _bulletColor;
+		}
+
+		public function set bulletColor(value:uint):void
+		{
+			_bulletColor = value;
+		}
+
 		public function get trampolineBoost():Number
 		{
 			return _trampolineBoost;

@@ -38,6 +38,7 @@ package
 	import generators.CaveGenerator;
 	import generators.MarioGenerator;
 	
+	import objects.Bullet;
 	import objects.EdgeDetectorEnemy;
 	import objects.ExBox2DPhysicsObject;
 	import objects.ExEnemy;
@@ -176,6 +177,7 @@ package
 		
 		private function setGameDataStartValues():void {
 			_gameData.lives = 5;
+			_gameData.bulletShape = Shapes.RECTANGLE;
 			
 		}
 		
@@ -624,20 +626,17 @@ package
 						}
 					}
 				}
+			} 
+			else if (_gameData.currentStyling == "bullets") {
+				_gameData.bulletShape = _gameData.currentShape;
 			}
 			
 			
 		}
 		
-//		_gameData.currentStyling = "hero";
-//		_gameData.currentStyling = "bg";
-//		_gameData.currentStyling = "platform";
-//		_gameData.currentStyling = "enemies";
 //		_gameData.currentStyling = "bullets";
 //		_gameData.currentStyling = "coins";
 //		_gameData.currentStyling = "lifes";
-//		_gameData.currentStyling = "movingplatforms";
-//		_gameData.currentStyling = "trampolines";
 //		_gameData.currentStyling = "traps";
 		
 		
@@ -673,10 +672,12 @@ package
 						object.view = StarlingShape.Triangle(width, height, object.currentColor);
 						break;
 				}
-			} else if (name == "enemies") {
-				for each (var enemyObj :CitrusObject in objects) {
-					if (enemyObj is EdgeDetectorEnemy) {
-						var enemy : EdgeDetectorEnemy = enemyObj as EdgeDetectorEnemy;
+			} 
+			else if (name == "enemies") {
+				var enemy : EdgeDetectorEnemy;
+				for each (var citrusObject :CitrusObject in objects) {
+					if (citrusObject is EdgeDetectorEnemy) {
+						enemy = citrusObject as EdgeDetectorEnemy;
 						enemy.currentColor = hex;
 						width = enemy.width;
 						height = enemy.height;
@@ -697,16 +698,20 @@ package
 						}
 					}
 				}
-			} else if (name == "movingplatforms") {
+			} else if (name == "bullets") {
+				_gameData.bulletColor = hex;
+			}
+			else if (name == "movingplatforms") {
 				var movingPlatform : ExMovingPlatform;
-				for each (var citrusObject :CitrusObject in objects) {
+				for each (citrusObject  in objects) {
 					if (citrusObject is ExMovingPlatform) {
 						movingPlatform = citrusObject as ExMovingPlatform;
 						movingPlatform.currentColor = hex;
 						movingPlatform.view = StarlingShape.Rectangle(movingPlatform.width, movingPlatform.height, movingPlatform.currentColor);
 					}
 				}
-			} else if (name == "trampolines") {
+			}
+			else if (name == "trampolines") {
 				var trampoline : Trampoline;
 				for each (citrusObject in objects) {
 					if (citrusObject is Trampoline) {
