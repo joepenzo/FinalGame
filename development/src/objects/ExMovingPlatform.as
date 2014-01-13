@@ -6,6 +6,7 @@ package objects {
 	import Box2D.Dynamics.b2Body;
 	
 	import citrus.math.MathVector;
+	import citrus.physics.PhysicsCollisionCategories;
 	import citrus.physics.box2d.Box2DUtils;
 	
 	/**
@@ -196,6 +197,11 @@ package objects {
 			_bodyDef.allowSleep = false;
 		}
 		
+		override protected function defineFixture():void {
+			super.defineFixture();
+			
+			_fixtureDef.filter.maskBits = PhysicsCollisionCategories.GetAllExcept("BadGuys");
+		}
 		
 		override public function handleBeginContact(contact:b2Contact):void {
 			
