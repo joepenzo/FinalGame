@@ -594,20 +594,7 @@ package
 				var height : Number = object.currentHeight;
 				var width : Number =  object.currentWidth;
 				
-				switch (object.currentShape){
-					case Shapes.CIRCLE:
-						object.view = StarlingShape.Circle(width, object.currentColor);
-						break;
-					case Shapes.HEXAGON:
-						object.view = StarlingShape.polygon(width, 6, object.currentColor);
-						break;
-					case Shapes.RECTANGLE:
-						object.view = StarlingShape.Rectangle(width, height, object.currentColor);
-						break;
-					case Shapes.TRIANGLE:
-						object.view = StarlingShape.Triangle(width, height, object.currentColor);
-						break;
-				}	
+				object.view = drawObjectView(object.currentColor, object.currentShape, width, height);
 			}
 			else if (_gameData.currentStyling == "enemies") {
 				for each (var citrusObject :CitrusObject in objects) {
@@ -618,20 +605,7 @@ package
 						var width = enemy.width;
 						var height = enemy.height;
 						
-						switch (enemy.currentShape){
-							case Shapes.CIRCLE:
-								enemy.view = StarlingShape.Circle(width, enemy.currentColor);
-								break;
-							case Shapes.HEXAGON:
-								enemy.view = StarlingShape.polygon(width, 6, enemy.currentColor);
-								break;
-							case Shapes.RECTANGLE:
-								enemy.view = StarlingShape.Rectangle(width, height, enemy.currentColor);
-								break;
-							case Shapes.TRIANGLE:
-								enemy.view = StarlingShape.Triangle(width, height, enemy.currentColor);
-								break;
-						}
+						enemy.view = drawObjectView(enemy.currentColor, enemy.currentShape, width, height);
 					}
 				}
 			} 
@@ -643,20 +617,7 @@ package
 						coin.currentShape = _gameData.currentShape;	
 						_gameData.coinShape = coin.currentShape;
 
-						switch (coin.currentShape){
-							case Shapes.CIRCLE:
-								coin.view = StarlingShape.Circle(coin.width, coin.currentColor);
-								break;
-							case Shapes.HEXAGON:
-								coin.view = StarlingShape.polygon(coin.width, 6, coin.currentColor);
-								break;
-							case Shapes.RECTANGLE:
-								coin.view = StarlingShape.Rectangle(coin.width, coin.height, coin.currentColor);
-								break;
-							case Shapes.TRIANGLE:
-								coin.view = StarlingShape.Triangle(coin.width, coin.height, coin.currentColor);
-								break;
-						}
+						coin.view = drawObjectView(coin.currentColor, coin.currentShape, coin.width, coin.height);
 					}
 				}
 			} 
@@ -667,21 +628,8 @@ package
 						life = citrusObject as Life;
 						life.currentShape = _gameData.currentShape;	
 						_gameData.lifeShape = _gameData.currentShape;
-							
-						switch (life.currentShape){
-							case Shapes.CIRCLE:
-								life.view = StarlingShape.Circle(life.width, life.currentColor);
-								break;
-							case Shapes.HEXAGON:
-								life.view = StarlingShape.polygon(life.width, 6, life.currentColor);
-								break;
-							case Shapes.RECTANGLE:
-								life.view = StarlingShape.Rectangle(life.width, life.height, life.currentColor);
-								break;
-							case Shapes.TRIANGLE:
-								life.view = StarlingShape.Triangle(life.width, life.height, life.currentColor);
-								break;
-						}
+						
+						life.view = drawObjectView(life.currentColor, life.currentShape, life.width, life.height);
 					}
 				}
 			} 
@@ -714,20 +662,7 @@ package
 				height = object.currentHeight;
 				width =  object.currentWidth;
 				
-				switch (object.currentShape){
-					case Shapes.CIRCLE:
-						object.view = StarlingShape.Circle(width, object.currentColor);
-						break;
-					case Shapes.HEXAGON:
-						object.view = StarlingShape.polygon(width, 6, object.currentColor);
-						break;
-					case Shapes.RECTANGLE:
-						object.view = StarlingShape.Rectangle(width, height, object.currentColor);
-						break;
-					case Shapes.TRIANGLE:
-						object.view = StarlingShape.Triangle(width, height, object.currentColor);
-						break;
-				}
+				object.view = drawObjectView(object.currentColor, object.currentShape, width, height);
 			} 
 			else if (name == "enemies") {
 				var enemy : EdgeDetectorEnemy;
@@ -738,20 +673,7 @@ package
 						width = enemy.width;
 						height = enemy.height;
 						
-						switch (enemy.currentShape){
-							case Shapes.CIRCLE:
-								enemy.view = StarlingShape.Circle(width, enemy.currentColor);
-								break;
-							case Shapes.HEXAGON:
-								enemy.view = StarlingShape.polygon(width, 6, enemy.currentColor);
-								break;
-							case Shapes.RECTANGLE:
-								enemy.view = StarlingShape.Rectangle(width, height, enemy.currentColor);
-								break;
-							case Shapes.TRIANGLE:
-								enemy.view = StarlingShape.Triangle(width, height, enemy.currentColor);
-								break;
-						}
+						enemy.view = drawObjectView(enemy.currentColor, enemy.currentShape, width, height);
 					}
 				}
 			} else if (name == "bullets") {
@@ -783,6 +705,26 @@ package
 		}
 
 		
+		
+		private function drawObjectView(color:uint, shape:String, width:int, height : int):Shape {
+			var view : starling.display.Shape = new Shape();
+			switch (shape){
+				case Shapes.CIRCLE:
+					view = StarlingShape.Circle(width, color);
+					break;
+				case Shapes.HEXAGON:
+					view = StarlingShape.polygon(width, 6, color);
+					break;
+				case Shapes.RECTANGLE:
+					view = StarlingShape.Rectangle(width, height, color);
+					break;
+				case Shapes.TRIANGLE:
+					view = StarlingShape.Triangle(width, height, color);
+					break;
+			}	
+			
+			return view;
+		}		
 		
 		
 			
