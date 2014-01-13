@@ -1,4 +1,4 @@
-package data.types
+package data.consts
 {
 	public class Actions
 	{
@@ -6,7 +6,6 @@ package data.types
 		public static const RIGHT : String = "right";		
 		public static const JUMP : String = "jump";		
 		public static const SHOOT : String = "shoot";		
-		
 		
 		public static const AUDIO_STARTFREQUENCY : String = "AUDIO_STARTFREQUENCY";
 		public static const AUDIO_ENDFREQUENCY : String = "AUDIO_ENDFREQUENCY";
@@ -44,7 +43,13 @@ package data.types
 		public static const SELECTED_CURRENTSTYLING_BULLETS:String = "SELECTED_CURRENTSTYLING_BULLETS";
 		public static const SELECTED_CURRENTSTYLING_LIVES:String = "SELECTED_CURRENTSTYLING_LIVES";
 		public static const SELECTED_CURRENTSTYLING_COINS:String = "SELECTED_CURRENTSTYLING_COINS";
-
+		
+		public static const SELECTED_CURRENTAUDIO_COINS:String = "SELECTED_CURRENTAUDIO_COINS";
+		public static const SELECTED_CURRENTAUDIO_LIFES:String = "SELECTED_CURRENTAUDIO_LIFES";
+		public static const SELECTED_CURRENTAUDIO_SHOOT:String = "SELECTED_CURRENTAUDIO_SHOOT";
+		public static const SELECTED_CURRENTAUDIO_HIT:String = "SELECTED_CURRENTAUDIO_HIT";
+		public static const SELECTED_CURRENTAUDIO_JUMP:String = "SELECTED_CURRENTAUDIO_JUMP";
+		
 		public static const CHANGE_SHAPE_RECT:String = "CHANGE_SHAPE_RECT";
 		public static const CHANGE_SHAPE_TRIANGLE:String = "CHANGE_SHAPE_TRIANGLE";
 		public static const CHANGE_SHAPE_CIRCLE:String = "CHANGE_SHAPE_CIRCLE";

@@ -3,22 +3,19 @@
 	Add finish + goal logic
 	
 	Editable Sounds
-	
-	Style adjustmens for every type of object 
-	
-	When platform level regenerates and the hero was stuck, he is placed back to top, and then there can be a spike	
-	
+	 	
 	Hero hit sound and bounce on damage from trap
 	
 	
 - BUGS
-
+	When platform level regenerates and the hero was stuck, he is placed back to top, and then there can be a spike
 	Remove all enemies when percentage is 0 - some enemies stay in the level is % = 0
 	When trap height is changed enemies bug as fuck
 	
 	
+			
 	
-// DEAD SOUNDS - As3fxr
+////---------    DEAD SOUNDS - As3fxr
 
 3,0.16,0.78,0.7554,0.1097,0.1508,,0.3799,-0.6599,,,0.48,,,,,,,1,,,,,0.97
 3,0.16,1,0.7554,0.1097,0.1508,,0.3799,-0.6599,,,0.48,,,,,,,1,,,,,0.97

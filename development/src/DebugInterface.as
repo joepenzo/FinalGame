@@ -5,7 +5,8 @@ package
 	import com.bit101.components.ComboBox;
 	import com.bit101.components.List;
 	
-	import data.types.Actions;
+	import data.consts.Actions;
+	import data.types.SoundRange;
 	import data.types.ValueRange;
 	
 	import flash.display.Sprite;
@@ -26,6 +27,7 @@ package
 		public var blue : int = 0;
 		
 		public var styledItem : String = "Avatar";
+		public var audioItem : String = "Jump";
 		public var shape : String = "Rectangle";
 		
 		
@@ -47,7 +49,11 @@ package
 		public var movingPlatSpeed : Number;	
 		public var trampolineBoost : Number;	
 			
-			
+		public var startFreq : Number = 0;	
+		public var endFreq : Number = 0;	
+		public var slide : Number = 0;	
+		public var duration : Number = 0;	
+		
 		public function DebugInterface() {
 			_guiInput = new GuiInputController("guiInput");
 			addInterface();
@@ -96,6 +102,23 @@ package
 				{label:"Hexagon", data: Actions.CHANGE_SHAPE_HEXAGON},
 				{label:"Circle", data: Actions.CHANGE_SHAPE_CIRCLE}
 			], { callback: function ():void{  _guiInput.triggerOnce(shape,1); }});
+			
+			_gui.addGroup("Audio");
+			_gui.addComboBox("audioItem", [
+				{label:"Coins Pickup", data: Actions.SELECTED_CURRENTAUDIO_COINS},
+				{label:"Lives Pickup", data: Actions.SELECTED_CURRENTAUDIO_LIFES},
+				{label:"Shoot", data: Actions.SELECTED_CURRENTAUDIO_SHOOT},
+				{label:"Hit", data: Actions.SELECTED_CURRENTAUDIO_HIT},
+				{label:"Jump", data: Actions.SELECTED_CURRENTAUDIO_JUMP}
+			], { callback: function ():void{  _guiInput.triggerOnce(audioItem,1); }});
+			
+			_gui.addSlider("startFreq", SoundRange.STARTFREQUENCY.x, SoundRange.STARTFREQUENCY.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.AUDIO_STARTFREQUENCY, startFreq);  }});
+			_gui.addSlider("endFreq", SoundRange.ENDFREQUENCY.x, SoundRange.ENDFREQUENCY.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.AUDIO_ENDFREQUENCY, endFreq);  }});
+			_gui.addSlider("slide", SoundRange.SLIDE.x, SoundRange.SLIDE.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.AUDIO_SLIDE, slide);  }});
+			_gui.addSlider("duration", SoundRange.DURATION.x, SoundRange.DURATION.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.AUDIO_ENDFREQUENCY, duration);  }});
+
+			
+			
 			
 			
 			_gui.addColumn("Level components");

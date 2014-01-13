@@ -4,18 +4,22 @@ package audio
 	import citrus.input.InputAction;
 	import citrus.utils.AGameData;
 	
-	import data.types.Actions;
+	import data.consts.Actions;
 	
 	import flash.utils.*;
 	import flash.utils.Dictionary;
+	import data.GameData;
 	
 	public class SynthSounds extends CitrusObject
 	{
 		
 		private const VOLUME : Number = .5;
-		private const AUDIO_FEEDBACK_DELAYTIME:int = 50;
+//		private const AUDIO_FEEDBACK_DELAYTIME:int = 50;
+//		private var audioInterval:Number =  0;
 
-		private var sounds : Dictionary = new Dictionary();
+		private var _gameData:GameData;
+
+		private var _sounds : Dictionary = new Dictionary();
 		
 		private var _jump : SfxrSynth = new SfxrSynth();
 		private var _shoot : SfxrSynth = new SfxrSynth();
@@ -25,12 +29,13 @@ package audio
 		private var _rewind : SfxrSynth = new SfxrSynth();
 		
 		
-		private var audioInterval:Number =  0;
 		
 		
 		public function SynthSounds(name : String, params : Object = null) {
-			updateCallEnabled = true;
+			notice("synth init");
 			super(name, params);
+			updateCallEnabled = true;
+			_gameData = _ce.gameData as GameData;
 			
 			_jump.params.setSettingsString("0,,0.271,,0.18,0.395,,0.201,,,,,,0.284,,,,,0.511,,,,," + VOLUME);
 			_jump.cacheSound();
@@ -58,49 +63,64 @@ package audio
 			
 		}
 		
-		private function playAudioFeedBack(soundName : String):void {
+		public function get sounds():Dictionary
+		{
+			return _sounds;
+		}
+
+		public function set sounds(value:Dictionary):void
+		{
+			_sounds = value;
+		}
+
+		public function playAudioFeedBack(soundName : String):void {
 			if (!sounds[soundName]) return;
 			var sound : SfxrSynth = sounds[soundName];
 			sound.stop();
 			sound.play();
 		}
 		
-		override public function update(timeDelta:Number):void {
-			super.update(timeDelta);
+//		override public function update(timeDelta:Number):void {
+//			super.update(timeDelta);
+//			error("sounnnndds");
 			
-			if(_ce.input.isDoing(Actions.AUDIO_STARTFREQUENCY)) {
-				action = _ce.input.getAction(Actions.AUDIO_STARTFREQUENCY) as InputAction;
-				SetStartFrequency(Sounds.JUMP, action.value);
-				
-				clearTimeout(audioInterval);
-				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, Sounds.JUMP);
-			}
+//			if(_ce.input.isDoing(Actions.AUDIO_STARTFREQUENCY)) {
+//				error("AUDIO_STARTFREQUENCY");
+//				action = _ce.input.getAction(Actions.AUDIO_STARTFREQUENCY) as InputAction;
+//				SetStartFrequency(sounds[_gameData.currentAudio], action.value);
+//
+//				clearTimeout(audioInterval);
+//				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, sounds[_gameData.currentAudio]);
+//			}
+//			
+//			if(_ce.input.isDoing(Actions.AUDIO_ENDFREQUENCY)) {
+//				error("AUDIO_ENDFREQUENCY");
+//				var action :InputAction = _ce.input.getAction(Actions.AUDIO_ENDFREQUENCY) as InputAction;
+//				SetEndFrequency(sounds[_gameData.currentAudio], action.value);
+//
+//				clearTimeout(audioInterval);
+//				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, sounds[_gameData.currentAudio]);
+//			}
+//			
+//			if(_ce.input.isDoing(Actions.AUDIO_SLIDE)) {
+//				error("AUDIO_SLIDE");
+//				action = _ce.input.getAction(Actions.AUDIO_SLIDE) as InputAction;
+//				SetSlide(sounds[_gameData.currentAudio], action.value);
+//				
+//				clearTimeout(audioInterval);
+//				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, sounds[_gameData.currentAudio]);
+//			}
+//		
+//			if(_ce.input.isDoing(Actions.AUDIO_DURATION)) {
+//				error("AUDIO_DURATION");
+//				action = _ce.input.getAction(Actions.AUDIO_DURATION) as InputAction;
+//				SetDuration(sounds[_gameData.currentAudio], action.value);
+//				
+//				clearTimeout(audioInterval);
+//				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, sounds[_gameData.currentAudio]);
+//			}
 			
-			if(_ce.input.isDoing(Actions.AUDIO_ENDFREQUENCY)) {
-				var action :InputAction = _ce.input.getAction(Actions.AUDIO_ENDFREQUENCY) as InputAction;
-				SetEndFrequency(Sounds.JUMP, action.value);
-
-				clearTimeout(audioInterval);
-				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, Sounds.JUMP);
-			}
-			
-			if(_ce.input.isDoing(Actions.AUDIO_SLIDE)) {
-				action = _ce.input.getAction(Actions.AUDIO_SLIDE) as InputAction;
-				SetSlide(Sounds.JUMP, action.value);
-				
-				clearTimeout(audioInterval);
-				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, Sounds.JUMP);
-			}
-		
-			if(_ce.input.isDoing(Actions.AUDIO_DURATION)) {
-				action = _ce.input.getAction(Actions.AUDIO_DURATION) as InputAction;
-				SetDuration(Sounds.JUMP, action.value);
-				
-				clearTimeout(audioInterval);
-				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, Sounds.JUMP);
-			}
-			
-		}
+//		}
 
 		public function getSound(soundName : String) : SfxrSynth {
 			if (!sounds[soundName]) return null;
@@ -121,25 +141,25 @@ package audio
 		}
 		
 		
-		private function SetEndFrequency(soundName : String, val : Number) : void {
+		public function SetEndFrequency(soundName : String, val : Number) : void {
 			if (!sounds[soundName]) return;
 			var sound : SfxrSynth = sounds[soundName];
 			sound.params.squareDuty = val; // TODO CHECK
 		}
 		
-		private function SetStartFrequency(soundName : String, val : Number) : void {
+		public function SetStartFrequency(soundName : String, val : Number) : void {
 			if (!sounds[soundName]) return;
 			var sound : SfxrSynth = sounds[soundName];
 			sound.params.startFrequency = val;
 		}
 		
-		private function SetSlide(soundName : String, val : Number) : void {
+		public function SetSlide(soundName : String, val : Number) : void {
 			if (!sounds[soundName]) return;
 			var sound : SfxrSynth = sounds[soundName];
 			sound.params.slide = val;
 		}
 		
-		private function SetDuration(soundName : String, val : Number) : void {
+		public function SetDuration(soundName : String, val : Number) : void {
 			if (!sounds[soundName]) return;
 			var sound : SfxrSynth = sounds[soundName];
 			sound.params.decayTime = val; // TODO CHECK

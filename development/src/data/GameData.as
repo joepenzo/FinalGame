@@ -15,6 +15,8 @@ package data
 		protected var _currentLevelType : String = "";
 		protected var _currentGravity : b2Vec2;
 		
+		
+		protected var _currentAudio : String = "";
 		protected var _currentStyling : String = "";
 		protected var _currentShape:String = "";
 		
@@ -53,6 +55,16 @@ package data
 			super();
 		}
 		
+		public function get currentAudio():String
+		{
+			return _currentAudio;
+		}
+
+		public function set currentAudio(value:String):void
+		{
+			_currentAudio = value;
+		}
+
 		public function get coinColor():uint
 		{
 			return _coinColor;

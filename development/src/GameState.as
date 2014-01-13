@@ -28,7 +28,7 @@ package
 	import data.GameData;
 	import data.consts.Goals;
 	import data.consts.Shapes;
-	import data.types.Actions;
+	import data.consts.Actions;
 	
 	import flash.display.Sprite;
 	import flash.geom.Point;
@@ -69,7 +69,10 @@ package
 	public class GameState extends StarlingState
 	{
 		private var INTERVAL:Number = new Number();
+		private const AUDIO_FEEDBACK_DELAYTIME:int = 50;
+		private var audioInterval:Number =  0;
 
+		
 		private var _gameData:GameData;
 
 		private var _tileSize:int = 32; // 32 
@@ -522,7 +525,53 @@ package
 			}
 			
 			
+			// CHANGE CURRENT STYLING OBJECT
+			if (_ce.input.justDid(Actions.SELECTED_CURRENTAUDIO_COINS)) {
+				_gameData.currentAudio = Sounds.COIN;
+			} if (_ce.input.justDid(Actions.SELECTED_CURRENTAUDIO_HIT)) {
+				_gameData.currentAudio = Sounds.HIT;
+			} if (_ce.input.justDid(Actions.SELECTED_CURRENTAUDIO_JUMP)) {
+				_gameData.currentAudio = Sounds.JUMP;
+			} if (_ce.input.justDid(Actions.SELECTED_CURRENTAUDIO_LIFES)) {
+				_gameData.currentAudio = Sounds.LIFE;
+			} if (_ce.input.justDid(Actions.SELECTED_CURRENTAUDIO_SHOOT)) {
+				_gameData.currentAudio = Sounds.SHOOT;
+			} 
 				
+			
+			
+			
+			if(_ce.input.isDoing(Actions.AUDIO_STARTFREQUENCY)) {
+				action = _ce.input.getAction(Actions.AUDIO_STARTFREQUENCY) as InputAction;
+				_sounds.SetStartFrequency(_gameData.currentAudio, action.value);
+				
+				clearTimeout(audioInterval);
+				audioInterval = setTimeout(_sounds.playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, _gameData.currentAudio);
+			}
+			
+			if(_ce.input.isDoing(Actions.AUDIO_ENDFREQUENCY)) {
+				action = _ce.input.getAction(Actions.AUDIO_ENDFREQUENCY) as InputAction;
+				_sounds.SetEndFrequency(_gameData.currentAudio, action.value);
+				
+				clearTimeout(audioInterval);
+				audioInterval = setTimeout(_sounds.playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, _gameData.currentAudio);
+			}
+			
+			if(_ce.input.isDoing(Actions.AUDIO_SLIDE)) {
+				action = _ce.input.getAction(Actions.AUDIO_SLIDE) as InputAction;
+				_sounds.SetSlide(_gameData.currentAudio, action.value);
+				
+				clearTimeout(audioInterval);
+				audioInterval = setTimeout(_sounds.playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, _gameData.currentAudio);
+			}
+			
+			if(_ce.input.isDoing(Actions.AUDIO_DURATION)) {
+				action = _ce.input.getAction(Actions.AUDIO_DURATION) as InputAction;
+				_sounds.SetDuration(_gameData.currentAudio, action.value);
+				
+				clearTimeout(audioInterval);
+				audioInterval = setTimeout(_sounds.playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, _gameData.currentAudio);
+			}
 		}
 		
 		

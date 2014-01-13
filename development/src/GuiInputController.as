@@ -2,7 +2,7 @@ package
 {
 	import citrus.input.InputController;
 	import flash.utils.*;
-	import data.types.Actions;
+	import data.consts.Actions;
 	import citrus.input.InputAction;
 	
 	public class GuiInputController extends InputController

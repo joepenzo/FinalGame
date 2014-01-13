@@ -1,8 +1,8 @@
 package data
 {
 	
-	import data.types.Actions;
-	import data.types.Pin;
+	import data.consts.Actions;
+	import data.consts.Pin;
 	import data.types.SoundRange;
 	import data.types.ValueRange;
 	
@@ -94,8 +94,8 @@ package data
 			_actionPins[Pin.PERCANTAGE_TRAP] = Actions.TRAP_PERCANTAGE;
 			
 //			_analogMinMaxMapVals[Pin.A_AUDIO_SQUAREDUTY] = SoundRange.JUMP_SQUAREDUTY;
-			_analogMinMaxMapVals[Pin.A_AUDIO_STARTFREQUENCY] = SoundRange.JUMP_STARTFREQUENCY;
-			_analogMinMaxMapVals[Pin.A_AUDIO_SLIDE] = SoundRange.JUMP_SLIDE;
+			_analogMinMaxMapVals[Pin.A_AUDIO_STARTFREQUENCY] = SoundRange.STARTFREQUENCY;
+			_analogMinMaxMapVals[Pin.A_AUDIO_SLIDE] = SoundRange.SLIDE;
 			_analogMinMaxMapVals[Pin.A_GRAVITY] = ValueRange.GRAVITY;
 			_analogMinMaxMapVals[Pin.A_RED] = ValueRange.RED;
 			_analogMinMaxMapVals[Pin.A_GREEN] = ValueRange.GREEN;

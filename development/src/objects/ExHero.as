@@ -24,7 +24,7 @@ package objects {
 	
 	import data.GameData;
 	import data.consts.Shapes;
-	import data.types.Actions;
+	import data.consts.Actions;
 	
 	import flash.geom.Point;
 	import flash.utils.clearTimeout;
