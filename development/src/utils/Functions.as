@@ -124,13 +124,12 @@ package utils
 			var newShape:b2PolygonShape = Box2DShapeMaker.Rect(tileSize/30, newH);
 			body.DestroyFixture(body.GetFixtureList());
 			body.CreateFixture2(newShape); // TODO: Add density?
+			var width : Number = (body.GetFixtureList().GetAABB().upperBound.x - body.GetFixtureList().GetAABB().lowerBound.x) * 30; // standard box2d scale 30
 			var newHeight : int = (body.GetFixtureList().GetAABB().upperBound.y - body.GetFixtureList().GetAABB().lowerBound.y) * 30;
 			trap.y += (oldhHeight - newHeight)/2;
 			
-			var shape :Shape = trap.view as starling.display.Shape;
-			shape.height = newHeight;
-			shape.y = -newHeight/2;
-
+			trap.currentHeight = newHeight;
+			trap.view = StarlingShape.CombinedShape(trap.currentShape, width, newHeight, trap.currentColor);
 		}
 		
 		

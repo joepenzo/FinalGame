@@ -39,6 +39,7 @@ package
 	import generators.MarioGenerator;
 	
 	import objects.Bullet;
+	import objects.Coin;
 	import objects.EdgeDetectorEnemy;
 	import objects.ExBox2DPhysicsObject;
 	import objects.ExEnemy;
@@ -47,6 +48,7 @@ package
 	import objects.ExPlatform;
 	import objects.GameInterface;
 	import objects.Level;
+	import objects.Life;
 	import objects.StaticTrap;
 	import objects.Trampoline;
 	
@@ -63,8 +65,6 @@ package
 	import utils.Functions;
 	import utils.StarlingDraw;
 	import utils.StarlingShape;
-	import objects.Coin;
-	import objects.Life;
 	
 	public class GameState extends StarlingState
 	{
@@ -640,9 +640,6 @@ package
 			
 		}
 		
-//		_gameData.currentStyling = "coins";
-//		_gameData.currentStyling = "lifes";
-//		_gameData.currentStyling = "traps";
 		
 		private function changeObjectColor(name : String , red : int, green : int, blue : int):void{
 			var hex:uint = red << 16 | green << 8 | blue;
@@ -720,6 +717,17 @@ package
 						_gameData.lifeColor = hex;
 						
 						life.view = drawObjectView(life.currentColor, life.currentShape, life.width, life.height);
+					}
+				}
+			} 
+			
+			else if (_gameData.currentStyling == "traps") {
+				var trap : StaticTrap;
+				for each (citrusObject in objects) {
+					if (citrusObject is StaticTrap) {
+						trap = citrusObject as StaticTrap;
+						trap.currentColor = hex;	
+						trap.view = StarlingShape.CombinedShape(trap.currentShape, trap.width, trap.currentHeight, trap.currentColor);
 					}
 				}
 			} 

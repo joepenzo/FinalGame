@@ -1,5 +1,7 @@
 package utils
 {
+	import data.consts.Shapes;
+	
 	import starling.display.BlendMode;
 	import starling.display.Image;
 	import starling.display.Shape;
@@ -40,10 +42,10 @@ package utils
 			
 			shape.graphics.beginFill(color);
 		
-			shape.graphics.moveTo(height/2, 0);
-			shape.graphics.lineTo(height, height);
+			shape.graphics.moveTo(width/2, 0);
+			shape.graphics.lineTo(width, height);
 			shape.graphics.lineTo(0, height);
-			shape.graphics.lineTo(height/2,0);
+			shape.graphics.lineTo(width/2,0);
 			
 			shape.graphics.endFill();
 			
@@ -86,15 +88,39 @@ package utils
 		public static function CombinedShape(type:String, w:int, h:int, color:uint):Shape {
 			var shape : Shape = new Shape(); 
 		
-			if (type == "Triangle") {
-				var triangle: Shape = Triangle(w, h, color);
+			if (type == Shapes.TRIANGLE) {
+				var triangle: Shape = Triangle(w/2, h, color);
 				triangle.x = 0;
 				shape.addChild(triangle);
 				
-				triangle = Triangle(w, h, color);			
+				triangle = Triangle(w/2, h, color);			
 				triangle.x = w/2;
 				shape.addChild(triangle);
+			} 
+			else if (type == Shapes.CIRCLE) {
+				var circle: Shape =  Circle(w/2, color);
+				circle.x = 0;
+				shape.addChild(circle);
+				
+				circle = Circle(w/2, color);			
+				circle.x = w/2;
+				shape.addChild(circle);
 			}
+			else if (type == Shapes.HEXAGON) {
+				var hexagon: Shape = polygon(w/2, 6, color);
+				hexagon.x = 0;
+				shape.addChild(hexagon);
+				
+				hexagon = polygon(w/2, 6, color);			
+				hexagon.x = w/2;
+				shape.addChild(hexagon);
+			}  
+			else if (type == Shapes.RECTANGLE) {
+				var rect: Shape = Rectangle(w, h, color);
+				rect.x = 0;
+				shape.addChild(rect);
+			}  
+			
 			return shape;
 		}
 		

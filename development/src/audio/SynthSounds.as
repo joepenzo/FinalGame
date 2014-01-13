@@ -52,7 +52,7 @@ package audio
 			_life.cacheSound();
 			sounds[Sounds.LIFE] = _life;
 			
-			_rewind.params.setSettingsString("3,0.2,1,0.98,1,0.1508,,0.3799,-0.6599,,,0.48,,,,,,,1,,,,," + VOLUME);
+			_rewind.params.setSettingsString("3,0.2,1,0.98,1,0.1508,,0.3799,-0.6599,,,0.48,,,,,,,1,,,,," + VOLUME*.65);
 			_rewind.cacheSound();
 			sounds[Sounds.REWIND] = _rewind;
 			

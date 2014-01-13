@@ -253,8 +253,8 @@ package objects  {
 			
 			drawQuadMap(gameState, _tileSize, color);
 		
-			_possibleTileForEnemies = getTilePointsArrayAbovePlatformTiles().length as int;
-			_possibleTileForTraps = getTilePointsArrayAbovePlatformTiles().length as int;
+			_possibleTileForEnemies = getTilePointsArrayAbovePlatformTilesExtraTile(Tile.TRAP).length as int;
+			_possibleTileForTraps = getTilePointsArrayAbovePlatformTilesExtraTile(Tile.ENEMY).length as int;
 			_possibleTilesForLives = getTilePointsArrayForFIRSTROWCollectables().length as int;
 			_possibleTilesForCoins = getTilePointsArrayForSECONDROWCollectables().length as int;
 			_possibleTilesForTramps = getTilePointsArrayAbovePlatformTiles();
@@ -552,13 +552,9 @@ package objects  {
 		}
 		
 		
-		
-		
-		
-		
 		public function placeStaticTraps(state: StarlingState, percentage : int, heroPos : Point):void {
 			_newStaticTrapAmount = _possibleTileForTraps*(percentage/100);
-			_freeStaticTrapTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
+			_freeStaticTrapTilesArray = getTilePointsArrayAbovePlatformTilesExtraTile(Tile.ENEMY) as Array;
 			
 			// removes coord if hero is if on or above it!
 			for each( var coord : Point in _freeStaticTrapTilesArray ) {
@@ -572,7 +568,7 @@ package objects  {
 			}
 			
 			_staticTrapsToPlaceAmount = _freeStaticTrapTilesArray.length*(percentage/100);		
-
+			
 			placeStaticTrapsInMap(heroPos);
 			
 			// CODE TO PLACE AND DELETE THE TRAPS IN THE GAMESTATE// write this more epic, that some TRAPS can stay!!
@@ -583,17 +579,19 @@ package objects  {
 			}
 			for each (var currentTrapPos:Point in _currentStaticTrapTilesArray) { // ADD ALL TO STATE
 				state.add(new StaticTrap('staticTrap', 0x3D3D3D, { 
-					group:2,
+					group:1,
 					width : _tileSize, 
 					height : _tileSize/2, 
 					x: (currentTrapPos.x*_tileSize) + _tileSize/2,
 					y: (currentTrapPos.y*_tileSize) + _tileSize*.75,
-					view : StarlingShape.CombinedShape("Triangle", _tileSize, _tileSize/2, 0x3D3D3D)
+					currentShape : Shapes.TRIANGLE,
+					view : StarlingShape.CombinedShape(Shapes.TRIANGLE, _tileSize, _tileSize/2, 0x3D3D3D)
 				}));
 			}
 			
-		}
 			
+		}
+		
 		private function placeStaticTrapsInMap(heroPos:Point):void {
 			if (_newStaticTrapAmount > _oldStaticTrapAmount) { 
 				for (var i:int=0; i < _staticTrapsToPlaceAmount-1; i++) {
@@ -620,9 +618,11 @@ package objects  {
 		
 		
 		
+		
+		
 		public function placeEnemies(state: StarlingState, percentage : int, heroPos : Point):void {
 			_newEnemiesAmount = _possibleTileForEnemies*(percentage/100);
-			_freeEnemiesTilesArray = getTilePointsArrayAbovePlatformTiles() as Array;
+			_freeEnemiesTilesArray = getTilePointsArrayAbovePlatformTilesExtraTile(Tile.TRAP) as Array;
 			
 			// removes coord if hero is if on or above it! // not that clean, but this will do for now
 			for each( var coord : Point in _freeEnemiesTilesArray ) {
@@ -743,6 +743,22 @@ package objects  {
 			return tiles;
 		}
 		
+		private function getTilePointsArrayAbovePlatformTilesExtraTile(extraTile : int): Array{
+			var tiles : Array = [];
+			
+			var mW:int = map[0].length;
+			var mH:int = map.length;
+			for (var y:int=0; y<mH; y++) {
+				for (var x:int=0; x<mW; x++) {
+					if (Functions.isLinkedBottom(map,x,y,1) ){ 
+						if (map[y][x] == 0 || map[y][x] == extraTile) { // ALL TILES ABOVE A PLATFORM TILE
+							tiles.push(new Point(x,y));
+						}
+					}
+				}
+			}
+			return tiles;
+		}
 		
 		private function getTilePointsArrayAbovePlatformTiles(): Array{
 			var tiles : Array = [];

@@ -9,7 +9,7 @@ package objects
 		public function StaticTrap(name:String, trapColor : uint, params:Object=null, tile : Point = null) {
 			super(name, params);
 			currentColor = trapColor;
-			
+			currentShape = params.currentShape;
 		}
 		
 		override protected function defineFixture():void {
