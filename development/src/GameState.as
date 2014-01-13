@@ -706,7 +706,17 @@ package
 						movingPlatform.view = StarlingShape.Rectangle(movingPlatform.width, movingPlatform.height, movingPlatform.currentColor);
 					}
 				}
+			} else if (name == "trampolines") {
+				var trampoline : Trampoline;
+				for each (citrusObject in objects) {
+					if (citrusObject is Trampoline) {
+						trampoline = citrusObject as Trampoline;
+						trampoline.currentColor = hex;
+						trampoline.view = StarlingShape.Rectangle(trampoline.width, trampoline.height, trampoline.currentColor);
+					}
+				}
 			}
+			
 			
 			
 		}
