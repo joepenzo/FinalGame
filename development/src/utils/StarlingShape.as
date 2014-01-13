@@ -35,6 +35,18 @@ package utils
 			return shape;
 		}
 		
+		public static function Ellipse(radiusW : int, radiusH : int, color : uint, stroked : Boolean = false, strokeW : int = 2, strokeC : uint = 0xC0FFEE) : Shape {
+			var shape: Shape = new Shape();
+			
+			if(stroked) shape.graphics.lineStyle(strokeW, strokeC);
+			
+			shape.graphics.beginFill(color);
+			shape.graphics.drawEllipse(radiusW/2,radiusH/2,radiusW, radiusH*2);
+			shape.graphics.endFill();
+			
+			return shape;
+		}
+		
 		public static function Triangle(width : int, height : int, color : uint, stroked : Boolean = false, strokeW : int = 2, strokeC : uint = 0xC0FFEE) : Shape {
 			var shape: Shape = new Shape();
 			
@@ -98,11 +110,11 @@ package utils
 				shape.addChild(triangle);
 			} 
 			else if (type == Shapes.CIRCLE) {
-				var circle: Shape =  Circle(w/2, color);
+				var circle: Shape = Ellipse(w/2, h/2, color);
 				circle.x = 0;
 				shape.addChild(circle);
 				
-				circle = Circle(w/2, color);			
+				circle = Ellipse(w/2, h/2, color);			
 				circle.x = w/2;
 				shape.addChild(circle);
 			}
@@ -114,6 +126,8 @@ package utils
 				hexagon = polygon(w/2, 6, color);			
 				hexagon.x = w/2;
 				shape.addChild(hexagon);
+				
+				shape.height = h;
 			}  
 			else if (type == Shapes.RECTANGLE) {
 				var rect: Shape = Rectangle(w, h, color);

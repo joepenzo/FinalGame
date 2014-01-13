@@ -637,7 +637,17 @@ package
 				_gameData.bulletShape = _gameData.currentShape;
 			}
 			
-			
+			else if (_gameData.currentStyling == "traps") {
+				var trap : StaticTrap;
+				for each (citrusObject in objects) {
+					if (citrusObject is StaticTrap) {
+						trap = citrusObject as StaticTrap;
+						trap.currentShape = _gameData.currentShape;	
+						
+						trap.view = StarlingShape.CombinedShape(trap.currentShape, trap.width, trap.currentHeight, trap.currentColor);
+					}
+				}
+			} 
 		}
 		
 		
