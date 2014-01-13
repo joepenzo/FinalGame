@@ -699,6 +699,30 @@ package
 					}
 				}
 			}
+			else if (_gameData.currentStyling == "coins") {
+				var coin : Coin;
+				for each (citrusObject in objects) {
+					if (citrusObject is Coin) {
+						coin = citrusObject as Coin;
+						coin.currentColor = hex;	
+						_gameData.coinColor = hex;
+						
+						coin.view = drawObjectView(coin.currentColor, coin.currentShape, coin.width, coin.height);
+					}
+				}
+			} 
+			else if (_gameData.currentStyling == "lifes") {
+				var life : Life;
+				for each (citrusObject in objects) {
+					if (citrusObject is Life) {
+						life = citrusObject as Life;
+						life.currentColor = hex;	
+						_gameData.lifeColor = hex;
+						
+						life.view = drawObjectView(life.currentColor, life.currentShape, life.width, life.height);
+					}
+				}
+			} 
 			
 			
 			
