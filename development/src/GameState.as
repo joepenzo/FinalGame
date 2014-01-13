@@ -63,6 +63,8 @@ package
 	import utils.Functions;
 	import utils.StarlingDraw;
 	import utils.StarlingShape;
+	import objects.Coin;
+	import objects.Life;
 	
 	public class GameState extends StarlingState
 	{
@@ -178,6 +180,12 @@ package
 		private function setGameDataStartValues():void {
 			_gameData.lives = 5;
 			_gameData.bulletShape = Shapes.RECTANGLE;
+			
+			_gameData.coinColor = 0xFFF700;
+			_gameData.coinShape = Shapes.CIRCLE;
+
+			_gameData.lifeColor = 0x1AFF00;
+			_gameData.lifeShape = Shapes.TRIANGLE;
 			
 		}
 		
@@ -390,7 +398,7 @@ package
 				
 				clearTimeout(INTERVAL);
 				INTERVAL = setTimeout(function (state : StarlingState):void { 
-					_lvl.placeLiveCollectables(state, _gameData.livesPercantage, new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize) ));
+					_lvl.placeLiveCollectables(state, _gameData.livesPercantage, _gameData.lifeColor, _gameData.lifeShape);
 				}, 100, this);
 				
 			}
@@ -402,7 +410,7 @@ package
 				
 				clearTimeout(INTERVAL);
 				INTERVAL = setTimeout(function (state : StarlingState):void { 
-					_lvl.placeCoinCollectables(state, _gameData.coinsPercantage, new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize) ));
+					_lvl.placeCoinCollectables(state, _gameData.coinsPercantage, _gameData.coinColor, _gameData.coinShape);
 				}, 100, this);
 				
 			}
@@ -602,9 +610,9 @@ package
 				}	
 			}
 			else if (_gameData.currentStyling == "enemies") {
-				for each (var test :CitrusObject in objects) {
-					if (test is ExEnemy) {
-						var enemy : ExEnemy = test as ExEnemy;
+				for each (var citrusObject :CitrusObject in objects) {
+					if (citrusObject is ExEnemy) {
+						var enemy : ExEnemy = citrusObject as ExEnemy;
 	
 						enemy.currentShape = _gameData.currentShape;	
 						var width = enemy.width;
@@ -627,6 +635,56 @@ package
 					}
 				}
 			} 
+			else if (_gameData.currentStyling == "coins") {
+				var coin : Coin;
+				for each (citrusObject in objects) {
+					if (citrusObject is Coin) {
+						coin = citrusObject as Coin;
+						coin.currentShape = _gameData.currentShape;	
+						_gameData.coinShape = coin.currentShape;
+
+						switch (coin.currentShape){
+							case Shapes.CIRCLE:
+								coin.view = StarlingShape.Circle(coin.width, coin.currentColor);
+								break;
+							case Shapes.HEXAGON:
+								coin.view = StarlingShape.polygon(coin.width, 6, coin.currentColor);
+								break;
+							case Shapes.RECTANGLE:
+								coin.view = StarlingShape.Rectangle(coin.width, coin.height, coin.currentColor);
+								break;
+							case Shapes.TRIANGLE:
+								coin.view = StarlingShape.Triangle(coin.width, coin.height, coin.currentColor);
+								break;
+						}
+					}
+				}
+			} 
+			else if (_gameData.currentStyling == "lifes") {
+				var life : Life;
+				for each (citrusObject in objects) {
+					if (citrusObject is Life) {
+						life = citrusObject as Life;
+						life.currentShape = _gameData.currentShape;	
+						_gameData.lifeShape = _gameData.currentShape;
+							
+						switch (life.currentShape){
+							case Shapes.CIRCLE:
+								life.view = StarlingShape.Circle(life.width, life.currentColor);
+								break;
+							case Shapes.HEXAGON:
+								life.view = StarlingShape.polygon(life.width, 6, life.currentColor);
+								break;
+							case Shapes.RECTANGLE:
+								life.view = StarlingShape.Rectangle(life.width, life.height, life.currentColor);
+								break;
+							case Shapes.TRIANGLE:
+								life.view = StarlingShape.Triangle(life.width, life.height, life.currentColor);
+								break;
+						}
+					}
+				}
+			} 
 			else if (_gameData.currentStyling == "bullets") {
 				_gameData.bulletShape = _gameData.currentShape;
 			}
@@ -634,11 +692,9 @@ package
 			
 		}
 		
-//		_gameData.currentStyling = "bullets";
 //		_gameData.currentStyling = "coins";
 //		_gameData.currentStyling = "lifes";
 //		_gameData.currentStyling = "traps";
-		
 		
 		private function changeObjectColor(name : String , red : int, green : int, blue : int):void{
 			var hex:uint = red << 16 | green << 8 | blue;

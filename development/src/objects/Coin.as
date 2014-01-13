@@ -29,6 +29,8 @@ package objects
 			super(name, params);
 			_gameData = _ce.gameData as GameData;
 			_sounds = _gameData.synthSounds;
+			currentColor = params.currentColor;
+			currentShape = params.currentShape;
 		}
 		
 		/**

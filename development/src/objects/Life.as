@@ -30,6 +30,8 @@ package objects
 			_gameData = _ce.gameData as GameData;
 			_sounds = _gameData.synthSounds;
 
+			currentColor = params.currentColor;
+			currentShape = params.currentShape;
 		}
 		
 		/**

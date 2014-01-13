@@ -21,6 +21,12 @@ package data
 		protected var _bulletColor:uint;
 		protected var _bulletShape:String = "";
 		
+		protected var _coinColor:uint;
+		protected var _coinShape:String = "";
+
+		protected var _lifeColor:uint;
+		protected var _lifeShape:String = "";
+		
 		protected var _goal:String = "";
 		protected var _enemiesKilled:int;
 		protected var _totalEnemiesInState:int;
@@ -47,6 +53,46 @@ package data
 			super();
 		}
 		
+		public function get coinColor():uint
+		{
+			return _coinColor;
+		}
+
+		public function set coinColor(value:uint):void
+		{
+			_coinColor = value;
+		}
+
+		public function get coinShape():String
+		{
+			return _coinShape;
+		}
+
+		public function set coinShape(value:String):void
+		{
+			_coinShape = value;
+		}
+
+		public function get lifeShape():String
+		{
+			return _lifeShape;
+		}
+
+		public function set lifeShape(value:String):void
+		{
+			_lifeShape = value;
+		}
+
+		public function get lifeColor():uint
+		{
+			return _lifeColor;
+		}
+
+		public function set lifeColor(value:uint):void
+		{
+			_lifeColor = value;
+		}
+
 		public function get bulletShape():String
 		{
 			return _bulletShape;

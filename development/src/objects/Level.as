@@ -340,6 +340,27 @@ package objects  {
 		
 		
 		
+		private function drawObjectView(color:uint, shape:String, width:int, height : int):Shape {
+			var view : starling.display.Shape = new Shape();
+			switch (shape){
+				case Shapes.CIRCLE:
+					view = StarlingShape.Circle(width, color);
+					break;
+				case Shapes.HEXAGON:
+					view = StarlingShape.polygon(width, 6, color);
+					break;
+				case Shapes.RECTANGLE:
+					view = StarlingShape.Rectangle(width, height, color);
+					break;
+				case Shapes.TRIANGLE:
+					view = StarlingShape.Triangle(width, height, color);
+					break;
+			}	
+			
+			return view;
+		}		
+		
+		
 		
 		
 		/***
@@ -434,7 +455,7 @@ package objects  {
 		
 		
 		
-		public function placeCoinCollectables(state: StarlingState, percentage : int, heroPos : Point) :void {
+		public function placeCoinCollectables(state: StarlingState, percentage : int, color : uint, shape : String) :void {
 			_newCoinsAmount = _possibleTilesForCoins*(percentage/100);
 			_freeCoinsTilesArray = getTilePointsArrayForSECONDROWCollectables() as Array;
 			_coinsToPlaceAmount = _freeCoinsTilesArray.length*(percentage/100);		
@@ -472,7 +493,9 @@ package objects  {
 					height : _tileSize/2, 
 					x: (currentCoinPos.x*_tileSize) + _tileSize/2,
 					y: (currentCoinPos.y*_tileSize) + _tileSize/2,
-					view : StarlingShape.Circle(_tileSize/2, 0xFFF700)
+					currentColor : color,
+					currentShape : shape,
+					view : drawObjectView(color, shape, _tileSize/2, _tileSize/2)
 				}));
 			}
 			
@@ -481,7 +504,7 @@ package objects  {
 		
 		
 		
-		public function placeLiveCollectables(state: StarlingState, percentage : int, heroPos : Point) :void {
+		public function placeLiveCollectables(state: StarlingState, percentage : int, color : uint, shape : String) :void {
 			_newLivesAmount = _possibleTilesForLives*(percentage/100);
 			_freeLivesTilesArray = getTilePointsArrayForFIRSTROWCollectables() as Array;
 			_livesToPlaceAmount = _freeLivesTilesArray.length*(percentage/100);		
@@ -520,7 +543,9 @@ package objects  {
 					height : _tileSize/2, 
 					x: (currentLivePos.x*_tileSize) + _tileSize/2,
 					y: (currentLivePos.y*_tileSize) + _tileSize/2,
-					view : StarlingShape.Triangle(_tileSize/2, _tileSize/2,0x1AFF00)
+					currentColor : color,
+					currentShape : shape,
+					view : drawObjectView(color, shape, _tileSize/2, _tileSize/2) 
 				}));
 			}
 			
