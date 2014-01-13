@@ -44,6 +44,7 @@ package data
 		protected var _trapPercantage : int = 0;
 		protected var _livesPercantage : int = 0;
 		protected var _coinsPercantage : int = 0;
+		protected var _trampolinePercantage : int = 0;
 		protected var _movingPlatsPercantage : int = 0;
 
 		protected var _movingPlatformSpeed : Number = 3;
@@ -55,6 +56,16 @@ package data
 			super();
 		}
 		
+		public function get trampolinePercantage():int
+		{
+			return _trampolinePercantage;
+		}
+
+		public function set trampolinePercantage(value:int):void
+		{
+			_trampolinePercantage = value;
+		}
+
 		public function get currentAudio():String
 		{
 			return _currentAudio;

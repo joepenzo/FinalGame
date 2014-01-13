@@ -32,7 +32,6 @@ package audio
 		
 		
 		public function SynthSounds(name : String, params : Object = null) {
-			notice("synth init");
 			super(name, params);
 			updateCallEnabled = true;
 			_gameData = _ce.gameData as GameData;

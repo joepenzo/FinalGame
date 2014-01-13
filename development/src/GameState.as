@@ -13,12 +13,15 @@ package
 	import citrus.input.InputAction;
 	import citrus.input.controllers.Keyboard;
 	import citrus.input.controllers.TimeShifter;
+	import citrus.math.MathUtils;
 	import citrus.objects.Box2DPhysicsObject;
 	import citrus.objects.CitrusSprite;
 	import citrus.objects.platformer.box2d.MovingPlatform;
 	import citrus.objects.platformer.box2d.Platform;
 	import citrus.physics.PhysicsCollisionCategories;
 	import citrus.physics.box2d.Box2D;
+	import citrus.physics.box2d.Box2DUtils;
+	import citrus.physics.box2d.IBox2DPhysicsObject;
 	import citrus.utils.AGameData;
 	import citrus.view.ACitrusCamera;
 	import citrus.view.starlingview.StarlingCamera;
@@ -26,11 +29,13 @@ package
 	import com.greensock.TweenLite;
 	
 	import data.GameData;
+	import data.consts.Actions;
 	import data.consts.Goals;
 	import data.consts.Shapes;
-	import data.consts.Actions;
+	import data.consts.Tile;
 	
 	import flash.display.Sprite;
+	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.*;
@@ -46,11 +51,14 @@ package
 	import objects.ExHero;
 	import objects.ExMovingPlatform;
 	import objects.ExPlatform;
+	import objects.Finish;
 	import objects.GameInterface;
 	import objects.Level;
 	import objects.Life;
 	import objects.StaticTrap;
 	import objects.Trampoline;
+	
+	import org.osmf.events.TimeEvent;
 	
 	import starling.display.BlendMode;
 	import starling.display.Image;
@@ -92,6 +100,7 @@ package
 		private var _deadOverlay:CitrusSprite;
 		private var _sounds:SynthSounds;
 		private var _shake:Boolean;
+		private var _deadTimer:Timer;
 
 		
 		public function GameState() {
@@ -204,6 +213,21 @@ package
 		}
 		
 		private function timeShiftEnd():void {
+//			for each (var citrusObject :CitrusObject in objects) {
+//				if (citrusObject is ExEnemy) {
+//					var enemy : ExEnemy = citrusObject as ExEnemy;
+//					if ( MathUtils.DistanceBetweenTwoPoints(_hero.x, _hero.x, enemy.x ,enemy.y) <= 100 ) {
+//						enemy.kill = true;
+//					}
+//				}
+//				if ( citrusObject is StaticTrap) {
+//					var trap : StaticTrap = citrusObject as StaticTrap;
+//					if ( MathUtils.DistanceBetweenTwoPoints(_hero.x, _hero.x, trap.x, trap.y) <= 100 ) {
+//						trap.kill = true;
+//					}
+//				}
+//			}
+			
 			_shake = false;
 			TweenLite.to(this, 0.2, {x:0, y:0});// tween state back to 0,0 after shaking it
 			
@@ -213,6 +237,11 @@ package
 			
 			_gameData.lives = 1; // give back one live!
 			
+			
+		}
+		
+		private function timerListener(e:TimerEvent):void {
+			error("timer");
 		}
 		
 		private function shakeState():void {
@@ -241,7 +270,7 @@ package
 				_gameInterface.changesLives(int(value));
 				
 				if(value <= 0) { //  zero lives, hero's is dead by now!
-					_timeshifter.startRewind(0, 1);
+					_timeshifter.startRewind(.1, 1.3);
 				}
 				
 			}
@@ -260,7 +289,7 @@ package
 			if (_shake) shakeState();
 			
 			if (_ce.input.justDid("debugAction")) {
-				_timeshifter.startRewind(0, 1.3);
+				_timeshifter.startRewind(.1, 1.3);
 			}
 			
 			
@@ -277,6 +306,7 @@ package
 			if(_ce.input.justDid(Actions.GOAL_A_TO_B)) {
 				_gameData.goal = Goals.A_TO_B;
 				_gameInterface.updateGoalType(_gameData);
+				placeFinish(new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize)));
 			} 
 			if(_ce.input.justDid(Actions.GOAL_NO_GOAL)) {
 				_gameData.goal = Goals.NO_GOAL;
@@ -386,6 +416,7 @@ package
 			// TRAMPOLINE AMOUNT - CHANGE
 			if(_ce.input.hasDone(Actions.TRAMPOLINE_PERCANTAGE)) {
 				action = _ce.input.getAction(Actions.TRAMPOLINE_PERCANTAGE) as InputAction;
+				_gameData.trampolinePercantage = action.value;
 				
 				clearTimeout(INTERVAL);
 				INTERVAL = setTimeout(function (state : StarlingState):void {
@@ -574,6 +605,49 @@ package
 			}
 		}
 		
+		public function placeFinish(heroPos:Point):void {
+			var finishes:Vector.<CitrusObject> = getObjectsByType(Finish);
+			var finish:Finish;
+			for each (finish in finishes) remove(finish);
+			
+			var longestDistance : Number = 0;
+			var fartestTile : Point = new Point(0,0);
+			var mW:int = _lvl.map[0].length;
+			var mH:int = _lvl.map.length;
+			
+			for (var y:int=0; y<mH; y++) {
+				for (var x:int=0; x<mW; x++) {
+					if (_lvl.map[y][x] != Tile.LAND && Functions.isLinkedBottom(_lvl.map, x, y, Tile.LAND) ) {
+						if (longestDistance < MathUtils.DistanceBetweenTwoPoints(heroPos.x, x, heroPos.y, y)) {
+							longestDistance = MathUtils.DistanceBetweenTwoPoints(heroPos.x, x, heroPos.y, y);
+							fartestTile = new Point(x,y);
+						}
+					}
+				}
+			}
+			
+			var finish = new Finish("finish", {x : fartestTile.x * _tileSize + _tileSize/2, y: fartestTile.y * _tileSize + _tileSize/2, width: _tileSize, height: _tileSize});
+			finish.onBeginContact.add(handleFinishTouched);
+			add(finish);
+			
+		}
+		
+		private function handleFinishTouched(contact:b2Contact):void {
+			var other:IBox2DPhysicsObject = Box2DUtils.CollisionGetOther(getObjectByName("getObjectByName") as Finish, contact);
+			if (other is ExHero) {
+			
+				var finishes:Vector.<CitrusObject> = getObjectsByType(Finish);
+				var finish:Finish;
+				for each (finish in finishes) remove(finish);
+				
+				setTimeout(function() : void{
+					placeFinish(new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize)));
+				}, 500);
+
+				
+			}
+		}
+
 		
 		private function drawPlatformsToMiniMap():void{
 			_debugSprite.graphics.lineStyle();
@@ -631,6 +705,25 @@ package
 				_lvl.placeStaticTraps(this, _gameData.trapPercantage, heroPos);
 			}
 			
+			if (getObjectsByType(Trampoline).length > 0) {
+				_lvl.placeTrampolines(this, _gameData.trampolinePercantage, _gameData.trampolineBoost);
+			}
+			
+			if (getObjectsByType(ExMovingPlatform).length > 0) {
+				_lvl.placeMovingPlatforms(this, _gameData.movingPlatsPercantage, _gameData.movingPlatformSpeed);
+			}
+			
+			if (getObjectsByType(Coin).length > 0) {
+				_lvl.placeCoinCollectables(this, _gameData.coinsPercantage, _gameData.coinColor, _gameData.coinShape);
+			}
+			
+			if (getObjectsByType(Life).length > 0) {
+				_lvl.placeLiveCollectables(this, _gameData.livesPercantage, _gameData.lifeColor, _gameData.lifeShape);
+			}
+			
+			
+			
+			if(_gameData.goal = Goals.A_TO_B)  placeFinish(new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize)));
 		}	
 		
 		

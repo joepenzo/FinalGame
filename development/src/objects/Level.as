@@ -1,10 +1,16 @@
 package objects  {
 	
+	import Box2D.Common.Math.b2Vec2;
+	import Box2D.Dynamics.Contacts.b2Contact;
+	
 	import citrus.core.CitrusObject;
 	import citrus.core.State;
 	import citrus.core.starling.StarlingState;
+	import citrus.math.MathUtils;
 	import citrus.objects.CitrusSprite;
 	import citrus.objects.platformer.box2d.Platform;
+	import citrus.physics.box2d.Box2DUtils;
+	import citrus.physics.box2d.IBox2DPhysicsObject;
 	
 	import data.GameData;
 	import data.consts.Shapes;
@@ -97,6 +103,8 @@ package objects  {
 		private var _newMovingPlatformsAmount:int;
 		
 		private var _possibleTilesForTramps:Array = [];
+		private var _finish:Finish;
+		private var _state:StarlingState;
 		
 	
 		
@@ -363,6 +371,7 @@ package objects  {
 		
 		
 		
+		
 		/***
 		 * 
 		 * 
@@ -579,7 +588,7 @@ package objects  {
 			}
 			for each (var currentTrapPos:Point in _currentStaticTrapTilesArray) { // ADD ALL TO STATE
 				state.add(new StaticTrap('staticTrap', 0x3D3D3D, { 
-					group:1,
+					group:2,
 					width : _tileSize, 
 					height : _tileSize/2, 
 					x: (currentTrapPos.x*_tileSize) + _tileSize/2,
@@ -781,5 +790,6 @@ package objects  {
 		
 		
 		
+	
 	}
 }
