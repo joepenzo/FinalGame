@@ -8,8 +8,8 @@ package utils
 	import citrus.objects.Box2DPhysicsObject;
 	import citrus.physics.box2d.Box2DShapeMaker;
 	
-	import data.types.Shapes;
-	import data.types.Tile;
+	import data.consts.Shapes;
+	import data.consts.Tile;
 	
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;

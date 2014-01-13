@@ -1,4 +1,4 @@
-package data.types
+package data.consts
 {
 	public class Goals
 	{

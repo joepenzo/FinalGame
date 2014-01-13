@@ -7,8 +7,8 @@ package objects  {
 	import citrus.objects.platformer.box2d.Platform;
 	
 	import data.GameData;
-	import data.types.Shapes;
-	import data.types.Tile;
+	import data.consts.Shapes;
+	import data.consts.Tile;
 	
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;

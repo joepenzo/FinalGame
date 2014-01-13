@@ -74,10 +74,16 @@ package
 			
 			_gui.addGroup("Style");
 			_gui.addComboBox("styledItem", [
-				{label:"Avatar", data: Actions.SELECTED_COLOROBJ_HERO},
-				{label:"Platform", data: Actions.SELECTED_COLOROBJ_PLAT},
-				{label:"Background", data: Actions.SELECTED_COLOROBJ_BG},
-				{label:"Enemies", data: Actions.SELECTED_COLOROBJ_ENEMIES}
+				{label:"Avatar", data: Actions.SELECTED_CURRENTSTYLING_HERO},
+				{label:"Platform", data: Actions.SELECTED_CURRENTSTYLING_PLAT},
+				{label:"Background", data: Actions.SELECTED_CURRENTSTYLING_BG},
+				{label:"Enemies", data: Actions.SELECTED_CURRENTSTYLING_ENEMIES},
+				{label:"Bullets", data: Actions.SELECTED_CURRENTSTYLING_BULLETS},
+				{label:"Coins", data: Actions.SELECTED_CURRENTSTYLING_COINS},
+				{label:"Lives", data: Actions.SELECTED_CURRENTSTYLING_LIVES},
+				{label:"Moving Platorms", data: Actions.SELECTED_CURRENTSTYLING_MOVINGPLATS},
+				{label:"Trampolines", data: Actions.SELECTED_CURRENTSTYLING_TRAMPOLINE},
+				{label:"Traps", data: Actions.SELECTED_CURRENTSTYLING_TRAPS}
 			], { callback: function ():void{  _guiInput.triggerOnce(styledItem,1); }});
 			
 			_gui.addSlider("red", ValueRange.RED.x, ValueRange.RED.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.VALUE_RED, red);  }});

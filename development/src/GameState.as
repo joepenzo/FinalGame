@@ -26,9 +26,9 @@ package
 	import com.greensock.TweenLite;
 	
 	import data.GameData;
+	import data.consts.Goals;
+	import data.consts.Shapes;
 	import data.types.Actions;
-	import data.types.Goals;
-	import data.types.Shapes;
 	
 	import flash.display.Sprite;
 	import flash.geom.Point;
@@ -473,15 +473,28 @@ package
 			}
 			
 			// CHANGE CURRENT STYLING OBJECT
-			if (_ce.input.justDid(Actions.SELECTED_COLOROBJ_HERO)) {
+			if (_ce.input.justDid(Actions.SELECTED_CURRENTSTYLING_HERO)) {
 				_gameData.currentStyling = "hero";
-			} if (_ce.input.justDid(Actions.SELECTED_COLOROBJ_BG)) {
+			} if (_ce.input.justDid(Actions.SELECTED_CURRENTSTYLING_BG)) {
 				_gameData.currentStyling = "bg";
-			} if (_ce.input.justDid(Actions.SELECTED_COLOROBJ_PLAT)) {
+			} if (_ce.input.justDid(Actions.SELECTED_CURRENTSTYLING_PLAT)) {
 				_gameData.currentStyling = "platform";
-			} if (_ce.input.justDid(Actions.SELECTED_COLOROBJ_ENEMIES)) {
+			} if (_ce.input.justDid(Actions.SELECTED_CURRENTSTYLING_ENEMIES)) {
 				_gameData.currentStyling = "enemies";
+			} if (_ce.input.justDid(Actions.SELECTED_CURRENTSTYLING_BULLETS)) {
+				_gameData.currentStyling = "bullets";
+			} if (_ce.input.justDid(Actions.SELECTED_CURRENTSTYLING_COINS)) {
+				_gameData.currentStyling = "coins";
+			} if (_ce.input.justDid(Actions.SELECTED_CURRENTSTYLING_LIVES)) {
+				_gameData.currentStyling = "lifes";
+			} if (_ce.input.justDid(Actions.SELECTED_CURRENTSTYLING_MOVINGPLATS)) {
+				_gameData.currentStyling = "movingplatforms";
+			} if (_ce.input.justDid(Actions.SELECTED_CURRENTSTYLING_TRAMPOLINE)) {
+				_gameData.currentStyling = "trampolines";
+			} if (_ce.input.justDid(Actions.SELECTED_CURRENTSTYLING_TRAPS)) {
+				_gameData.currentStyling = "traps";
 			}
+			
 			
 			// CHANGE SHAPE OF SELECTED ITEM
 			if (_ce.input.justDid(Actions.CHANGE_SHAPE_RECT)) {
@@ -616,10 +629,23 @@ package
 			
 		}
 		
+//		_gameData.currentStyling = "hero";
+//		_gameData.currentStyling = "bg";
+//		_gameData.currentStyling = "platform";
+//		_gameData.currentStyling = "enemies";
+//		_gameData.currentStyling = "bullets";
+//		_gameData.currentStyling = "coins";
+//		_gameData.currentStyling = "lifes";
+//		_gameData.currentStyling = "movingplatforms";
+//		_gameData.currentStyling = "trampolines";
+//		_gameData.currentStyling = "traps";
+		
 		
 		private function changeObjectColor(name : String , red : int, green : int, blue : int):void{
-			
 			var hex:uint = red << 16 | green << 8 | blue;
+			var width : int;
+			var height : int;
+			
 			if (name == "platform") {
 				_gameData.levelColor = hex;
 				_lvl.drawQuadMap(this, _tileSize, hex);
@@ -627,14 +653,11 @@ package
 			} else if ( name == "bg") {
 				stage.color = hex;
 				return;
-			}
-			
-			
-			if (name == "hero") { 
+			} else if (name == "hero") { 
 				var object : ExBox2DPhysicsObject = getObjectByName(name) as ExBox2DPhysicsObject;
 				object.currentColor = hex;
-				var height : Number = object.currentHeight;
-				var width : Number =  object.currentWidth;
+				height = object.currentHeight;
+				width =  object.currentWidth;
 				
 				switch (object.currentShape){
 					case Shapes.CIRCLE:
@@ -650,15 +673,13 @@ package
 						object.view = StarlingShape.Triangle(width, height, object.currentColor);
 						break;
 				}
-			}
-			
-			if (name == "enemies") {
+			} else if (name == "enemies") {
 				for each (var enemyObj :CitrusObject in objects) {
 					if (enemyObj is EdgeDetectorEnemy) {
 						var enemy : EdgeDetectorEnemy = enemyObj as EdgeDetectorEnemy;
 						enemy.currentColor = hex;
-						var width = enemy.width;
-						var height = enemy.height;
+						width = enemy.width;
+						height = enemy.height;
 						
 						switch (enemy.currentShape){
 							case Shapes.CIRCLE:
@@ -674,6 +695,15 @@ package
 								enemy.view = StarlingShape.Triangle(width, height, enemy.currentColor);
 								break;
 						}
+					}
+				}
+			} else if (name == "movingplatforms") {
+				var movingPlatform : ExMovingPlatform;
+				for each (var citrusObject :CitrusObject in objects) {
+					if (citrusObject is ExMovingPlatform) {
+						movingPlatform = citrusObject as ExMovingPlatform;
+						movingPlatform.currentColor = hex;
+						movingPlatform.view = StarlingShape.Rectangle(movingPlatform.width, movingPlatform.height, movingPlatform.currentColor);
 					}
 				}
 			}

@@ -17,7 +17,7 @@ package objects
 	import citrus.utils.AGameData;
 	
 	import data.GameData;
-	import data.types.Goals;
+	import data.consts.Goals;
 	
 	import flash.geom.Point;
 	import flash.utils.clearTimeout;

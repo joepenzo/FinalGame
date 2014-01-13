@@ -3,7 +3,7 @@ package objects
 	import citrus.core.starling.StarlingState;
 	
 	import data.GameData;
-	import data.types.Goals;
+	import data.consts.Goals;
 	
 	import starling.text.TextField;
 	import starling.utils.HAlign;

@@ -1,6 +1,6 @@
 package generators {
 
-import data.types.Tile;
+import data.consts.Tile;
 
 import flash.geom.Point;
 
