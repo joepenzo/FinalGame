@@ -65,16 +65,16 @@ package objects
 			switch(gameData.goal){
 				case Goals.KILL_ENEMIES:
 					_goal.text = Goals.KILL_ENEMIES.toString();
-					_goalTarget.text = gameData.enemiesKilled.toString() + " / " + gameData.totalEnemies.toString(); 
+					_goalTarget.text = "Goal: " + gameData.enemiesKilled.toString() + " / " + gameData.totalEnemies.toString(); 
 					break;
 				case Goals.COLLECT_COINS:
-					_goal.text = Goals.COLLECT_COINS.toString();
+					_goal.text = "Goal: " + Goals.COLLECT_COINS.toString();
 					break;
 				case Goals.A_TO_B:
-					_goal.text = Goals.A_TO_B.toString();
+					_goal.text = "Goal: " + Goals.A_TO_B.toString();
 					break;
 				case Goals.NO_GOAL:
-					_goal.text = Goals.NO_GOAL.toString();
+					_goal.text ="Goal: " +  Goals.NO_GOAL.toString();
 					break;
 			}
 			
