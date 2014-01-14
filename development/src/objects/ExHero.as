@@ -508,14 +508,14 @@ package objects {
 			
 			var collider:IBox2DPhysicsObject = Box2DUtils.CollisionGetOther(this, contact);
 
-			if (_enemyClass && collider is _enemyClass)
+			if (_enemyClass && collider is _enemyClass || collider is StaticTrap)
 			{
 				if (_body.GetLinearVelocity().y < killVelocity && !_hurt)
 				{
 					hurt();
 					_gameData.lives--;
 
-					//fling the hero
+					//flying the hero
 					var hurtVelocity:b2Vec2 = _body.GetLinearVelocity();
 					hurtVelocity.y = -hurtVelocityY;
 					hurtVelocity.x = hurtVelocityX;
@@ -538,7 +538,18 @@ package objects {
 				
 				if (collisionAngle >= Math.PI*.25 && collisionAngle <= 3*Math.PI*.25 ) // normal angle between pi/4 and 3pi/4
 				{
-					if(collider is StaticTrap) _gameData.lives--; // DAMAGE ON STATIC TRAPS
+					if(collider is StaticTrap) {
+						_gameData.lives--; // DAMAGE ON STATIC TRAPS
+						hurt();
+						
+						//flying the hero
+						var hurtVelocity:b2Vec2 = _body.GetLinearVelocity();
+						hurtVelocity.y = -hurtVelocityY;
+						hurtVelocity.x = hurtVelocityX;
+						if (collider.x > x)
+							hurtVelocity.x = -hurtVelocityX;
+						_body.SetLinearVelocity(hurtVelocity);
+					}
 					
 					_groundContacts.push(collider.body.GetFixtureList());
 					_onGround = true;

@@ -60,12 +60,6 @@ package audio
 			_rewind.cacheSound();
 			sounds[Sounds.REWIND] = _rewind;
 				
-			
-			
-			notice("strtFreq " + _hit.params.startFrequency);
-			notice("endFrq " + _hit.params.squareDuty);
-			notice("slide " + _hit.params.slide);
-			notice("duration " + _hit.params.decayTime);
 		}
 		
 		
