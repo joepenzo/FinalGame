@@ -33,6 +33,7 @@ package
 		
 		
 		public function AfstudeerGame() {
+			
 			LogMeister.addLogger(new TrazzleConnector(stage, "AfstudeerGame"));
 			setUpStarling(true);
 			
