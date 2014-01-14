@@ -465,6 +465,13 @@ package objects  {
 		
 		
 		public function placeCoinCollectables(state: StarlingState, percentage : int, color : uint, shape : String) :void {
+			// CODE TO DELETE THE coins IN THE GAMESTATE// write this more epic, that some COINS can stay!!
+			var currentCoinsInState : Vector.<CitrusObject> = state.getObjectsByName("coinCollectable") as Vector.<CitrusObject>;
+			var currentCoinsInStatelength:int = currentCoinsInState.length;
+			if (currentCoinsInStatelength != 0) { // REMOVE ALL TRAP IN STATE IF THERE ARE 
+				for each (var currentCoin:Coin in currentCoinsInState) state.remove(currentCoin);
+			}
+			
 			_newCoinsAmount = _possibleTilesForCoins*(percentage/100);
 			_freeCoinsTilesArray = getTilePointsArrayForSECONDROWCollectables() as Array;
 			_coinsToPlaceAmount = _freeCoinsTilesArray.length*(percentage/100);		
@@ -489,12 +496,9 @@ package objects  {
 			}
 			_oldCoinsAmount = _newCoinsAmount;
 			
-			// CODE TO PLACE AND DELETE THE coins IN THE GAMESTATE// write this more epic, that some COINS can stay!!
-			var currentCoinsInState : Vector.<CitrusObject> = state.getObjectsByName("coinCollectable") as Vector.<CitrusObject>;
-			var currentCoinsInStatelength:int = currentCoinsInState.length;
-			if (currentCoinsInStatelength != 0) { // REMOVE ALL TRAP IN STATE IF THERE ARE 
-				for each (var currentCoin:Coin in currentCoinsInState) state.remove(currentCoin);
-			}
+			if (_newCoinsAmount<= 0 ) return;
+			
+			// CODE TO PLACE  THE coins IN THE GAMESTATE// write this more epic, that some COINS can stay!!
 			for each (var currentCoinPos:Point in _currentCoinsArray) { // ADD ALL TO STATE
 				state.add(new Coin('coinCollectable', { 
 					group:1,
@@ -514,6 +518,13 @@ package objects  {
 		
 		
 		public function placeLiveCollectables(state: StarlingState, percentage : int, color : uint, shape : String) :void {
+			// CODE TO DELETE THE TRAPS IN THE GAMESTATE// write this more epic, that some TRAPS can stay!!
+			var currentLivesInState : Vector.<CitrusObject> = state.getObjectsByName("liveCollectable") as Vector.<CitrusObject>;
+			var currentLivesInStatelength:int = currentLivesInState.length;
+			if (currentLivesInStatelength != 0) { // REMOVE ALL TRAP IN STATE IF THERE ARE 
+				for each (var currentLive:Life in currentLivesInState) state.remove(currentLive);
+			}
+			
 			_newLivesAmount = _possibleTilesForLives*(percentage/100);
 			_freeLivesTilesArray = getTilePointsArrayForFIRSTROWCollectables() as Array;
 			_livesToPlaceAmount = _freeLivesTilesArray.length*(percentage/100);		
@@ -537,13 +548,10 @@ package objects  {
 				}
 			}
 			_oldLivesAmount = _newLivesAmount;
+			
+			if (_newLivesAmount <= 0) return;
 		
-			// CODE TO PLACE AND DELETE THE TRAPS IN THE GAMESTATE// write this more epic, that some TRAPS can stay!!
-			var currentLivesInState : Vector.<CitrusObject> = state.getObjectsByName("liveCollectable") as Vector.<CitrusObject>;
-			var currentLivesInStatelength:int = currentLivesInState.length;
-			if (currentLivesInStatelength != 0) { // REMOVE ALL TRAP IN STATE IF THERE ARE 
-				for each (var currentLive:Life in currentLivesInState) state.remove(currentLive);
-			}
+			// CODE TO PLACE THE TRAPS IN THE GAMESTATE// write this more epic, that some TRAPS can stay!!
 			for each (var currentLivePos:Point in _currentLivesArray) { // ADD ALL TO STATE
 				//state.add(new ExSensor('liveCollectable', 0xFFDD03, { 
 				state.add(new Life('liveCollectable', { 
@@ -562,8 +570,17 @@ package objects  {
 		
 		
 		public function placeStaticTraps(state: StarlingState, percentage : int, heroPos : Point):void {
+			// CODE TO DELETE THE TRAPS IN THE GAMESTATE// write this more epic, that some TRAPS can stay!!
+			var currentTrapsInState : Vector.<CitrusObject> = state.getObjectsByName("staticTrap") as Vector.<CitrusObject>;
+			var currentTrapsInStatelength:int = currentTrapsInState.length;
+			if (currentTrapsInStatelength != 0) { // REMOVE ALL TRAP IN STATE IF THERE ARE 
+				for each (var currentTrap:StaticTrap in currentTrapsInState) state.remove(currentTrap);
+			}
+			
+			
 			_newStaticTrapAmount = _possibleTileForTraps*(percentage/100);
 			_freeStaticTrapTilesArray = getTilePointsArrayAbovePlatformTilesExtraTile(Tile.ENEMY) as Array;
+			
 			
 			// removes coord if hero is if on or above it!
 			for each( var coord : Point in _freeStaticTrapTilesArray ) {
@@ -579,13 +596,10 @@ package objects  {
 			_staticTrapsToPlaceAmount = _freeStaticTrapTilesArray.length*(percentage/100);		
 			
 			placeStaticTrapsInMap(heroPos);
+
+			if (_newStaticTrapAmount <= 0) return;
 			
-			// CODE TO PLACE AND DELETE THE TRAPS IN THE GAMESTATE// write this more epic, that some TRAPS can stay!!
-			var currentTrapsInState : Vector.<CitrusObject> = state.getObjectsByName("staticTrap") as Vector.<CitrusObject>;
-			var currentTrapsInStatelength:int = currentTrapsInState.length;
-			if (currentTrapsInStatelength != 0) { // REMOVE ALL TRAP IN STATE IF THERE ARE 
-				for each (var currentTrap:StaticTrap in currentTrapsInState) state.remove(currentTrap);
-			}
+			// CODE TO PLACE THE TRAPS IN THE GAMESTATE// write this more epic, that some TRAPS can stay!!
 			for each (var currentTrapPos:Point in _currentStaticTrapTilesArray) { // ADD ALL TO STATE
 				state.add(new StaticTrap('staticTrap', 0x3D3D3D, { 
 					group:2,
@@ -630,8 +644,17 @@ package objects  {
 		
 		
 		public function placeEnemies(state: StarlingState, percentage : int, heroPos : Point):void {
+			// CODE TO  DELETE THE ENEMIES IN THE GAMESTATE
+			var currentEnemiesInState : Vector.<CitrusObject> = state.getObjectsByName("enemy") as Vector.<CitrusObject>;
+			var currentEnemiesStatelength:int = currentEnemiesInState.length;
+			// write this more epic, that some enemies can stay!!
+			if (currentEnemiesStatelength != 0) { // REMOVE ALL ENEMiES IN STATE IF THERE ARE
+				for each (var currentEnemy:ExBox2DPhysicsObject in currentEnemiesInState) state.remove(currentEnemy);
+			}
+			
 			_newEnemiesAmount = _possibleTileForEnemies*(percentage/100);
 			_freeEnemiesTilesArray = getTilePointsArrayAbovePlatformTilesExtraTile(Tile.TRAP) as Array;
+		
 			
 			// removes coord if hero is if on or above it! // not that clean, but this will do for now
 			for each( var coord : Point in _freeEnemiesTilesArray ) {
@@ -648,17 +671,13 @@ package objects  {
 			
 			placeEnemiesInMap(); // EDIT MAP ARRAY SO ENEMIES ARE SHOWN IN THERE
 			
-			// CODE TO PLACE AND DELETE THE ENEMIES IN THE GAMESTATE
-			var currentEnemiesInState : Vector.<CitrusObject> = state.getObjectsByName("enemy") as Vector.<CitrusObject>;
-			var currentEnemiesStatelength:int = currentEnemiesInState.length;
-			// write this more epic, that some enemies can stay!!
-			if (currentEnemiesStatelength != 0) { // REMOVE ALL ENEMiES IN STATE IF THERE ARE
-				for each (var currentEnemy:ExBox2DPhysicsObject in currentEnemiesInState) state.remove(currentEnemy);
-			}
+			if (_newEnemiesAmount <= 0) return; 
+		
 			var boundDistance : int;
 			var enemyW : int = 20;
 			var enemyH : int = 20;
 			for each (var currentEnemyPos:Point in _currentEnemyTilesArray) { // ADD ALL ENEMIES TO STATE
+				debug(currentEnemyPos);
 				//boundDistance =  Functions.randomIntRange(32, 32*5);
 				boundDistance = 2000;
 				state.add(new EdgeDetectorEnemy('enemy', 0xAB1A1A, { 

@@ -76,7 +76,7 @@ package
 		
 		
 		private function handleDigital(pin:int, value:int):void {
-			//			error(pin + " " + value);
+//			error(pin + " " + value);
 			for each (var p:int in pinData.usedDigitalPins) {
 				if (pin == p) {
 					switch (value){
@@ -93,7 +93,6 @@ package
 		
 		
 		private function handleAnalog(pin:int, value:int):void {
-			error(pin + " " + value);
 			
 			// STOP AND SAVE READING IF IT IS THE FIRST READING
 			if (pinData.prevAnalogReads[pin] == "empty") {
@@ -114,22 +113,22 @@ package
 					if (value != pinData.prevAnalogReads[p] && value != 1023 || value != 0){
 						triggerCHANGE(pinData.actionPins[p], pinData.analogVals[p], "ON");
 						pinData.prevAnalogReads[p] = value;
-						//						error("ON " + pin + " " + pinData.actionPins[p] + "  " + value + "  " + pinData.prevAnalogReads[p]);
+												error("ON " + pin + " " + pinData.actionPins[p] + "  " + value + "  " + pinData.prevAnalogReads[p]);
 						clearTimeout(pinData.intervals[p]);
 						pinData.intervals[p] = setTimeout(myDelayedFunction, NO_CHANGE_DELAY, p);
 						function myDelayedFunction(currentpin : int):void { // Kills the input after no change
 							if (action && action.message == "ON") {
 								triggerOFF(pinData.actionPins[currentpin], pinData.analogVals[currentpin], "OFF");
-								//								fatal("OFF " + pinData.actionPins[currentpin] + "  " + value + "  " + pinData.prevAnalogReads[currentpin]);
+																fatal("OFF " + pinData.actionPins[currentpin] + "  " + value + "  " + pinData.prevAnalogReads[currentpin]);
 							}
 						}
 						if (value == 1023 || value == 0 ) {
 							triggerOFF(pinData.actionPins[p], pinData.analogVals[p], "OFF");
-							//							notice("OFF " + pinData.actionPins[p] + "  " + value + "  " + pinData.prevAnalogReads[p]);
+														notice("OFF " + pinData.actionPins[p] + "  " + value + "  " + pinData.prevAnalogReads[p]);
 						}
 					} else if (action && action.message == "ON") {
 						triggerOFF(pinData.actionPins[p], pinData.analogVals[p], "OFF");
-						//						debug("OFF " + pinData.actionPins[p] + "  " + value + "  " + pinData.prevAnalogReads[p]);
+												debug("OFF " + pinData.actionPins[p] + "  " + value + "  " + pinData.prevAnalogReads[p]);
 					}
 				} 
 			}

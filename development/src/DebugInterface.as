@@ -57,7 +57,7 @@ package
 		public function DebugInterface() {
 			_guiInput = new GuiInputController("guiInput");
 			addInterface();
-			_gui.show();
+			_gui.hide();
 		}
 		
 		private function addInterface():void {
