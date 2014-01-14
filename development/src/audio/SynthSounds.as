@@ -62,10 +62,10 @@ package audio
 				
 			
 			
-			notice("strtFreq " + _shoot.params.startFrequency);
-			notice("endFrq " + _shoot.params.squareDuty);
-			notice("slide " + _shoot.params.slide);
-			notice("duration " + _shoot.params.decayTime);
+			notice("strtFreq " + _hit.params.startFrequency);
+			notice("endFrq " + _hit.params.squareDuty);
+			notice("slide " + _hit.params.slide);
+			notice("duration " + _hit.params.decayTime);
 		}
 		
 		

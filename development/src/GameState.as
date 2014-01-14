@@ -593,12 +593,10 @@ package
 		
 		private function handleAudioChanged():void {
 			
-			//Functions.map(value, 0, 1023, pinData.analogMinMaxMapVals[p].x,  pinData.analogMinMaxMapVals[p].y);
-			
 			if(_ce.input.isDoing(Actions.AUDIO_STARTFREQUENCY)) {
 				var action:InputAction = _ce.input.getAction(Actions.AUDIO_STARTFREQUENCY) as InputAction;
 				var newMappedValue : Number = getStartFreqRangeByType(action.value);
-				debug(newMappedValue);
+
 				_sounds.SetStartFrequency(_gameData.currentAudio, newMappedValue);
 				clearTimeout(audioInterval);
 				audioInterval = setTimeout(_sounds.playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, _gameData.currentAudio);
@@ -637,16 +635,16 @@ package
 			var startFreq : Number = 0;
 			switch (_gameData.currentAudio){
 				case Sounds.COIN:
-					startFreq = 1;
+					startFreq = Functions.map(originalValue, 0, 1023, SoundRange.COIN_STARTFREQUENCY.x, SoundRange.COIN_STARTFREQUENCY.y);
 					break;
 				case Sounds.HIT:
-					startFreq = 1;
+					startFreq = Functions.map(originalValue, 0, 1023, SoundRange.HIT_STARTFREQUENCY.x, SoundRange.HIT_STARTFREQUENCY.y);
 					break;
 				case Sounds.JUMP:
-					startFreq = 1;
+					startFreq = Functions.map(originalValue, 0, 1023, SoundRange.JUMP_STARTFREQUENCY.x, SoundRange.JUMP_STARTFREQUENCY.y);
 					break;
 				case Sounds.LIFE:
-					startFreq = 1;
+					startFreq = Functions.map(originalValue, 0, 1023, SoundRange.LIFE_STARTFREQUENCY.x, SoundRange.LIFE_STARTFREQUENCY.y);
 					break;
 				case Sounds.SHOOT:
 					startFreq = Functions.map(originalValue, 0, 1023, SoundRange.SHOOT_STARTFREQUENCY.x, SoundRange.SHOOT_STARTFREQUENCY.y); 
@@ -659,12 +657,16 @@ package
 			var endFreq : Number = 0;
 			switch (_gameData.currentAudio){
 				case Sounds.COIN:
+					endFreq = Functions.map(value, 0, 1023, SoundRange.COIN_ENDFREQUENCY.x, SoundRange.COIN_ENDFREQUENCY.y);
 					break;
 				case Sounds.HIT:
+					endFreq = Functions.map(value, 0, 1023, SoundRange.HIT_ENDFREQUENCY.x, SoundRange.HIT_ENDFREQUENCY.y);
 					break;
 				case Sounds.JUMP:
+					endFreq = Functions.map(value, 0, 1023, SoundRange.JUMP_ENDFREQUENCY.x, SoundRange.JUMP_ENDFREQUENCY.y);
 					break;
 				case Sounds.LIFE:
+					endFreq = Functions.map(value, 0, 1023, SoundRange.LIFE_ENDFREQUENCY.x, SoundRange.LIFE_ENDFREQUENCY.y);
 					break;
 				case Sounds.SHOOT:
 					endFreq = Functions.map(value, 0, 1023, SoundRange.SHOOT_ENDFREQUENCY.x, SoundRange.SHOOT_ENDFREQUENCY.y); 
@@ -677,12 +679,16 @@ package
 			var slide : Number = 0;
 			switch (_gameData.currentAudio){
 				case Sounds.COIN:
+					slide = Functions.map(value, 0, 1023, SoundRange.COIN_SLIDE.x, SoundRange.COIN_SLIDE.y);
 					break;
 				case Sounds.HIT:
+					slide = Functions.map(value, 0, 1023, SoundRange.HIT_SLIDE.x, SoundRange.HIT_SLIDE.y);
 					break;
 				case Sounds.JUMP:
+					slide = Functions.map(value, 0, 1023, SoundRange.JUMP_SLIDE.x, SoundRange.JUMP_SLIDE.y);
 					break;
 				case Sounds.LIFE:
+					slide = Functions.map(value, 0, 1023, SoundRange.LIFE_SLIDE.x, SoundRange.LIFE_SLIDE.y);
 					break;
 				case Sounds.SHOOT:
 					slide = Functions.map(value, 0, 1023, SoundRange.SHOOT_SLIDE.x, SoundRange.SHOOT_SLIDE.y); 
@@ -695,18 +701,21 @@ package
 			var duration : Number = 0;
 			switch (_gameData.currentAudio){
 				case Sounds.COIN:
+					duration = Functions.map(value, 0, 1023, SoundRange.COIN_DURATION.x, SoundRange.COIN_DURATION.y);
 					break;
 				case Sounds.HIT:
+					duration = Functions.map(value, 0, 1023, SoundRange.HIT_DURATION.x, SoundRange.HIT_DURATION.y);
 					break;
 				case Sounds.JUMP:
+					duration = Functions.map(value, 0, 1023, SoundRange.JUMP_DURATION.x, SoundRange.JUMP_DURATION.y);
 					break;
 				case Sounds.LIFE:
+					duration = Functions.map(value, 0, 1023, SoundRange.LIFE_DURATION.x, SoundRange.LIFE_DURATION.y);
 					break;
 				case Sounds.SHOOT:
 					duration = Functions.map(value, 0, 1023, SoundRange.SHOOT_DURATION.x, SoundRange.SHOOT_DURATION.y); 
 					break;
 			}
-			debug(duration);
 			return duration;
 		}
 		
