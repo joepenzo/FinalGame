@@ -212,8 +212,8 @@ package data
 			_analogMinMaxMapVals[Pin.A_ZOOM] = ValueRange.ZOOM;
 			
 			_analogMinMaxMapVals[Pin.A_HERO_LIVES] = ValueRange.HERO_LIVES;
-			_analogMinMaxMapVals[Pin.A_HERO_SPEED] = ValueRange.HERO_SIZE;
-			_analogMinMaxMapVals[Pin.A_HERO_SIZE] = ValueRange.HERO_SPEED;
+			_analogMinMaxMapVals[Pin.A_HERO_SPEED] = ValueRange.HERO_SPEED;
+			_analogMinMaxMapVals[Pin.A_HERO_SIZE] = ValueRange.HERO_SIZE;
 			
 			_analogMinMaxMapVals[Pin.A_PERCANTAGE_ENEMY] = ValueRange.PERCENTAGE;
 			_analogMinMaxMapVals[Pin.A_PERCANTAGE_TRAP] = ValueRange.PERCENTAGE;
@@ -231,28 +231,13 @@ package data
 			
 			
 			// DIGITAL STUFFINGS GOING ON DOWN HERE
-		/*	_actionPins[Pin.LEFT] = Actions.LEFT;
-			_actionPins[Pin.RIGHT] = Actions.RIGHT;
-			_actionPins[Pin.JUMP] = Actions.JUMP;
-			_actionPins[Pin.SHOOT] = Actions.SHOOT;
-			
-			_actionPins[Pin.LEVEL_MARIO] = Actions.CHANGE_LVL_MARIO;
-			_actionPins[Pin.LEVEL_CAVE] = Actions.CHANGE_LVL_CAVE;
-			
-			_actionPins[Pin.CURRENT_COLOROBJ_BG] = Actions.SELECTED_CURRENTSTYLING_BG;
-			_actionPins[Pin.CURRENT_COLOROBJ_HERO] = Actions.SELECTED_CURRENTSTYLING_HERO;
-			_actionPins[Pin.CURRENT_COLOROBJ_PLAT] = Actions.SELECTED_CURRENTSTYLING_PLAT;
-			_actionPins[Pin.CURRENT_COLOROBJ_EMENIES] = Actions.SELECTED_CURRENTSTYLING_ENEMIES;
-			_actionPins[Pin.CURRENT_COLOROBJ_TRAPS] = Actions.SELECTED_CURRENTSTYLING_TRAPS;
-		*/
-			
 			_actionPins[Pin.LEFT] = Actions.LEFT;
 			_actionPins[Pin.RIGHT] = Actions.RIGHT;
 			_actionPins[Pin.JUMP] = Actions.JUMP;
 			_actionPins[Pin.SHOOT] = Actions.SHOOT;
 			
-			_actionPins[Pin.SHOOTING_ON] = Actions.HERO_SHOOT_ONOFF;
-			_actionPins[Pin.SHOOTING_OFF] = Actions.HERO_SHOOT_ONOFF;
+			_actionPins[Pin.SHOOTING_ON] = Actions.HERO_SHOOT_ON;
+			_actionPins[Pin.SHOOTING_OFF] = Actions.HERO_SHOOT_OFF;
 			
 			_actionPins[Pin.LEVEL_MARIO] = Actions.CHANGE_LVL_MARIO;
 			_actionPins[Pin.LEVEL_CAVE] = Actions.CHANGE_LVL_CAVE;

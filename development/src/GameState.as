@@ -161,16 +161,16 @@ package
 			_camera.setZoom(2);
 			
 			// CREATE MINIMAP DEBUG SPRITE
-			_debugSprite = new flash.display.Sprite();
-			_debugSprite.scaleX = 0.2 * 0.6;
-			_debugSprite.scaleY = 0.2 * 0.6;
-			_debugSprite.graphics.lineStyle(20, 0xFFFFFF, 0.4);
-			// DETERMINE SIZE OF SPRITE
-			_camera.renderDebug(_debugSprite as flash.display.Sprite)
-			// ADD AND PLACE MINIMAP
-			_ce.stage.addChild(_debugSprite);
-			_debugSprite.x = stage.stageWidth - _debugSprite.width - 10;
-			_debugSprite.y = 10;
+//			_debugSprite = new flash.display.Sprite();
+//			_debugSprite.scaleX = 0.2 * 0.6;
+//			_debugSprite.scaleY = 0.2 * 0.6;
+//			_debugSprite.graphics.lineStyle(20, 0xFFFFFF, 0.4);
+//			// DETERMINE SIZE OF SPRITE
+//			_camera.renderDebug(_debugSprite as flash.display.Sprite)
+//			// ADD AND PLACE MINIMAP
+//			_ce.stage.addChild(_debugSprite);
+//			_debugSprite.x = stage.stageWidth - _debugSprite.width - 10;
+//			_debugSprite.y = 10;
 			
 			
 			_timeshifter = new TimeShifter(2,false, false);
@@ -179,7 +179,7 @@ package
 			_timeshifter.onActivated.add(timeShiftStart);
 			_timeshifter.onDeactivated.add(timeShiftEnd);
 			
-			_gameInterface = new GameInterface(this, _debugSprite.x , _debugSprite.y + _debugSprite.height);
+			_gameInterface = new GameInterface(this, 50, 50);
 			
 			_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
 			
@@ -282,9 +282,9 @@ package
 			super.update(timeDelta);
 			
 			//camera render debug 
-			_camera.renderDebug(_debugSprite as flash.display.Sprite)
-			drawPlatformsToMiniMap();
-			drawEnemiesToMiniMap();
+//			_camera.renderDebug(_debugSprite as flash.display.Sprite)
+//			drawPlatformsToMiniMap();
+//			drawEnemiesToMiniMap();
 			// ENDOFF MINIMAP DEBUG RENDERING
 			
 			if (_shake) shakeState();
@@ -355,11 +355,19 @@ package
 				_hero.acceleration = action.value/8;
 			}
 	
-			// HERO SHOOTING _ONOFF
-			if(_ce.input.justDid(Actions.HERO_SHOOT_ONOFF)) {
-				action = _ce.input.getAction(Actions.HERO_SHOOT_ONOFF) as InputAction;
-				_hero.shootingEnabled = action.value;
+			if(_ce.input.justDid(Actions.HERO_SHOOT_ON)) {
+				action = _ce.input.getAction(Actions.HERO_SHOOT_ON) as InputAction;
+				if (action.value == 1) _hero.shootingEnabled = true;
 			}
+			
+			if(_ce.input.justDid(Actions.HERO_SHOOT_OFF)) {
+				action = _ce.input.getAction(Actions.HERO_SHOOT_OFF) as InputAction;
+				if (action.value == 1) _hero.shootingEnabled = false;
+			}
+							
+			
+			
+			
 			// HERO JUMPS
 			if(_ce.input.justDid(Actions.CHANGE_JUMP_SINGLE)) {
 				_hero.jumpType = "Single";
