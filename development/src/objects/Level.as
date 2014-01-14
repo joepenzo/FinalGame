@@ -425,6 +425,12 @@ package objects  {
 		
 		// WIHTOUT TILE MAP PLACEMENT - not placed in the TileMap - TODO: THIS WOULD BE NICE IF THEY WOULD BE PLACED
 		public function placeTrampolines(state: StarlingState, percentage : int, boostSpeed : Number = 3):void {
+			// CODE TO PLACE AND DELETE THE MOVINGTRAPS IN THE GAMESTATE// write this more epic, that objects can stay!!
+			var currentTrampsInState : Vector.<CitrusObject> = state.getObjectsByName("trampoline") as Vector.<CitrusObject>;
+			var currentTrampsInStatelength:int = currentTrampsInState.length;
+			// REMOVE ALL TRAP IN STATE IF THERE ARE
+			if (currentTrampsInStatelength != 0) for each (var currentTramp:Trampoline in currentTrampsInState) state.remove(currentTramp);
+			
 			var newTrampolineAmount : int = Math.ceil(_possibleTilesForTramps.length*(percentage/100));
 			
 			// copy all tiles and remove extra tiles that a not used into new array'
@@ -433,12 +439,7 @@ package objects  {
 			sortArray.sort(Functions.randomSort)
 			var usedTilePoints : Array = sortArray.slice(-(newTrampolineAmount-(_possibleTilesForTramps.length))); 
 			
-			// CODE TO PLACE AND DELETE THE MOVINGTRAPS IN THE GAMESTATE// write this more epic, that objects can stay!!
-			var currentTrampsInState : Vector.<CitrusObject> = state.getObjectsByName("trampoline") as Vector.<CitrusObject>;
-			var currentTrampsInStatelength:int = currentTrampsInState.length;
-			// REMOVE ALL TRAP IN STATE IF THERE ARE
-			if (currentTrampsInStatelength != 0) for each (var currentTramp:Trampoline in currentTrampsInState) state.remove(currentTramp);
-			
+			if (newTrampolineAmount <= 0) return;			
 			
 			var w : int = _tileSize;
 			var h : int = _tileSize/2;
