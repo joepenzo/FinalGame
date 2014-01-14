@@ -12,12 +12,15 @@ package
 	
 	import flash.display.BlendMode;
 	import flash.display.Sprite;
+	import flash.display.StageDisplayState;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
 	import flash.net.FileFilter;
 	
 	import logmeister.LogMeister;
 	import logmeister.connectors.TrazzleConnector;
+	
+	import starling.events.TouchEvent;
 	
 	
 	public class AfstudeerGame extends StarlingCitrusEngine {
@@ -35,7 +38,8 @@ package
 		public function AfstudeerGame() {
 			
 			LogMeister.addLogger(new TrazzleConnector(stage, "AfstudeerGame"));
-			setUpStarling(true);
+//			setUpStarling(true);
+			setUpStarling(false);
 			
 			gameData = new GameData();
 			_gameData = gameData as GameData;
@@ -47,7 +51,8 @@ package
 
 //			var debugInterface = new DebugInterface();
 //			stage.addChild(debugInterface);
-		}		
+			
+		}
 		
 		
 		

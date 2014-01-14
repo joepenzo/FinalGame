@@ -33,8 +33,11 @@ package
 	import data.consts.Goals;
 	import data.consts.Shapes;
 	import data.consts.Tile;
+	import data.types.SoundRange;
 	
 	import flash.display.Sprite;
+	import flash.display.StageDisplayState;
+	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -65,6 +68,9 @@ package
 	import starling.display.Quad;
 	import starling.display.QuadBatch;
 	import starling.display.Shape;
+	import starling.events.Touch;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	import starling.text.TextField;
 	import starling.utils.HAlign;
 	import starling.utils.VAlign;
@@ -73,7 +79,6 @@ package
 	import utils.Functions;
 	import utils.StarlingDraw;
 	import utils.StarlingShape;
-	import data.types.SoundRange;
 	
 	public class GameState extends StarlingState
 	{
@@ -175,14 +180,28 @@ package
 			_timeshifter.onActivated.add(timeShiftStart);
 			_timeshifter.onDeactivated.add(timeShiftEnd);
 			
-			_gameInterface = new GameInterface(this, 20, 20);
+			_gameInterface = new GameInterface(this, 10, 10);
 			
 			_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
 			
 			_ce.input.keyboard.addKeyAction("debugAction",Keyboard.Q);
 			
-			
 			setGameDataStartValues();
+			
+			stage.addEventListener(TouchEvent.TOUCH, onTouch);
+		}	
+		
+		
+		private function onTouch(e:TouchEvent):void {
+			var t:Touch = e.getTouch(stage);
+			if (t !== null) {
+				if (t.phase == TouchPhase.ENDED) {  
+					_ce.stage.scaleMode = "noScale";
+					_ce.stage.align = "TL";
+					_ce.stage.displayState = StageDisplayState.FULL_SCREEN;
+				}
+			}
+			
 		}
 		
 		private function setGameDataStartValues():void {
@@ -287,10 +306,10 @@ package
 			
 			if (_shake) shakeState();
 			
-			if (_ce.input.justDid("debugAction")) {
-				_timeshifter.startRewind(.1, 1.3);
-			}
-			
+//			if (_ce.input.justDid("debugAction")) {
+//				_timeshifter.startRewind(.1, 1.3);
+//			}
+
 			
 			// GAME GOAL
 			if (_ce.input.justDid(Actions.GOAL_KILL)) {
