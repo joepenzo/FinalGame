@@ -124,10 +124,6 @@ package
 			_mapH = 25;
 			_lvl = MarioGenerator.createlevel(_mapW, _mapH, 533, 0, 1);
 
-//			_mapW = 100;
-//			_mapH = 50;			
-//			_lvl = CaveGenerator.createlevel(_mapW, _mapH);
-			
 			_lvl.drawMapPlaftormsToGameState(this, _tileSize, 0x000000);
 //			_lvl.drawDebugGrid(this);
 			
@@ -149,7 +145,6 @@ package
 			_hero.jumpType = "Double";
 			add(_hero);
 
-			//add(new ExMovingPlatform("test" , {x:500, y:200, width: 300}));
 			
 			_bounds = new Rectangle(0, 0, _mapW*_tileSize, _mapH*_tileSize);
 			_camera = view.camera as StarlingCamera;
@@ -180,7 +175,7 @@ package
 			_timeshifter.onActivated.add(timeShiftStart);
 			_timeshifter.onDeactivated.add(timeShiftEnd);
 			
-			_gameInterface = new GameInterface(this, 50, 50);
+			_gameInterface = new GameInterface(this, 20, 20);
 			
 			_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
 			
@@ -794,8 +789,8 @@ package
 			}
 			
 			if(type == "cave"){
-				_mapW = 100;
-				_mapH = 50;	
+				_mapW = 90;
+				_mapH = 40;	
 				_lvl = CaveGenerator.createlevel(_mapW, _mapH, heroPos, _hero);
 			} else if (type == "mario") {
 				_mapW = 100;
@@ -803,6 +798,9 @@ package
 				_lvl = MarioGenerator.createlevel(_mapW, _mapH, 533, Functions.randomIntRange(1,10), 1, heroPos, _hero);
 			}
 			
+			
+			_bounds = new Rectangle(0, 0, _mapW*_tileSize, _mapH*_tileSize);
+			_camera.bounds = _bounds; 
 			
 //			_camera.bounds = new Rectangle(0, 0, mapW*tileSize, mapH*tileSize); 
 			_lvl.drawMapPlaftormsToGameState(this, _tileSize, _gameData.levelColor, false, heroPos);
