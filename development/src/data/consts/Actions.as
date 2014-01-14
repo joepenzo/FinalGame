@@ -25,7 +25,7 @@ package data.consts
 		
 		public static const HERO_SIZE:String = "HERO_SIZE";
 		public static const HERO_LIVES:String = "HERO_LIVES";
-		public static const HERO_SHOOT:String = "HERO_SHOOT";
+		public static const HERO_SHOOT_ONOFF:String = "HERO_SHOOT_ONOFF";
 		public static const HERO_SPEED:String = "HERO_SPEED";
 		
 		public static const CHANGE_JUMP_SINGLE:String = "CHANGE_JUMP_SINGLE";

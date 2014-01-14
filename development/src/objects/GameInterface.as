@@ -5,12 +5,15 @@ package objects
 	import data.GameData;
 	import data.consts.Goals;
 	
+	import starling.display.BlendMode;
 	import starling.text.TextField;
 	import starling.utils.HAlign;
 	import starling.utils.VAlign;
 	
 	public class GameInterface 
 	{
+		
+		private static const COLOR : uint = 0xffffff;
 		
 		private var _goal:TextField;
 		private var _goalTarget:TextField;
@@ -21,14 +24,15 @@ package objects
 		
 		public function GameInterface(state : StarlingState, x : int, y : int) {
 		
-			_lives = new TextField(200, 30, "Lives x", "PixelUniCode", 30, 0x0000ff);
+			_lives = new TextField(200, 40, "Lives x", "PixelUniCode", 35, COLOR, true);
 			_lives.vAlign = VAlign.TOP;
 			_lives.hAlign = HAlign.LEFT;
 			_lives.x = x;
 			_lives.y = y;
+			_lives.bold = true;
 			state.addChild(_lives);
 			
-			_goal = new TextField(200, 25, "", "PixelUniCode", 25, 0x0000ff);
+			_goal = new TextField(200, 35, "", "PixelUniCode", 30, COLOR);
 //			_goal.border = true;
 			_goal.vAlign = VAlign.TOP;
 			_goal.hAlign = HAlign.LEFT;
@@ -36,15 +40,13 @@ package objects
 			_goal.y = _lives.y + _lives.height + 10;
 			state.addChild(_goal);
 			
-			_goalTarget = new TextField(200, 25, "", "PixelUniCode", 25, 0x0000ff);
+			_goalTarget = new TextField(200, 35, "", "PixelUniCode", 30, COLOR);
 //			_goalTarget.border = true;
 			_goalTarget.vAlign = VAlign.TOP;
 			_goalTarget.hAlign = HAlign.LEFT;
 			_goalTarget.x = x;
 			_goalTarget.y = _goal.y + _goal.height;
 			state.addChild(_goalTarget);
-			
-			
 			
 		}
 

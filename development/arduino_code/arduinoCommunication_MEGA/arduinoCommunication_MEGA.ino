@@ -9,7 +9,7 @@
 
 #define TOTAL_PORTS 8
 
-int MARGIN = 6;
+int MARGIN = 3;
 
 byte previousPinValue[54];  // PIN means PORT for input
 

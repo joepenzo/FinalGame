@@ -181,7 +181,7 @@ package
 			
 			_gameInterface = new GameInterface(this, _debugSprite.x , _debugSprite.y + _debugSprite.height);
 			
-			//_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
+			_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
 			
 			_ce.input.keyboard.addKeyAction("debugAction",Keyboard.Q);
 			
@@ -199,6 +199,7 @@ package
 			_gameData.lifeColor = 0x1AFF00;
 			_gameData.lifeShape = Shapes.TRIANGLE;
 			
+			_gameData.goal = Goals.NO_GOAL;
 		}
 		
 		private function timeShiftStart():void {
@@ -355,8 +356,8 @@ package
 			}
 	
 			// HERO SHOOTING _ONOFF
-			if(_ce.input.justDid(Actions.HERO_SHOOT)) {
-				action = _ce.input.getAction(Actions.HERO_SHOOT) as InputAction;
+			if(_ce.input.justDid(Actions.HERO_SHOOT_ONOFF)) {
+				action = _ce.input.getAction(Actions.HERO_SHOOT_ONOFF) as InputAction;
 				_hero.shootingEnabled = action.value;
 			}
 			// HERO JUMPS

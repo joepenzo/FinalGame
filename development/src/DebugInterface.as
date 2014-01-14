@@ -57,11 +57,11 @@ package
 		public function DebugInterface() {
 			_guiInput = new GuiInputController("guiInput");
 			addInterface();
+			_gui.show();
 		}
 		
 		private function addInterface():void {
 			_gui = new SimpleGUI(this, "", "C");
-//			_gui.addSaveButton();
 			
 			_gui.addColumn("Level Settings");
 			_gui.addButton("platformLevel", { callback: function ():void{  _guiInput.triggerOnce(Actions.CHANGE_LVL_MARIO, 1);  }});
@@ -127,7 +127,7 @@ package
 			_gui.addSlider("heroLives", ValueRange.HERO_LIVES.x, ValueRange.HERO_LIVES.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.HERO_LIVES, heroLives); }});
 			_gui.addSlider("heroSize", ValueRange.HERO_SIZE.x, ValueRange.HERO_SIZE.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.HERO_SIZE, heroSize); }});
 			_gui.addSlider("heroSpeed", ValueRange.HERO_SPEED.x, ValueRange.HERO_SPEED.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.HERO_SPEED, heroSpeed); }});
-			_gui.addToggle("shootEnabled", { callback: function ():void{  _guiInput.triggerOnce(Actions.HERO_SHOOT, int(shootEnabled)); }});
+			_gui.addToggle("shootEnabled", { callback: function ():void{  _guiInput.triggerOnce(Actions.HERO_SHOOT_ONOFF, int(shootEnabled)); }});
 			_gui.addComboBox("jump", [
 				{label:"Single", data: Actions.CHANGE_JUMP_SINGLE},
 				{label:"Double", data: Actions.CHANGE_JUMP_DOUBLE},
@@ -156,7 +156,7 @@ package
 			_gui.addSlider("trampolineBoost", ValueRange.TRAMP_BOOST.x, ValueRange.TRAMP_BOOST.y, {label:"speed",  callback: function ():void{  _guiInput.triggerUntilRelease(Actions.TRAMPOLINE_BOOST, trampolineBoost); }});
 			
 			
-			_gui.show();
+			
 		}
 		
 	}
