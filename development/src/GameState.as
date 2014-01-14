@@ -839,9 +839,8 @@ package
 				_lvl.placeLiveCollectables(this, _gameData.livesPercantage, _gameData.lifeColor, _gameData.lifeShape);
 			}
 			
-			
-			
-			if(_gameData.goal = Goals.A_TO_B)  placeFinish(new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize)));
+			removeFinishSensor();
+			if(_gameData.goal == Goals.A_TO_B)  placeFinish(new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize)));
 		}	
 		
 		
