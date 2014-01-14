@@ -38,19 +38,14 @@ package
 			
 			gameData = new GameData();
 			_gameData = gameData as GameData;
-
-			
-			_gameData.currentStyling = "hero";
 			
 			_sounds = new SynthSounds("synthSounds");
 			_gameData.synthSounds = _sounds;
 		
 			state = new GameState();
 
-			var debugInterface = new DebugInterface();
-			stage.addChild(debugInterface);
-			
-			
+//			var debugInterface = new DebugInterface();
+//			stage.addChild(debugInterface);
 		}		
 		
 		

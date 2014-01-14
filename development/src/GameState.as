@@ -117,10 +117,10 @@ package
 			PhysicsCollisionCategories.Add("Traps");
 			
 			_box2D = new Box2D("box2D");
-			_box2D.visible = true;
+			_box2D.visible = false;
 			add(_box2D);
 			
-			_mapW = 40;//_mapW = 150;
+			_mapW = 100;//_mapW = 150;
 			_mapH = 25;
 			_lvl = MarioGenerator.createlevel(_mapW, _mapH, 533, 0, 1);
 
@@ -146,7 +146,7 @@ package
 			_hero.currentShape = Shapes.RECTANGLE;
 			_hero.jumpHeight = _tileSize*.225;
 			_hero.view = StarlingShape.Rectangle(_hero.width, _hero.height, _hero.currentColor);
-			_hero.jumpType = "Unlimited";
+			_hero.jumpType = "Double";
 			add(_hero);
 
 			//add(new ExMovingPlatform("test" , {x:500, y:200, width: 300}));
@@ -240,10 +240,6 @@ package
 			_gameData.lives = 1; // give back one live!
 			
 			
-		}
-		
-		private function timerListener(e:TimerEvent):void {
-			error("timer");
 		}
 		
 		private function shakeState():void {
@@ -798,14 +794,15 @@ package
 			}
 			
 			if(type == "cave"){
-				//mapH = 40;
-				//mapW = 70;
+				_mapW = 100;
+				_mapH = 50;	
 				_lvl = CaveGenerator.createlevel(_mapW, _mapH, heroPos, _hero);
 			} else if (type == "mario") {
-				//mapH = 40;
-				//mapW = 200;
+				_mapW = 100;
+				_mapH = 25;
 				_lvl = MarioGenerator.createlevel(_mapW, _mapH, 533, Functions.randomIntRange(1,10), 1, heroPos, _hero);
 			}
+			
 			
 //			_camera.bounds = new Rectangle(0, 0, mapW*tileSize, mapH*tileSize); 
 			_lvl.drawMapPlaftormsToGameState(this, _tileSize, _gameData.levelColor, false, heroPos);
