@@ -112,10 +112,10 @@ package
 				{label:"Jump", data: Actions.SELECTED_CURRENTAUDIO_JUMP}
 			], { callback: function ():void{  _guiInput.triggerOnce(audioItem,1); }});
 			
-			_gui.addSlider("startFreq", SoundRange.STARTFREQUENCY.x, SoundRange.STARTFREQUENCY.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.AUDIO_STARTFREQUENCY, startFreq);  }});
-			_gui.addSlider("endFreq", SoundRange.ENDFREQUENCY.x, SoundRange.ENDFREQUENCY.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.AUDIO_ENDFREQUENCY, endFreq);  }});
-			_gui.addSlider("slide", SoundRange.SLIDE.x, SoundRange.SLIDE.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.AUDIO_SLIDE, slide);  }});
-			_gui.addSlider("duration", SoundRange.DURATION.x, SoundRange.DURATION.y, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.AUDIO_ENDFREQUENCY, duration);  }});
+			_gui.addSlider("startFreq", 0, 1023, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.AUDIO_STARTFREQUENCY, startFreq);  }});
+			_gui.addSlider("endFreq",0, 1023, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.AUDIO_ENDFREQUENCY, endFreq);  }});
+			_gui.addSlider("slide", 0, 1023, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.AUDIO_SLIDE, slide);  }});
+			_gui.addSlider("duration",0, 1023, { callback: function ():void{  _guiInput.triggerUntilRelease(Actions.AUDIO_ENDFREQUENCY, duration);  }});
 
 			
 			

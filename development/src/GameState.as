@@ -73,6 +73,7 @@ package
 	import utils.Functions;
 	import utils.StarlingDraw;
 	import utils.StarlingShape;
+	import data.types.SoundRange;
 	
 	public class GameState extends StarlingState
 	{
@@ -384,16 +385,12 @@ package
 			// HERO JUMPS
 			if(_ce.input.justDid(Actions.CHANGE_JUMP_SINGLE)) {
 				_hero.jumpType = "Single";
-				fatal(_hero.jumpType);
 			} else if(_ce.input.justDid(Actions.CHANGE_JUMP_DOUBLE)) {
 				_hero.jumpType = "Double";
-				fatal(_hero.jumpType);
 			} else if(_ce.input.justDid(Actions.CHANGE_JUMP_UNLIMETID)) {
 				_hero.jumpType = "Unlimited";
-				fatal(_hero.jumpType);
 			} else if(_ce.input.justDid(Actions.CHANGE_JUMP_JETPACK)) {
 				_hero.jumpType = "Jetpack";
-				fatal(_hero.jumpType);
 			}
 
 			
@@ -591,41 +588,131 @@ package
 				_gameData.currentAudio = Sounds.SHOOT;
 			} 
 				
+			handleAudioChanged();
+		}
+		
+		private function handleAudioChanged():void {
 			
-			
+			//Functions.map(value, 0, 1023, pinData.analogMinMaxMapVals[p].x,  pinData.analogMinMaxMapVals[p].y);
 			
 			if(_ce.input.isDoing(Actions.AUDIO_STARTFREQUENCY)) {
-				action = _ce.input.getAction(Actions.AUDIO_STARTFREQUENCY) as InputAction;
-				_sounds.SetStartFrequency(_gameData.currentAudio, action.value);
-				
+				var action:InputAction = _ce.input.getAction(Actions.AUDIO_STARTFREQUENCY) as InputAction;
+				var newMappedValue : Number = getStartFreqRangeByType(action.value);
+				debug(newMappedValue);
+				_sounds.SetStartFrequency(_gameData.currentAudio, newMappedValue);
 				clearTimeout(audioInterval);
 				audioInterval = setTimeout(_sounds.playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, _gameData.currentAudio);
 			}
 			
 			if(_ce.input.isDoing(Actions.AUDIO_ENDFREQUENCY)) {
 				action = _ce.input.getAction(Actions.AUDIO_ENDFREQUENCY) as InputAction;
-				_sounds.SetEndFrequency(_gameData.currentAudio, action.value);
+				newMappedValue = getEndFreqRangeByType(action.value);
 				
+				_sounds.SetEndFrequency(_gameData.currentAudio, newMappedValue);
 				clearTimeout(audioInterval);
 				audioInterval = setTimeout(_sounds.playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, _gameData.currentAudio);
 			}
 			
 			if(_ce.input.isDoing(Actions.AUDIO_SLIDE)) {
 				action = _ce.input.getAction(Actions.AUDIO_SLIDE) as InputAction;
-				_sounds.SetSlide(_gameData.currentAudio, action.value);
+				newMappedValue = getSlideRangeByType(action.value);
 				
+				_sounds.SetSlide(_gameData.currentAudio, newMappedValue);
 				clearTimeout(audioInterval);
 				audioInterval = setTimeout(_sounds.playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, _gameData.currentAudio);
 			}
 			
 			if(_ce.input.isDoing(Actions.AUDIO_DURATION)) {
 				action = _ce.input.getAction(Actions.AUDIO_DURATION) as InputAction;
-				_sounds.SetDuration(_gameData.currentAudio, action.value);
+				newMappedValue = getDurationRangeByType(action.value);
 				
+				_sounds.SetDuration(_gameData.currentAudio, newMappedValue);
 				clearTimeout(audioInterval);
 				audioInterval = setTimeout(_sounds.playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, _gameData.currentAudio);
 			}
+			
 		}
+		
+		private function getStartFreqRangeByType(originalValue: int): Number {
+			var startFreq : Number = 0;
+			switch (_gameData.currentAudio){
+				case Sounds.COIN:
+					startFreq = 1;
+					break;
+				case Sounds.HIT:
+					startFreq = 1;
+					break;
+				case Sounds.JUMP:
+					startFreq = 1;
+					break;
+				case Sounds.LIFE:
+					startFreq = 1;
+					break;
+				case Sounds.SHOOT:
+					startFreq = Functions.map(originalValue, 0, 1023, SoundRange.SHOOT_STARTFREQUENCY.x, SoundRange.SHOOT_STARTFREQUENCY.y); 
+					break;
+			}
+			return startFreq;
+		}		
+		
+		private function getEndFreqRangeByType(value:Number):Number {
+			var endFreq : Number = 0;
+			switch (_gameData.currentAudio){
+				case Sounds.COIN:
+					break;
+				case Sounds.HIT:
+					break;
+				case Sounds.JUMP:
+					break;
+				case Sounds.LIFE:
+					break;
+				case Sounds.SHOOT:
+					endFreq = Functions.map(value, 0, 1023, SoundRange.SHOOT_ENDFREQUENCY.x, SoundRange.SHOOT_ENDFREQUENCY.y); 
+					break;
+			}
+			return endFreq;
+		}
+		
+		private function getSlideRangeByType(value:Number):Number {
+			var slide : Number = 0;
+			switch (_gameData.currentAudio){
+				case Sounds.COIN:
+					break;
+				case Sounds.HIT:
+					break;
+				case Sounds.JUMP:
+					break;
+				case Sounds.LIFE:
+					break;
+				case Sounds.SHOOT:
+					slide = Functions.map(value, 0, 1023, SoundRange.SHOOT_SLIDE.x, SoundRange.SHOOT_SLIDE.y); 
+					break;
+			}
+			return slide;
+		}
+		
+		private function getDurationRangeByType(value:Number):Number {
+			var duration : Number = 0;
+			switch (_gameData.currentAudio){
+				case Sounds.COIN:
+					break;
+				case Sounds.HIT:
+					break;
+				case Sounds.JUMP:
+					break;
+				case Sounds.LIFE:
+					break;
+				case Sounds.SHOOT:
+					duration = Functions.map(value, 0, 1023, SoundRange.SHOOT_DURATION.x, SoundRange.SHOOT_DURATION.y); 
+					break;
+			}
+			debug(duration);
+			return duration;
+		}
+		
+		
+		
+		
 		
 		public function placeFinish(heroPos:Point):void {
 			var finishes:Vector.<CitrusObject> = getObjectsByType(Finish);

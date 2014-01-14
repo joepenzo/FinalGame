@@ -7,6 +7,7 @@ package data
 	import data.types.ValueRange;
 	
 	import flash.utils.Dictionary;
+	import flash.geom.Point;
 
 	public class PinData extends Object
 	{
@@ -199,10 +200,10 @@ package data
 			
 			//----
 			
-			_analogMinMaxMapVals[Pin.A_AUDIO_STARTFREQUENCY] = SoundRange.STARTFREQUENCY;
-			_analogMinMaxMapVals[Pin.A_AUDIO_ENDFREQUENCY] = SoundRange.ENDFREQUENCY;
-			_analogMinMaxMapVals[Pin.A_AUDIO_SLIDE] = SoundRange.SLIDE;
-			_analogMinMaxMapVals[Pin.A_AUDIO_DURATION] = SoundRange.DURATION;
+			_analogMinMaxMapVals[Pin.A_AUDIO_STARTFREQUENCY] = new Point(0, 1023);
+			_analogMinMaxMapVals[Pin.A_AUDIO_ENDFREQUENCY] = new Point(0, 1023);
+			_analogMinMaxMapVals[Pin.A_AUDIO_SLIDE] = new Point(0, 1023);
+			_analogMinMaxMapVals[Pin.A_AUDIO_DURATION] = new Point(0, 1023);
 			
 			_analogMinMaxMapVals[Pin.A_RED] = ValueRange.RED;
 			_analogMinMaxMapVals[Pin.A_GREEN] = ValueRange.GREEN;

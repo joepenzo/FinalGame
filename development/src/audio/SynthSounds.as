@@ -33,7 +33,6 @@ package audio
 		
 		public function SynthSounds(name : String, params : Object = null) {
 			super(name, params);
-			updateCallEnabled = true;
 			_gameData = _ce.gameData as GameData;
 			
 			_jump.params.setSettingsString("0,,0.271,,0.18,0.395,,0.201,,,,,,0.284,,,,,0.511,,,,," + VOLUME);
@@ -44,6 +43,7 @@ package audio
 			_shoot.cacheSound();
 			sounds[Sounds.SHOOT] = _shoot;
 			
+		
 			_hit.params.setSettingsString("0,,0.0365,,0.1434,0.5223,,-0.5298,,,,,,,,,,,1,,,0.1867,," + VOLUME);
 			_hit.cacheSound();
 			sounds[Sounds.HIT] = _hit;
@@ -59,8 +59,15 @@ package audio
 			_rewind.params.setSettingsString("3,0.2,1,0.98,1,0.1508,,0.3799,-0.6599,,,0.48,,,,,,,1,,,,," + VOLUME*.65);
 			_rewind.cacheSound();
 			sounds[Sounds.REWIND] = _rewind;
+				
 			
+			
+			notice("strtFreq " + _shoot.params.startFrequency);
+			notice("endFrq " + _shoot.params.squareDuty);
+			notice("slide " + _shoot.params.slide);
+			notice("duration " + _shoot.params.decayTime);
 		}
+		
 		
 		public function get sounds():Dictionary
 		{
@@ -78,48 +85,6 @@ package audio
 			sound.stop();
 			sound.play();
 		}
-		
-//		override public function update(timeDelta:Number):void {
-//			super.update(timeDelta);
-//			error("sounnnndds");
-			
-//			if(_ce.input.isDoing(Actions.AUDIO_STARTFREQUENCY)) {
-//				error("AUDIO_STARTFREQUENCY");
-//				action = _ce.input.getAction(Actions.AUDIO_STARTFREQUENCY) as InputAction;
-//				SetStartFrequency(sounds[_gameData.currentAudio], action.value);
-//
-//				clearTimeout(audioInterval);
-//				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, sounds[_gameData.currentAudio]);
-//			}
-//			
-//			if(_ce.input.isDoing(Actions.AUDIO_ENDFREQUENCY)) {
-//				error("AUDIO_ENDFREQUENCY");
-//				var action :InputAction = _ce.input.getAction(Actions.AUDIO_ENDFREQUENCY) as InputAction;
-//				SetEndFrequency(sounds[_gameData.currentAudio], action.value);
-//
-//				clearTimeout(audioInterval);
-//				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, sounds[_gameData.currentAudio]);
-//			}
-//			
-//			if(_ce.input.isDoing(Actions.AUDIO_SLIDE)) {
-//				error("AUDIO_SLIDE");
-//				action = _ce.input.getAction(Actions.AUDIO_SLIDE) as InputAction;
-//				SetSlide(sounds[_gameData.currentAudio], action.value);
-//				
-//				clearTimeout(audioInterval);
-//				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, sounds[_gameData.currentAudio]);
-//			}
-//		
-//			if(_ce.input.isDoing(Actions.AUDIO_DURATION)) {
-//				error("AUDIO_DURATION");
-//				action = _ce.input.getAction(Actions.AUDIO_DURATION) as InputAction;
-//				SetDuration(sounds[_gameData.currentAudio], action.value);
-//				
-//				clearTimeout(audioInterval);
-//				audioInterval = setTimeout(playAudioFeedBack, AUDIO_FEEDBACK_DELAYTIME, sounds[_gameData.currentAudio]);
-//			}
-			
-//		}
 
 		public function getSound(soundName : String) : SfxrSynth {
 			if (!sounds[soundName]) return null;
@@ -161,6 +126,7 @@ package audio
 		public function SetDuration(soundName : String, val : Number) : void {
 			if (!sounds[soundName]) return;
 			var sound : SfxrSynth = sounds[soundName];
+			
 			sound.params.decayTime = val; // TODO CHECK
 		}
 		
