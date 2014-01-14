@@ -49,8 +49,8 @@ package
 		
 			state = new GameState();
 
-//			var debugInterface = new DebugInterface();
-//			stage.addChild(debugInterface);
+			var debugInterface = new DebugInterface();
+			stage.addChild(debugInterface);
 			
 		}
 		

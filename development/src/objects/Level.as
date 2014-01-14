@@ -382,7 +382,7 @@ package objects  {
 		
 
 		// not placed in the TileMap - TODO: THIS WOULD BE NICE IF THEY WOULD BE PLACED
-		public function placeMovingPlatforms(state: StarlingState, percentage : int, platformSpeed : Number = 3):void {
+		public function placeMovingPlatforms(state: StarlingState, percentage : int, color : uint, platformSpeed : Number = 3):void {
 			_newMovingPlatformsAmount = ((width - 2)*(percentage/100))/2;
 			var allPossbileTilePointsForMovingPlats : Array = [];
 
@@ -406,7 +406,7 @@ package objects  {
 			var h : int = _tileSize*.66;
 			for each (var currentMovingPlatPos:Point in usedTilePoints) { // ADD ALL TO STATE
 				state.add(new ExMovingPlatform("movingPlatform", { 
-					currentColor : 0x000000,
+					currentColor : color,
 					speed: platformSpeed,
 					group:1,
 					width : w, 
@@ -417,14 +417,14 @@ package objects  {
 					startY: 0,
 					endX: (currentMovingPlatPos.x*_tileSize) + w/2,
 					endY: (this.height*_tileSize) - 30,
-					view : StarlingShape.Rectangle(w,h,0x000000)
+					view : StarlingShape.Rectangle(w,h,color)
 				}));
 			}
 			
 		}
 		
 		// WIHTOUT TILE MAP PLACEMENT - not placed in the TileMap - TODO: THIS WOULD BE NICE IF THEY WOULD BE PLACED
-		public function placeTrampolines(state: StarlingState, percentage : int, boostSpeed : Number = 3):void {
+		public function placeTrampolines(state: StarlingState, percentage : int, color : uint, boostSpeed : Number = 3):void {
 			// CODE TO PLACE AND DELETE THE MOVINGTRAPS IN THE GAMESTATE// write this more epic, that objects can stay!!
 			var currentTrampsInState : Vector.<CitrusObject> = state.getObjectsByName("trampoline") as Vector.<CitrusObject>;
 			var currentTrampsInStatelength:int = currentTrampsInState.length;
@@ -446,13 +446,13 @@ package objects  {
 			
 			for each (var trampPos:Point in usedTilePoints) { // ADD ALL TO STATE
 				state.add(new Trampoline("trampoline", { 
-					currentColor : 0xc0ffee,
+					currentColor : color,
 					group:1,
 					width : w, 
 					height : h, 
 					x: (trampPos.x*_tileSize) + w/2,
 					y: (trampPos.y*_tileSize) + h*1.5,
-					view : StarlingShape.Rectangle(w,h,0xc0ffee)
+					view : StarlingShape.Rectangle(w,h,color)
 				}));
 			}
 			
@@ -570,7 +570,7 @@ package objects  {
 		}
 		
 		
-		public function placeStaticTraps(state: StarlingState, percentage : int, heroPos : Point):void {
+		public function placeStaticTraps(state: StarlingState, percentage : int, heroPos : Point, color : uint, shape : String):void {
 			// CODE TO DELETE THE TRAPS IN THE GAMESTATE// write this more epic, that some TRAPS can stay!!
 			var currentTrapsInState : Vector.<CitrusObject> = state.getObjectsByName("staticTrap") as Vector.<CitrusObject>;
 			var currentTrapsInStatelength:int = currentTrapsInState.length;
@@ -602,14 +602,14 @@ package objects  {
 			
 			// CODE TO PLACE THE TRAPS IN THE GAMESTATE// write this more epic, that some TRAPS can stay!!
 			for each (var currentTrapPos:Point in _currentStaticTrapTilesArray) { // ADD ALL TO STATE
-				state.add(new StaticTrap('staticTrap', 0x3D3D3D, { 
+				state.add(new StaticTrap('staticTrap', color, { 
 					group:2,
 					width : _tileSize, 
 					height : _tileSize/2, 
 					x: (currentTrapPos.x*_tileSize) + _tileSize/2,
 					y: (currentTrapPos.y*_tileSize) + _tileSize*.75,
-					currentShape : Shapes.TRIANGLE,
-					view : StarlingShape.CombinedShape(Shapes.TRIANGLE, _tileSize, _tileSize/2, 0x3D3D3D)
+					currentShape : shape,
+					view : StarlingShape.CombinedShape(shape, _tileSize, _tileSize/2, color)
 				}));
 			}
 			
@@ -644,7 +644,7 @@ package objects  {
 		
 		
 		
-		public function placeEnemies(state: StarlingState, percentage : int, heroPos : Point):void {
+		public function placeEnemies(state: StarlingState, percentage : int, heroPos : Point, color : uint, shape : String):void {
 			// CODE TO  DELETE THE ENEMIES IN THE GAMESTATE
 			var currentEnemiesInState : Vector.<CitrusObject> = state.getObjectsByName("enemy") as Vector.<CitrusObject>;
 			var currentEnemiesStatelength:int = currentEnemiesInState.length;
@@ -681,7 +681,7 @@ package objects  {
 				debug(currentEnemyPos);
 				//boundDistance =  Functions.randomIntRange(32, 32*5);
 				boundDistance = 2000;
-				state.add(new EdgeDetectorEnemy('enemy', 0xAB1A1A, { 
+				state.add(new EdgeDetectorEnemy('enemy', color, { 
 					speed : 0.5,
 					group:3,
 					width : enemyW, 
@@ -690,8 +690,8 @@ package objects  {
 					y: (currentEnemyPos.y*_tileSize) + enemyH,
 					leftBound: (currentEnemyPos.x*_tileSize) - boundDistance, // TILESIZE INSTEAD
 					rightBound: (currentEnemyPos.x*_tileSize) + boundDistance,
-					view : StarlingShape.polygon(20,6, 0xAB1A1A),
-					currentShape : Shapes.HEXAGON
+					view : drawObjectView(color, shape, enemyW, enemyH),
+					currentShape : shape
 				}, currentEnemyPos));
 			}
 			

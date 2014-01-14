@@ -15,7 +15,6 @@ package data
 		protected var _currentLevelType : String = "";
 		protected var _currentGravity : b2Vec2;
 		
-		
 		protected var _currentAudio : String = "";
 		protected var _currentStyling : String = "";
 		protected var _currentShape:String = "";
@@ -29,10 +28,22 @@ package data
 		protected var _lifeColor:uint;
 		protected var _lifeShape:String = "";
 		
+		protected var _trapColor:uint;
+		protected var _trapShape:String = "";
+		
+		protected var _enemyColor:uint;
+		protected var _enemyShape:String = "";
+
+		protected var _trampolineColor:uint;
+		
+		protected var _movingPlatColor:uint;
+		
+		protected var _movingPlatformSpeed : Number = 3;
+		protected var _trampolineBoost : Number = 5;
+		
 		protected var _goal:String = "";
 		protected var _enemiesKilled:int;
 		protected var _totalEnemiesInState:int;
-		
 		
 		protected var _levelColor : uint;
 		
@@ -47,8 +58,7 @@ package data
 		protected var _trampolinePercantage : int = 0;
 		protected var _movingPlatsPercantage : int = 0;
 
-		protected var _movingPlatformSpeed : Number = 3;
-		protected var _trampolineBoost : Number = 5;
+		
 		
 		
 		
@@ -56,6 +66,67 @@ package data
 			super();
 		}
 		
+	
+		public function get movingPlatColor():uint
+		{
+			return _movingPlatColor;
+		}
+
+		public function set movingPlatColor(value:uint):void
+		{
+			_movingPlatColor = value;
+		}
+
+		public function get trampolineColor():uint
+		{
+			return _trampolineColor;
+		}
+
+		public function set trampolineColor(value:uint):void
+		{
+			_trampolineColor = value;
+		}
+
+		public function get trapColor():uint
+		{
+			return _trapColor;
+		}
+
+		public function set trapColor(value:uint):void
+		{
+			_trapColor = value;
+		}
+
+		public function get trapShape():String
+		{
+			return _trapShape;
+		}
+
+		public function set trapShape(value:String):void
+		{
+			_trapShape = value;
+		}
+
+		public function get enemyShape():String
+		{
+			return _enemyShape;
+		}
+
+		public function set enemyShape(value:String):void
+		{
+			_enemyShape = value;
+		}
+
+		public function get enemyColor():uint
+		{
+			return _enemyColor;
+		}
+
+		public function set enemyColor(value:uint):void
+		{
+			_enemyColor = value;
+		}
+
 		public function get trampolinePercantage():int
 		{
 			return _trampolinePercantage;

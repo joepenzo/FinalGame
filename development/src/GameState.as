@@ -182,17 +182,17 @@ package
 			
 			_gameInterface = new GameInterface(this, 10, 10);
 			
-			_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
+			//_arduinoConnector = new ArduinoSerialComAnalogAndDigital("arduinoConnector");
 			
 			_ce.input.keyboard.addKeyAction("debugAction",Keyboard.Q);
 			
 			setGameDataStartValues();
 			
-			stage.addEventListener(TouchEvent.TOUCH, onTouch);
+			//stage.addEventListener(TouchEvent.TOUCH, handleFullscreen);
 		}	
 		
 		
-		private function onTouch(e:TouchEvent):void {
+		private function handleFullscreen(e:TouchEvent):void {
 			var t:Touch = e.getTouch(stage);
 			if (t !== null) {
 				if (t.phase == TouchPhase.ENDED) {  
@@ -213,6 +213,15 @@ package
 
 			_gameData.lifeColor = 0x1AFF00;
 			_gameData.lifeShape = Shapes.TRIANGLE;
+			
+			_gameData.enemyColor = 0xAB1A1A;
+			_gameData.enemyShape =	Shapes.HEXAGON;
+
+			_gameData.trapColor = 0x3D3D3D;
+			_gameData.trapShape = Shapes.TRIANGLE;
+			
+			_gameData.movingPlatColor = 0x333333;
+			_gameData.trampolineColor = 0xc0ffee;
 			
 			_gameData.goal = Goals.NO_GOAL;
 		}
@@ -414,7 +423,7 @@ package
 				clearTimeout(INTERVAL);
 				INTERVAL = setTimeout(myDelayedFunction, 100, this, action);
 				function myDelayedFunction(state : StarlingState, action : InputAction):void { 
-					_lvl.placeEnemies(state, _gameData.enemyPercentage, new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize)) );
+					_lvl.placeEnemies(state, _gameData.enemyPercentage, (new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize))), _gameData.enemyColor, _gameData.enemyShape  );
 					_gameData.totalEnemies = _lvl.getTotalEnemiesAmount; // save total enemies for the enemy kill counter
 				}
 			}
@@ -426,7 +435,9 @@ package
 				
 				clearTimeout(INTERVAL);
 				INTERVAL = setTimeout(function (state : StarlingState):void { 
-					_lvl.placeStaticTraps(state, _gameData.trapPercantage, new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize) ));
+					_lvl.placeStaticTraps(state, 
+						_gameData.trapPercantage, 
+						(new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize))), _gameData.trapColor, _gameData.trapShape  );
 				}, 100, this);
 				
 			}
@@ -438,7 +449,7 @@ package
 				
 				clearTimeout(INTERVAL);
 				INTERVAL = setTimeout(function (state : StarlingState):void {
-					_lvl.placeMovingPlatforms(state, _gameData.movingPlatsPercantage, _gameData.movingPlatformSpeed);
+					_lvl.placeMovingPlatforms(state, _gameData.movingPlatsPercantage, _gameData.movingPlatColor, _gameData.movingPlatformSpeed);
 				}, 100, this);
 			}
 			
@@ -450,7 +461,7 @@ package
 				clearTimeout(INTERVAL);
 				INTERVAL = setTimeout(function (state : StarlingState):void {
 					trace(action.value);
-					_lvl.placeTrampolines(state, action.value);
+					_lvl.placeTrampolines(state,_gameData.trampolinePercantage, _gameData.trampolineColor);
 				}, 100, this);
 			}
 		
@@ -829,20 +840,20 @@ package
 			
 			// DO PLACE ENEMIES BACK IF THERE ARE ANY IN THE STATE
 			if (getObjectsByType(EdgeDetectorEnemy).length > 0) {
-				_lvl.placeEnemies(this, _gameData.enemyPercentage, heroPos);// replace enemies
+				_lvl.placeEnemies(this, _gameData.enemyPercentage, heroPos, _gameData.enemyColor, _gameData.enemyShape);// replace enemies
 				_gameData.totalEnemies = _lvl.getTotalEnemiesAmount; // save total enemies for the enemy kill counter
 			}
 			
 			if (getObjectsByType(StaticTrap).length > 0) {
-				_lvl.placeStaticTraps(this, _gameData.trapPercantage, heroPos);
+				_lvl.placeStaticTraps(this, _gameData.trapPercantage, heroPos, _gameData.trapColor, _gameData.trapShape);
 			}
 			
 			if (getObjectsByType(Trampoline).length > 0) {
-				_lvl.placeTrampolines(this, _gameData.trampolinePercantage, _gameData.trampolineBoost);
+				_lvl.placeTrampolines(this, _gameData.trampolinePercantage, _gameData.trampolineColor, _gameData.trampolineBoost);
 			}
 			
 			if (getObjectsByType(ExMovingPlatform).length > 0) {
-				_lvl.placeMovingPlatforms(this, _gameData.movingPlatsPercantage, _gameData.movingPlatformSpeed);
+				_lvl.placeMovingPlatforms(this, _gameData.movingPlatsPercantage, _gameData.movingPlatColor, _gameData.movingPlatformSpeed);
 			}
 			
 			if (getObjectsByType(Coin).length > 0) {
@@ -873,8 +884,9 @@ package
 				for each (var citrusObject :CitrusObject in objects) {
 					if (citrusObject is ExEnemy) {
 						var enemy : ExEnemy = citrusObject as ExEnemy;
-	
-						enemy.currentShape = _gameData.currentShape;	
+						enemy.currentShape = _gameData.currentShape;
+						_gameData.enemyShape = enemy.currentShape; 
+						
 						var width = enemy.width;
 						var height = enemy.height;
 						
@@ -916,6 +928,7 @@ package
 					if (citrusObject is StaticTrap) {
 						trap = citrusObject as StaticTrap;
 						trap.currentShape = _gameData.currentShape;	
+						_gameData.trapShape = _gameData.currentShape;
 						
 						trap.view = StarlingShape.CombinedShape(trap.currentShape, trap.width, trap.currentHeight, trap.currentColor);
 					}
@@ -950,6 +963,7 @@ package
 					if (citrusObject is EdgeDetectorEnemy) {
 						enemy = citrusObject as EdgeDetectorEnemy;
 						enemy.currentColor = hex;
+						_gameData.enemyColor = hex;
 						width = enemy.width;
 						height = enemy.height;
 						
@@ -965,6 +979,7 @@ package
 					if (citrusObject is ExMovingPlatform) {
 						movingPlatform = citrusObject as ExMovingPlatform;
 						movingPlatform.currentColor = hex;
+						_gameData.movingPlatColor = hex;
 						movingPlatform.view = StarlingShape.Rectangle(movingPlatform.width, movingPlatform.height, movingPlatform.currentColor);
 					}
 				}
@@ -975,6 +990,7 @@ package
 					if (citrusObject is Trampoline) {
 						trampoline = citrusObject as Trampoline;
 						trampoline.currentColor = hex;
+						_gameData.trampolineColor = hex;
 						trampoline.view = StarlingShape.Rectangle(trampoline.width, trampoline.height, trampoline.currentColor);
 					}
 				}
@@ -1010,6 +1026,7 @@ package
 					if (citrusObject is StaticTrap) {
 						trap = citrusObject as StaticTrap;
 						trap.currentColor = hex;	
+						_gameData.trapColor = hex;
 						trap.view = StarlingShape.CombinedShape(trap.currentShape, trap.width, trap.currentHeight, trap.currentColor);
 					}
 				}
