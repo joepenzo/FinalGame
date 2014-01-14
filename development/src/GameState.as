@@ -278,6 +278,12 @@ package
 			
 		}
 		
+		private function removeFinishSensor():void{
+			var finishes:Vector.<CitrusObject> = getObjectsByType(Finish);
+			var finish:Finish;
+			for each (finish in finishes) remove(finish);
+		}
+		
 		override public function update(timeDelta:Number):void {
 			super.update(timeDelta);
 			
@@ -299,19 +305,26 @@ package
 				_gameData.goal = Goals.KILL_ENEMIES;
 				_gameInterface.updateGoalType(_gameData);
 				_gameInterface.updateGoalStatus( (_gameData.enemiesKilled.toString() + " / " + _gameData.totalEnemies.toString()) );
+				
+				removeFinishSensor();
 			}
 			if(_ce.input.justDid(Actions.GOAL_COLLECT)) {
 				_gameData.goal = Goals.COLLECT_COINS;
 				_gameInterface.updateGoalType(_gameData);
+				
+				removeFinishSensor();
 			}
 			if(_ce.input.justDid(Actions.GOAL_A_TO_B)) {
 				_gameData.goal = Goals.A_TO_B;
 				_gameInterface.updateGoalType(_gameData);
+				
 				placeFinish(new Point(Math.floor(_hero.x/_tileSize),Math.floor(_hero.y/_tileSize)));
 			} 
 			if(_ce.input.justDid(Actions.GOAL_NO_GOAL)) {
 				_gameData.goal = Goals.NO_GOAL;
 				_gameInterface.updateGoalType(_gameData);
+				
+				removeFinishSensor();
 			}
 			
 			
